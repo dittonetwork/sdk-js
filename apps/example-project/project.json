@@ -1,0 +1,9 @@
+{
+  "name": "ditto-sdk2",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/ditto-sdk2/src",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project ditto-sdk2 --web",
+  "targets": {}
+}
