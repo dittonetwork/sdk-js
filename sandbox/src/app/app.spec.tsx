@@ -10,6 +10,6 @@ describe('App', () => {
 
   it('should have a greeting as the title', () => {
     const { getByText } = render(<App />);
-    expect(getByText(/Welcome ditto-sdk2/gi)).toBeTruthy();
+    expect(getByText(/Welcome ditto-sdk/gi)).toBeTruthy();
   });
 });

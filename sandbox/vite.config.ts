@@ -5,7 +5,7 @@ import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/apps/ditto-sdk2',
+  cacheDir: '../node_modules/.vite/sandbox',
 
   server: {
     port: 4200,
@@ -25,25 +25,10 @@ export default defineConfig({
   // },
 
   build: {
-    outDir: '../../dist/apps/ditto-sdk2',
+    outDir: '../dist/sandbox',
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
     },
-  },
-
-  test: {
-    globals: true,
-    cache: {
-      dir: '../../node_modules/.vitest',
-    },
-    environment: 'jsdom',
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-
-    reporters: ['default'],
-    coverage: {
-      reportsDirectory: '../../coverage/apps/ditto-sdk2',
-      provider: 'v8',
-    },
-  },
+  }
 });
