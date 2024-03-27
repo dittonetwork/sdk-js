@@ -30,5 +30,21 @@ export default defineConfig({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
-  }
+  },
+
+  // @ts-expect-error test here
+  test: {
+    globals: true,
+    cache: {
+      dir: '../node_modules/.vitest',
+    },
+    environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+
+    reporters: ['default'],
+    coverage: {
+      reportsDirectory: '../coverage/sandbox',
+      provider: 'v8',
+    },
+  },
 });
