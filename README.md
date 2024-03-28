@@ -226,10 +226,6 @@ interface DittoApiClientConfig {
 
 **Example**
 ```typescript
-import { DittoApi as ApiClient, DAUnathorizedError, DABaseError } from '@ditto-sdk/api'
-import { Workflow } from '@ditto-sdk/types'
-
-// client initialization
 const apiClient = new DittoApi({
     baseUrl: 'https://dev.backend.ditto.io',
     requestInterceptors: [
