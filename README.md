@@ -204,3 +204,47 @@ interface SmartWallet {
     ...
   }
 ```
+
+## HttpClient
+
+**Interfaces** 
+```typescript
+interface DittoApiClient {
+    constructor(config: DittoApiClientConfig): void;
+    
+    setAuthKey(autKey: string): void;
+
+    post(input: RequestInfo | URL, init?: RequestInit): Promise<Response>
+    get(input: RequestInfo | URL, init?: RequestInit): Promise<Response>
+}
+
+interface DittoApiClientConfig {
+    baseUrl: string,
+    requestInterceptors?: Array<(request: Request) => Request>
+}
+```
+
+**Example**
+```typescript
+import { DittoApi as ApiClient, DAUnathorizedError, DABaseError } from '@ditto-sdk/api'
+import { Workflow } from '@ditto-sdk/types'
+
+// client initialization
+const apiClient = new DittoApi({
+    baseUrl: 'https://dev.backend.ditto.io',
+    requestInterceptors: [
+        // way for enriching requests
+        (request: Request) => {
+            request.headers = {
+                ...request.headers,
+                'X-app-name': 'user defined header'
+            }
+
+            return request;
+        },
+    ]
+})
+
+const response = await apiClient.get('/workflows', { page: 1, limit: 12 })
+const workflows: Workflow[] = await response.json()
+```
