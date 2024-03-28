@@ -12,11 +12,13 @@ interface DittoProvider {
   constructor(config: DittoProviderConfig): DittoProvider;
     
   authenticate(): Promise<boolean>
+  
+  getWorkflowsFactory(): Promise<WorkflowsFactory>
+  getSmartWalletsFactory(): Promise<SmartWalletsFactory>
 }
 
 interface DittoProviderConfig {
-  signer: SignerTypeHere, 
-  provider: JSONProviderTypeHere,
+  signer: DittoSigner, 
   // DittoProvider will try to detect storage by himself, but also will be able to set custom one 
   storage?: DittoProviderStorage,  
 }
@@ -62,7 +64,7 @@ async function main() {
     storage: new InMemoryStorage(),  
   })
 
-  await provider.authenticate() // here internally will be update authKey for apiClient
+  await provider.authenticate() // here internally will update authKey for apiClient
 
   const history = await new WorkflowsFactory(provider).getHistory({ limit: 10, offset: 0 })
   ...
@@ -111,7 +113,7 @@ type Actions = {
   // Need to be defined
 }
 
-interface Factory {
+interface WorkflowsFactory {
   create(name: string, triggers: Trigger[], actions: Actions[], chainId: number): Promise<Workflow>
 
 
@@ -125,7 +127,7 @@ interface Factory {
 **Example:**
 ```typescript
   import { DittoProvider } from '@dittoproject/provider'
-  import { Factory as WorkflowsFactory, Triggers, Actions } from '@dittoproject/workflows'
+  import { WorkflowsFactory, Triggers, Actions } from '@dittoproject/workflows'
 
   async function main() {
     const provider = new DittoProvider({
@@ -135,7 +137,7 @@ interface Factory {
 
     await provider.authenticate()
 
-    const workflows = new WorkflowsFactory(provider)
+    const workflows = provider.getWorkflowsFactory()
 
     await workflows.create('First Automation', [Trigger.Instant], [ Actions.SwapWithUniswap ], 137)
     
@@ -192,7 +194,7 @@ interface SmartWallet {
 
     await provider.authenticate()
 
-    const walletsFactory = new SmartWalletsFactory(provider)
+    const walletsFactory = provider.getSmartWalletsFactory()
 
     const wallets = await walletsFactory.list(137)
 
@@ -243,4 +245,16 @@ const apiClient = new DittoApi({
 
 const response = await apiClient.get('/workflows', { page: 1, limit: 12 })
 const workflows: Workflow[] = await response.json()
+```
+
+## Signer adapters
+
+Just a wrapper over etherjs or web3.js
+
+```typescript
+interface DittoSigner {
+  getAddress(): Promise<WalletAddress>
+  sendTransaction(tx: DittoSignerTx): Promise<TxHash>
+  signMessage(string): Promise<string>
+}
 ```
