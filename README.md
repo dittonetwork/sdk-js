@@ -1,37 +1,27 @@
 # SDK js
-[Good reference ](https://github.com/dittonetwork/sdk-core)
+[Good reference](https://github.com/dittonetwork/sdk-core)
 
 ## Authenticate
 
-**Interface:**
+**Interfaces:**
 ```typescript
 /**
  * Used for all the Ditto related operations
  */
 interface DittoProvider {
-  constructor(config: DittoProviderConfig): DittoProvider;
+  constructor(config: DittoProviderConfig): void;
     
   authenticate(): Promise<boolean>
+  
+  getStorage(): DittoStorage
+  getHttpClient(): HttpClient
 }
 
 interface DittoProviderConfig {
-  signer: SignerTypeHere, 
-  provider: JSONProviderTypeHere,
-  // DittoProvider will try to detect storage by himself, but also will be able to set custom one 
-  storage?: DittoProviderStorage,  
+  signer: Signer,
+  storage: DittoStorage, // Storage is reserved
+  httpClient: HttpClient,
 }
-
-// for browser usage, will be set automatically in browser if not defined other
-class DittoProviderLocalStorage implements DittoProviderStorage { ... }
-
-// for server usage, will be set automatically on a server if not defined other
-class DittoProviderFileStorage implements DittoProviderStorage { ... }
-
-interface DittoProviderStorage {
-  set(key: string, value: string): void | Promise<void>,
-  get<T = Optional<string>>(key: string): T | Promise<T>,  
-  remove(key: string): void | Promise<void>,  
-} 
 ```
 
 **Example:**
@@ -39,7 +29,38 @@ interface DittoProviderStorage {
 import { DittoProvider } from '@dittoproject/provider'
 import { Factory as WorkflowsFactory } from '@dittoproject/workflows'
 
-class InMemoryStorage implements DittoProviderStorage {
+async function main() {
+  const provider = new DittoProvider({
+    signer,
+    storage: new InMemoryStorage(),  
+  })
+
+  await provider.authenticate()
+
+  const history = await new WorkflowsFactory(provider).getHistory({ limit: 10, offset: 0 })
+}
+```
+
+## Storage
+**Interfaces:**
+```typescript
+interface Storage {
+  set(key: string, value: string): void | Promise<void>,
+  get<T = Optional<string>>(key: string): T | Promise<T>,  
+  remove(key: string): void | Promise<void>,  
+} 
+```
+
+**Example**
+```typescript
+// for browser usage
+class BrowserStorage implements DittoStorage { ... }
+
+// for server usage
+class FileStorage implements DittoStorage { ... }
+
+// example of custom storage
+class InMemoryStorage implements DittoStorage {
   private _inMemoryStorage: Record<string, string> = {} 
     
   public get(key: string): Optional<string> {
@@ -54,25 +75,21 @@ class InMemoryStorage implements DittoProviderStorage {
     delete this._inMemoryStorage[key]
   }  
 }
+```
 
-async function main() {
-  const provider = new DittoProvider({
-    signer,
-    provider: jsonRpcProvider,
-    storage: new InMemoryStorage(),  
-  })
+## HttpClient
 
-  await provider.authenticate() // here internally will be update authKey for apiClient
-
-  const history = await new WorkflowsFactory(provider).getHistory({ limit: 10, offset: 0 })
-  ...
+**Interfaces:**
+```typescript
+interface HttpClient {
+    post(input: RequestInfo | URL, init?: RequestInit): Promise<Response>
+    get(input: RequestInfo | URL, init?: RequestInit): Promise<Response>
 }
 ```
 
-
 ## Workflows
 
-**Interface:**
+**Interfaces:**
 ```typescript
 type Execution = {
   workflowId: string
@@ -112,6 +129,8 @@ type Actions = {
 }
 
 interface Factory {
+  constructor(provider: DittoProvider): void;
+  
   create(name: string, triggers: Trigger[], actions: Actions[], chainId: number): Promise<Workflow>
 
 
@@ -124,9 +143,6 @@ interface Factory {
 
 **Example:**
 ```typescript
-  import { DittoProvider } from '@dittoproject/provider'
-  import { Factory as WorkflowsFactory, Triggers, Actions } from '@dittoproject/workflows'
-
   async function main() {
     const provider = new DittoProvider({
       signer,
@@ -146,7 +162,7 @@ interface Factory {
 
 ## Smart Wallets (Vaults)
 
-**Interface:**
+**Interfaces:**
 ```typescript
 type Asset = {
   id: string
@@ -154,6 +170,8 @@ type Asset = {
 }
 
 interface Factory {
+  constructor(provider: DittoProvider): void;
+  
   list(chainId: number): Promise<SmartWallet[]>
   getByAddress(chainId: number, address: string): Promise<SmartWallet>
 }
@@ -181,13 +199,10 @@ interface SmartWallet {
 **Example:**
 
 ```typescript
-  import { DittoProvider } from '@dittoproject/provider'
-  import { Factory as SmartWalletsFactory } from '@dittoproject/smartwallets'
-
   async function main() {
     const provider = new DittoProvider({
       signer,
-      provider: jsonRpcProvider
+      httpClient,
     })
 
     await provider.authenticate()
@@ -203,44 +218,4 @@ interface SmartWallet {
     await wallet.rename('some other name')
     ...
   }
-```
-
-## HttpClient
-
-**Interfaces** 
-```typescript
-interface DittoApiClient {
-    constructor(config: DittoApiClientConfig): void;
-    
-    setAuthKey(autKey: string): void;
-
-    post(input: RequestInfo | URL, init?: RequestInit): Promise<Response>
-    get(input: RequestInfo | URL, init?: RequestInit): Promise<Response>
-}
-
-interface DittoApiClientConfig {
-    baseUrl: string,
-    requestInterceptors?: Array<(request: Request) => Request>
-}
-```
-
-**Example**
-```typescript
-const apiClient = new DittoApi({
-    baseUrl: 'https://dev.backend.ditto.io',
-    requestInterceptors: [
-        // way for enriching requests
-        (request: Request) => {
-            request.headers = {
-                ...request.headers,
-                'X-app-name': 'user defined header'
-            }
-
-            return request;
-        },
-    ]
-})
-
-const response = await apiClient.get('/workflows', { page: 1, limit: 12 })
-const workflows: Workflow[] = await response.json()
 ```
