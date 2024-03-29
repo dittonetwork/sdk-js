@@ -1,6 +1,8 @@
 on:
   issue_comment:
     types: [created]
+  discussion:
+    types: [created, answered]
 name: Issue Commented
 jobs:
   slackNotification:
