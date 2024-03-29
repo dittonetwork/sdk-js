@@ -25,3 +25,5 @@ root.render(
     </BrowserRouter>
   </StrictMode>
 );
+
+//  <SignerTest /> for sdk testing

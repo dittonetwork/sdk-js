@@ -2,7 +2,11 @@
   "name": "@ditto-sdk/ditto-sdk",
   "version": "0.0.1",
   "dependencies": {
+    "fetch-ponyfill": "^7.1.0",
     "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "ethers": "^6.11.1"
   },
   "type": "commonjs",
   "main": "./src/index.js",
