@@ -15,12 +15,13 @@ interface DittoProvider {
   
   getStorage(): DittoStorage
   getHttpClient(): HttpClient
+  getContractFactory(): ContractFactory<DittoContract>
 }
 
 interface DittoProviderConfig {
   signer: Signer,
-  storage: DittoStorage, // Storage is reserved
-  httpClient: HttpClient,
+  storage: DittoStorage,
+  contractFactory: ContractFactory<DittoContract>,
 }
 ```
 
@@ -30,15 +31,80 @@ import { DittoProvider } from '@dittoproject/provider'
 import { Factory as WorkflowsFactory } from '@dittoproject/workflows'
 
 async function main() {
+  const signer = await new ethers.BrowserProvider(window.ethereum!).getSigner()
+  const dittoSigner =  new EthersSigner(signer)
+  
   const provider = new DittoProvider({
-    signer,
-    storage: new InMemoryStorage(),  
+    signer: dittoSigner,
+    storage: new InMemoryStorage(),
+    contractFactory: new EthersContractFactory(ethers.Contract, signer),
   })
 
   await provider.authenticate()
 
   const history = await new WorkflowsFactory(provider).getHistory({ limit: 10, offset: 0 })
 }
+```
+
+## Contract
+**Interfaces:**
+```typescript
+interface ContractFactory<T extends DittoContract> {
+  getContract(address: WalletAddress, abi: string): Promise<T>;
+}
+
+interface DittoContract {
+  call<P, R>(method: string, params: P): Promise<R>;
+}
+```
+
+**Example**
+```typescript
+const abi = `[
+  {
+    "inputs": [],
+    "name": "retrieve",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "num",
+        "type": "uint256"
+      }
+    ],
+    "name": "store",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]`
+const smartContractAddress = '0xd10e3E8EbC4B55eAE572181be1554356Fb2a7767'
+
+const provider = new DittoProvider({
+  // here we use wrapper over ethersjs contracts
+  contractFactory: new EthersContractFactory(ethers.Contract, signer),
+  ...
+})
+
+const contract = await provider.getContractFactory().getContract(smartContractAddress, abi);
+
+// write method
+const { hash } = await contract.call<string, { hash: string }>('store', 12345n);
+// wallet will be opened, you should write tx and send to blockchain and wait for tx mining
+
+// read method
+const storedNumber = await contract.call<null, bigint>('retrieve', null)
+// stored number is 12345n
 ```
 
 ## Storage
