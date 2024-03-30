@@ -1,11 +1,9 @@
 import { HttpClient, HttpClientMethod } from './types';
 import * as fetchPonyfill from 'fetch-ponyfill';
-import { Nullable, Optional } from '../types';
+import { Optional } from '../types';
 
 export class DittoHttpClient implements HttpClient {
   private readonly fetch = fetchPonyfill().fetch;
-
-  private authKey: Nullable<string> = null; // will be used later
 
   private baseUrl = 'https://backend.dittonetwork.io';
 
@@ -15,10 +13,6 @@ export class DittoHttpClient implements HttpClient {
 
   public post(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     return this.fetch(...this.enrichRequest('post', input, init));
-  }
-
-  public setAuthKey(key: string) {
-    this.authKey = key;
   }
 
   private enrichWithMethod(

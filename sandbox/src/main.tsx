@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './app/app';
 import { MetaMaskProvider } from '@metamask/sdk-react';
 import { ContractTesting } from './components/contract-testing';
+import { SignerTest } from './components/signer-test';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -28,6 +29,7 @@ root.render(
           }
         />
         <Route path="/contracts" element={<ContractTesting />} />
+        <Route path="/auth" element={<SignerTest />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
