@@ -6,10 +6,14 @@ import App from './app/app';
 import { MetaMaskProvider } from '@metamask/sdk-react';
 import { ContractTesting } from './components/contract-testing';
 import { SignerTest } from './components/signer-test';
+import { Workflows } from './components/workflows';
+import { Navbar } from './navbar';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <StrictMode>
+    <Navbar />
+
     <BrowserRouter>
       <Routes>
         <Route
@@ -30,6 +34,7 @@ root.render(
         />
         <Route path="/contracts" element={<ContractTesting />} />
         <Route path="/auth" element={<SignerTest />} />
+        <Route path="/workflows" element={<Workflows />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

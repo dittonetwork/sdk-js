@@ -11,7 +11,7 @@ export const SignerTest = () => {
   const [auth, setAuth] = useState(false);
 
   const handleSignClick = async () => {
-    const signer = await new ethers.BrowserProvider(window.ethereum).getSigner();
+    const signer = await new ethers.BrowserProvider(window.ethereum!).getSigner();
 
     const provider = new Provider({
       signer: new EthersSigner(signer),
