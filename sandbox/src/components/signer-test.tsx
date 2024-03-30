@@ -1,4 +1,9 @@
-import { BrowserStorage, EthersSigner, Provider } from '@ditto-sdk/ditto-sdk';
+import {
+  BrowserStorage,
+  EthersContractFactory,
+  EthersSigner,
+  Provider,
+} from '@ditto-sdk/ditto-sdk';
 import { ethers } from 'ethers';
 import { useState } from 'react';
 
@@ -11,6 +16,7 @@ export const SignerTest = () => {
     const provider = new Provider({
       signer: new EthersSigner(signer),
       storage: new BrowserStorage(),
+      contractFactory: new EthersContractFactory(ethers.Contract, signer),
     });
 
     const authResult = await provider.authenticate();
