@@ -6,6 +6,9 @@ import {
   EthersContract,
   DittoContractNotInitializedError,
 } from './contracts';
+import { WorkflowsFactory } from './workflow';
+import type { WorkflowExecution } from './workflow';
+import { BaseApiError } from './api-client';
 
 export {
   EthersSigner,
@@ -14,4 +17,8 @@ export {
   EthersContractFactory,
   EthersContract,
   DittoContractNotInitializedError,
+  WorkflowsFactory,
+  BaseApiError,
 };
+
+export type { WorkflowExecution };

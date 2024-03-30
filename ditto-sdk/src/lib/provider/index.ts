@@ -4,11 +4,12 @@ import { DittoHttpClient } from '../http-client';
 import { HttpClient } from '../http-client/types';
 import { DittoSigner } from '../signer/types';
 import { ContractFactory, DittoContract } from '../contracts/types';
-import { DittoApiClient } from './api-client';
+import { AuthApiClient } from '../api-client/auth-api-client';
+import { VoidStorage } from '../storage/void-storage';
 
 export class Provider implements DittoProvider {
   private readonly httpClient: DittoHttpClient;
-  private readonly apiClient: DittoApiClient;
+  private readonly authApiClient: AuthApiClient;
 
   private readonly signer: DittoSigner;
 
@@ -20,7 +21,7 @@ export class Provider implements DittoProvider {
     this.storage = config.storage;
 
     this.httpClient = new DittoHttpClient();
-    this.apiClient = new DittoApiClient(this.httpClient, this.storage);
+    this.authApiClient = new AuthApiClient(this.httpClient, new VoidStorage());
 
     this.signer = config.signer;
     this.contractFactory = config.contractFactory;
@@ -29,9 +30,9 @@ export class Provider implements DittoProvider {
   public async authenticate(): Promise<boolean> {
     const walletAddress = await this.signer.getAddress();
 
-    const nonce = await this.apiClient.getAuthNonce(walletAddress);
+    const nonce = await this.authApiClient.getAuthNonce(walletAddress);
     const signedMessage = await this.signer.signMessage(nonce);
-    const accessToken = await this.apiClient.getAccessToken(signedMessage, walletAddress);
+    const accessToken = await this.authApiClient.getAccessToken(signedMessage, walletAddress);
 
     this.storage.set('access-token', accessToken);
 

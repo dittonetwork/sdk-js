@@ -1,34 +1,13 @@
-import { AuthNonce, JSONBody } from './types';
-import { DittoHttpClient } from '../../http-client';
-import { Maybe, WalletAddress } from '../../types';
-import { DittoStorage } from '../../storage/types';
+import { JSONBody } from './types';
+import { DittoStorage } from '../storage/types';
+import { Maybe } from '../types';
+import { HttpClient } from '../http-client/types';
+import { BaseApiError } from './errors/base-api-error';
 
-export class DittoApiClient {
-  constructor(
-    private readonly httpClient: DittoHttpClient,
-    private readonly storage: DittoStorage
-  ) {}
+export class BaseApiClient {
+  constructor(private readonly httpClient: HttpClient, private readonly storage: DittoStorage) {}
 
-  public async getAuthNonce(walletAddress: WalletAddress): Promise<AuthNonce> {
-    const { nonce } = await this.doGet<{ nonce: string }>('/authentication/nonce', {
-      walletAddress,
-    });
-    return nonce;
-  }
-
-  public async getAccessToken(
-    signedMessage: string,
-    walletAddress: WalletAddress
-  ): Promise<string> {
-    const { accessToken } = await this.doPost<{ accessToken: string }>('/authentication/verify', {
-      signature: signedMessage,
-      walletAddress,
-    });
-
-    return accessToken;
-  }
-
-  private async doGet<T>(path: string, query: Record<string, string>): Promise<T> {
+  public async doGet<T>(path: string, query: Record<string, string> = {}): Promise<T> {
     const accessToken = await this.getAuthKey();
     const response = await this.httpClient.get(
       `${path}?${Object.entries(query).reduce(
@@ -43,12 +22,14 @@ export class DittoApiClient {
       }
     );
 
+    await this.throwErrorIfNeeded(response);
+
     const result = await response.json();
 
     return result as T;
   }
 
-  private async doPost<T, P = JSONBody>(path: string, body: P): Promise<T> {
+  public async doPost<T, P = JSONBody>(path: string, body: P): Promise<T> {
     const accessToken = await this.getAuthKey();
     const response = await this.httpClient.post(path, {
       body: JSON.stringify(body),
@@ -57,6 +38,8 @@ export class DittoApiClient {
         ...(accessToken ? { Authorization: accessToken } : {}),
       },
     });
+
+    await this.throwErrorIfNeeded(response);
 
     const result = await response.json();
 
@@ -74,5 +57,14 @@ export class DittoApiClient {
     }
 
     return undefined;
+  }
+
+  private async throwErrorIfNeeded(response: Response): Promise<Response> {
+    if (!response.ok) {
+      const error = await response.json();
+      throw new BaseApiError(error.message, response.status, error);
+    }
+
+    return response;
   }
 }

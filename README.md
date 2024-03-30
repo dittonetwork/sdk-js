@@ -171,7 +171,7 @@ enum WorkflowStatus {
 
 
 interface Workflow {
-  deactiate(): Promise<boolean>
+  deactivate(): Promise<boolean>
   activate(): Promise<boolean>
 
   isActivated(): boolean
