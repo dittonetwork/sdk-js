@@ -55,6 +55,12 @@ export const Workflows = () => {
     alert(JSON.stringify(workflow));
   };
 
+  const handleCreateLimitOrderWorkflowClick = async () => {
+    const workflowsFactory = new WorkflowsFactory(provider!);
+
+    //
+  };
+
   return (
     <div className="container mx-auto p-4 max-w-md bg-white shadow-lg rounded-lg mt-5">
       <h1 className="font-bold text-center mb-4 w-100">Workflows sandbox</h1>

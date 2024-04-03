@@ -1,4 +1,4 @@
-import { Transaction, TxHash, WalletAddress } from '../types';
+import { Transaction, TxHash, WalletAddress } from '../../types';
 
 export interface DittoSigner {
   getAddress(): Promise<WalletAddress>;

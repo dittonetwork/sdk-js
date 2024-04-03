@@ -1,4 +1,6 @@
-import { Execution } from './dto/execution.dto';
+import { Execution } from './execution';
+import { CallDataBuilder } from './builders/types';
+import { Chain } from '../blockchain/chains/types';
 
 export enum WorkflowStatus {
   ACTIVE = 'active',
@@ -7,7 +9,14 @@ export enum WorkflowStatus {
   COMPLETED = 'completed',
 }
 
-export interface Workflow {
+export interface WorkflowInitOptions {
+  name: string;
+  triggers: CallDataBuilder[];
+  actions: CallDataBuilder[];
+  chainId: Chain;
+}
+
+export interface DittoWorkflow {
   deactivate(): Promise<boolean>;
   activate(): Promise<boolean>;
 
@@ -17,21 +26,13 @@ export interface Workflow {
 }
 
 export interface Factory {
-  create(name: string, triggers: Trigger[], actions: Actions[], chainId: number): Promise<Workflow>;
+  create(options: WorkflowInitOptions): Promise<DittoWorkflow>;
 
   getHistory(pagination: PaginationParams): Promise<Execution[]>;
-  getList(statuses: WorkflowStatus[], pagination: PaginationParams): Promise<Workflow[]>;
+  getList(statuses: WorkflowStatus[], pagination: PaginationParams): Promise<DittoWorkflow[]>;
   getCountByStatus(status: WorkflowStatus): Promise<number>;
-  getById(id: string): Promise<Workflow>;
+  getById(id: string): Promise<DittoWorkflow>;
 }
-
-export type Trigger = {
-  // Need to be defined
-};
-
-export type Actions = {
-  // Need to be defined
-};
 
 export type PaginationParams = {
   limit: number;

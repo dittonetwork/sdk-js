@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "dependencies": {
     "fetch-ponyfill": "^7.1.0",
+    "@uniswap/sdk-core": "3.2.6",
+    "@uniswap/v3-sdk": "3.10.2",
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
