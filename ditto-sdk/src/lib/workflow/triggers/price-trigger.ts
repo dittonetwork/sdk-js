@@ -1,5 +1,9 @@
-import { TriggerCallDataBuilder, Triggers } from './types';
-import { CallData, CallDataBuilderReturnData } from '../builders/types';
+import {
+  CallData,
+  CallDataBuilder,
+  CallDataBuilderReturnData,
+  CommonBuilderOptions,
+} from '../builders/types';
 import { Token, V3_CORE_FACTORY_ADDRESSES } from '@uniswap/sdk-core';
 import { computePoolAddress, FeeAmount } from '@uniswap/v3-sdk';
 import { ZERO_ADDRESS } from '../../blockchain/addresses/zero-address';
@@ -11,7 +15,19 @@ import { getRandomBytes } from '../../utils/get-random-bytes';
 import { DittoContractInterface } from '../../blockchain/contracts/types';
 import { Maybe } from '../../types';
 
-export class PriceTriggerCallDataBuilder extends TriggerCallDataBuilder<Triggers.Price> {
+type TriggerConfig = {
+  uniswapPoolFeeTier: FeeAmount;
+  triggerAtPrice: number;
+  priceMustBeHigherThan?: boolean;
+  tokenAddress: string;
+  baseTokenAddress: string;
+};
+
+export class PriceTriggerCallDataBuilder implements CallDataBuilder {
+  protected constructor(
+    protected readonly config: TriggerConfig,
+    protected readonly commonCallDataBuilderConfig: CommonBuilderOptions
+  ) {}
   public async build(): Promise<CallDataBuilderReturnData> {
     const vaultInterface = this.commonCallDataBuilderConfig.provider
       .getContractFactory()

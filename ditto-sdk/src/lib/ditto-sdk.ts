@@ -1,14 +1,14 @@
-import { EthersSigner } from './signer';
+import { EthersSigner } from './blockchain/signer';
 import { Provider } from './provider';
 import { BrowserStorage } from './storage';
 import {
   EthersContractFactory,
   EthersContract,
   DittoContractNotInitializedError,
-} from './contracts';
+} from './blockchain/contracts';
 import { WorkflowsFactory } from './workflow';
 import type { WorkflowExecution } from './workflow';
-import { BaseApiError } from './api-client';
+import { BaseApiError } from './network/api-client';
 
 export {
   EthersSigner,

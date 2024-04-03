@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientMethod } from './types';
-import * as fetchPonyfill from 'fetch-ponyfill';
+import fetchPonyfill from 'fetch-ponyfill';
 import { Optional } from '../../types';
 
 export class DittoHttpClient implements HttpClient {
