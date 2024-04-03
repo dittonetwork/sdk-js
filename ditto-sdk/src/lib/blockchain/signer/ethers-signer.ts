@@ -17,4 +17,8 @@ export class EthersSigner implements DittoSigner {
   public signMessage(message: string): Promise<string> {
     return this.ethersSigner.signMessage(message);
   }
+
+  public getRawSigner(): JsonRpcSigner {
+    return this.ethersSigner;
+  }
 }

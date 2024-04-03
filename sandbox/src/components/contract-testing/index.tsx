@@ -20,7 +20,7 @@ export const ContractTesting = () => {
       const provider = new Provider({
         signer: new EthersSigner(signer),
         storage: new BrowserStorage(),
-        contractFactory: new EthersContractFactory(ethers.Contract, signer),
+        contractFactory: new EthersContractFactory(signer),
       });
 
       setProvider(provider);
