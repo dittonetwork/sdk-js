@@ -33,7 +33,7 @@ export const ContractTesting = () => {
   };
 
   const handleGetValueClick = async () => {
-    const contract = await provider!
+    const contract = provider!
       .getContractFactory()
       .getContract('0xd10e3E8EbC4B55eAE572181be1554356Fb2a7767', JSON.stringify(storageAbi));
 
@@ -43,7 +43,7 @@ export const ContractTesting = () => {
 
   const handleSetValueClick = async () => {
     const value = prompt('Enter a value');
-    const contract = await provider!
+    const contract = provider!
       .getContractFactory()
       .getContract('0xd10e3E8EbC4B55eAE572181be1554356Fb2a7767', JSON.stringify(storageAbi));
 

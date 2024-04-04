@@ -39,6 +39,10 @@ export class Provider implements DittoProvider {
     return true;
   }
 
+  public getSigner(): DittoSigner {
+    return this.signer;
+  }
+
   public getStorage(): DittoStorage {
     return this.config.storage;
   }

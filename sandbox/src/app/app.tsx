@@ -1,6 +1,15 @@
 import { Button, formatAddress, Popover, PopoverContent, PopoverTrigger } from '@ditto-sdk/shared';
 import { useSDK, MetaMaskProvider } from "@metamask/sdk-react";
 import { Link } from "react-router-dom";
+import {
+  BrowserStorage,
+  EthersContractFactory,
+  EthersSigner,
+  Provider,
+  SmartWalletFactoryContract,
+} from '@ditto-sdk/ditto-sdk';
+import { ethers } from 'ethers';
+import { useState } from 'react';
 
 const ConnectWalletButton = () => {
   const { sdk, connected, connecting, account } = useSDK();
@@ -75,11 +84,86 @@ const NavBar = () => {
 
 
 export function App() {
+  const [smartWalletAddress, setSmartWalletAddress] = useState<string>('');
+
+  const handlePredictVaultAddressSDKClick = async () => {  
+    const signer = await new ethers.BrowserProvider(window.ethereum!).getSigner();
+
+    const provider = new Provider({
+      signer: new EthersSigner(signer),
+      storage: new BrowserStorage(),
+      contractFactory: new EthersContractFactory(ethers.Contract, signer),
+    });
+
+    const smartWalletFactory = new SmartWalletFactoryContract(provider, new EthersSigner(signer));
+
+    const addr = await smartWalletFactory.predictVaultAddress();
+    console.log('addr', addr);
+  };
+
+  const handlePredictVaultAddressClick = async () => {
+    // const signer = await new ethers.BrowserProvider(window.ethereum!).getSigner();
+    
+    // const contractFactory = new Contract(factoryAddress, factoryAbi, signer);
+
+    // const vault = await contractFactory.predictDeterministicVaultAddress(
+    //       signer.address,
+    //       vaultId
+    //   );
+    //   console.log(vault);
+
+    //   // deploy
+    //   const vaultCodeSize = (await provider.getCode(vault)).length;
+    //   let tx;
+
+    //   if (vaultCodeSize === 0) {
+    //       tx = await contractFactory.deploy(1, vaultId);
+    //       console.log(await tx.wait());
+    //   }
+  }
+
+
   return (
     <div className="w-full h-screen">
       <NavBar />
-      <div className="flex flex-col items-center py-20 justify-center bg-slate-600">
-        <h1 className="text-6xl text-white">Hello World</h1>
+      <div className="flex flex-col py-4 px-10 h-screen">
+        <h1 className="text-6xl">Getting started</h1>
+
+        <div className="flex flex-col gap-4 mt-4">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-2xl font-bold">Smart Wallet</h2>
+            <p className="text-gray-600">
+              Create a smart wallet and deploy it to the blockchain
+            </p>
+
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <Button
+                  className="w-min"
+                  onClick={handlePredictVaultAddressClick}
+                >
+                  Predict Vault Address (SDK)
+                </Button>
+
+                <Button
+                  className="w-min"
+                  onClick={handlePredictVaultAddressClick}
+                >
+                  Predict Vault Address
+                </Button>
+              </div>
+              <p className="text-gray-600">
+                This will predict the address of the smart wallet based on the wallet address
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-2xl font-bold">Workflow</h2>
+            <p className="text-gray-600">
+              Create a workflow and deploy it to the blockchain
+            </p>
+          </div>
+        </div> 
       </div>
     </div>
   );

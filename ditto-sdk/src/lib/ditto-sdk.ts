@@ -5,6 +5,7 @@ import {
   EthersContractFactory,
   EthersContract,
   DittoContractNotInitializedError,
+  SmartWalletFactoryContract,
 } from './contracts';
 import { WorkflowsFactory } from './workflow';
 import type { WorkflowExecution } from './workflow';
@@ -19,6 +20,7 @@ export {
   DittoContractNotInitializedError,
   WorkflowsFactory,
   BaseApiError,
+  SmartWalletFactoryContract,
 };
 
 export type { WorkflowExecution };

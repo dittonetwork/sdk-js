@@ -9,7 +9,7 @@ export class EthersContractFactory implements ContractFactory<EthersContract> {
     private readonly signer: ethers.Signer
   ) {}
 
-  public async getContract(address: WalletAddress, abi: string) {
+  public getContract(address: WalletAddress, abi: string) {
     const contract = new this.ethersContractClass(address, abi, this.signer);
     return new EthersContract(contract);
   }

@@ -1,7 +1,7 @@
 import { WalletAddress } from '../types';
 
 export interface ContractFactory<T extends DittoContract> {
-  getContract(address: WalletAddress, abi: string): Promise<T>;
+  getContract(address: WalletAddress, abi: any): T;
 }
 
 export interface DittoContract {
