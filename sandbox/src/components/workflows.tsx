@@ -20,7 +20,7 @@ export const Workflows = () => {
         new Provider({
           signer: new EthersSigner(signer),
           storage: new BrowserStorage(),
-          contractFactory: new EthersContractFactory(ethers.Contract, signer),
+          contractFactory: new EthersContractFactory(signer),
         })
       );
     });
@@ -53,6 +53,12 @@ export const Workflows = () => {
     const workflow = await workflowsFactory.getById(id);
 
     alert(JSON.stringify(workflow));
+  };
+
+  const handleCreateLimitOrderWorkflowClick = async () => {
+    const workflowsFactory = new WorkflowsFactory(provider!);
+
+    //
   };
 
   return (

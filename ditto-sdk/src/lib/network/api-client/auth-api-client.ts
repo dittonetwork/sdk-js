@@ -1,6 +1,6 @@
 import { AuthNonce } from './types';
 import { BaseApiClient } from './base-api-client';
-import { WalletAddress } from '../types';
+import { WalletAddress } from '../../types';
 
 export class AuthApiClient extends BaseApiClient {
   public async getAuthNonce(walletAddress: WalletAddress): Promise<AuthNonce> {

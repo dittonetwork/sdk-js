@@ -1,5 +1,5 @@
 import { BaseApiClient } from './base-api-client';
-import { Execution } from '../workflow/dto/execution.dto';
+import { Execution } from '../../workflow/execution';
 
 export class WorkflowApiClient extends BaseApiClient {
   public getWorkflows(): Promise<Execution[]> {

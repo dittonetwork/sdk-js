@@ -169,6 +169,12 @@ enum WorkflowStatus {
   COMPLETED = 'completed',
 }
 
+interface WorkflowInitOptions {
+  name: string,
+  trigger: TriggerWithConfiguration
+  actions: ActionWithConfiguration[]
+  chainId: number
+}
 
 interface Workflow {
   deactivate(): Promise<boolean>
@@ -179,26 +185,23 @@ interface Workflow {
   getStatus(): WorkflowStatus
 }
 
-
-
 type PaginationParams = {
   limit: number
   offset: number
 }
 
-type Trigger = {
-  // Need to be defined
+enum Triggers {
+  Schedule = "schedule",
+  Instant = "instant",
+  Price = "price"
 }
 
-type Actions = {
-  // Need to be defined
+enum Actions {
+  SwapWithUniswap = "swapWithUniswap"
 }
 
 interface Factory {
-  constructor(provider: DittoProvider): void;
-  
-  create(name: string, triggers: Trigger[], actions: Actions[], chainId: number): Promise<Workflow>
-
+  create(options: WorkflowInitOptions): Promise<Workflow>
 
   getHistory(pagination: PaginationParams): Promise<Execution[]>
   getList(statuses: WorkflowStatus[], pagination: PaginationParams): Promise<Workflow[]>
@@ -220,8 +223,6 @@ interface Factory {
     const workflows = new WorkflowsFactory(provider)
 
     await workflows.create('First Automation', [Trigger.Instant], [ Actions.SwapWithUniswap ], 137)
-    
-    ...
   }
 ```
 

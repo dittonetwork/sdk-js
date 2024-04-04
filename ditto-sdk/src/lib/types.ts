@@ -5,6 +5,7 @@ export type Nullable<T> = T | null;
 export type Maybe<T> = Optional<T> | Nullable<T>;
 
 export type WalletAddress = string;
+export type Address = string;
 
 export type Transaction = EtherTransaction;
 

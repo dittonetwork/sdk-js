@@ -1,11 +1,15 @@
 import { DittoProvider, DittoProviderConfig } from './types';
 import { DittoStorage } from '../storage/types';
-import { DittoHttpClient } from '../http-client';
-import { HttpClient } from '../http-client/types';
-import { DittoSigner } from '../signer/types';
-import { ContractFactory, DittoContract } from '../contracts/types';
-import { AuthApiClient } from '../api-client/auth-api-client';
 import { VoidStorage } from '../storage/void-storage';
+import { DittoHttpClient } from '../network/http-client';
+import { AuthApiClient } from '../network/api-client/auth-api-client';
+import { DittoSigner } from '../blockchain/signer/types';
+import {
+  ContractFactory,
+  DittoContract,
+  DittoContractInterface,
+} from '../blockchain/contracts/types';
+import { HttpClient } from '../network/http-client/types';
 
 export class Provider implements DittoProvider {
   private readonly httpClient: DittoHttpClient;
@@ -15,7 +19,7 @@ export class Provider implements DittoProvider {
 
   private readonly storage: DittoStorage;
 
-  private readonly contractFactory: ContractFactory<DittoContract>;
+  private readonly contractFactory: ContractFactory<DittoContract, DittoContractInterface>;
 
   constructor(private readonly config: DittoProviderConfig) {
     this.storage = config.storage;
@@ -51,7 +55,7 @@ export class Provider implements DittoProvider {
     return this.httpClient;
   }
 
-  public getContractFactory(): ContractFactory<DittoContract> {
+  public getContractFactory(): ContractFactory<DittoContract, DittoContractInterface> {
     return this.contractFactory;
   }
 }

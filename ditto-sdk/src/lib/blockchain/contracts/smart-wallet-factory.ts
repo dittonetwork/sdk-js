@@ -1,9 +1,8 @@
 import { ethers } from 'ethers';
-import { WalletAddress } from '../types';
-import { EthersContractFactory } from './ethers';
-import { abi as factoryAbi } from '../abi/IVaultFactory.json';
+import { WalletAddress } from '../../types';
+import { abi as factoryAbi } from '../../abi/IVaultFactory.json';
 
-import { DittoProvider } from '../provider/types';
+import { DittoProvider } from '../../provider/types';
 import { DittoContract } from './types';
 import { DittoSigner } from '../signer/types';
 

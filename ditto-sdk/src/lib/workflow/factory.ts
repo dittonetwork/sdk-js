@@ -1,35 +1,32 @@
 import {
-  Actions,
   Factory as IWorkflowFactory,
   PaginationParams,
-  Trigger,
-  Workflow,
+  DittoWorkflow,
+  WorkflowInitOptions,
   WorkflowStatus,
 } from './types';
 import { DittoProvider } from '../provider/types';
-import { WorkflowApiClient } from '../api-client/workflow-api-client';
-import { Execution } from './dto/execution.dto';
+import { Execution } from './execution';
+import { Workflow } from './workflow';
+import { WorkflowApiClient } from '../network/api-client/workflow-api-client';
 
 export class WorkflowsFactory implements IWorkflowFactory {
   private readonly apiClient: WorkflowApiClient;
 
-  constructor(provider: DittoProvider) {
+  constructor(private readonly provider: DittoProvider) {
     this.apiClient = new WorkflowApiClient(provider.getHttpClient(), provider.getStorage());
   }
 
-  public create(
-    name: string,
-    triggers: Trigger[],
-    actions: Actions[],
-    chainId: number
-  ): Promise<Workflow> {
-    throw new Error('Method not implemented.');
+  public create(options: WorkflowInitOptions): Promise<DittoWorkflow> {
+    const wf = new Workflow(this.provider.getSigner(), options);
+
+    return Promise.resolve(wf);
   }
 
-  public async getById(id: string): Promise<Workflow> {
+  public async getById(id: string): Promise<DittoWorkflow> {
     const result = await this.apiClient.getWorkflow(id);
 
-    return result as unknown as Workflow;
+    return result as unknown as DittoWorkflow;
   }
 
   public getCountByStatus(status: WorkflowStatus): Promise<number> {
@@ -43,7 +40,7 @@ export class WorkflowsFactory implements IWorkflowFactory {
   public async getList(
     statuses: WorkflowStatus[],
     pagination: PaginationParams
-  ): Promise<Workflow[]> {
+  ): Promise<DittoWorkflow[]> {
     throw new Error('Method not implemented.');
   }
 }

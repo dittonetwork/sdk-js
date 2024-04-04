@@ -1,6 +1,6 @@
-import { JsonRpcSigner } from 'ethers';
-import { Transaction, TxHash, WalletAddress } from '../types';
+import { JsonRpcSigner, Transaction } from 'ethers';
 import { DittoSigner } from './types';
+import { TxHash, WalletAddress } from '../../types';
 
 export class EthersSigner implements DittoSigner {
   constructor(private readonly ethersSigner: JsonRpcSigner) {}
@@ -16,5 +16,9 @@ export class EthersSigner implements DittoSigner {
 
   public signMessage(message: string): Promise<string> {
     return this.ethersSigner.signMessage(message);
+  }
+
+  public getRawSigner(): JsonRpcSigner {
+    return this.ethersSigner;
   }
 }

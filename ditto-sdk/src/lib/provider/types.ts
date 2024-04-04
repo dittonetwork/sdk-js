@@ -1,8 +1,11 @@
-import { EthersSigner } from '../ditto-sdk';
 import { DittoStorage } from '../storage/types';
-import { HttpClient } from '../http-client/types';
-import { ContractFactory, DittoContract } from '../contracts/types';
-import { DittoSigner } from '../signer/types';
+import {
+  ContractFactory,
+  DittoContract,
+  DittoContractInterface,
+} from '../blockchain/contracts/types';
+import { HttpClient } from '../network/http-client/types';
+import { DittoSigner } from '../blockchain/signer/types';
 
 export interface DittoProvider {
   // @todo add typing for constructor
@@ -12,11 +15,11 @@ export interface DittoProvider {
   getSigner(): DittoSigner;
   getStorage(): DittoStorage;
   getHttpClient(): HttpClient;
-  getContractFactory(): ContractFactory<DittoContract>;
+  getContractFactory(): ContractFactory<DittoContract, DittoContractInterface>;
 }
 
 export interface DittoProviderConfig {
-  signer: EthersSigner;
+  signer: DittoSigner;
   storage: DittoStorage;
-  contractFactory: ContractFactory<DittoContract>;
+  contractFactory: ContractFactory<DittoContract, DittoContractInterface>;
 }

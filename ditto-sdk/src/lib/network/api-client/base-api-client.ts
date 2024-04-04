@@ -1,8 +1,8 @@
 import { JSONBody } from './types';
-import { DittoStorage } from '../storage/types';
-import { Maybe } from '../types';
 import { HttpClient } from '../http-client/types';
 import { BaseApiError } from './errors/base-api-error';
+import { DittoStorage } from '../../storage/types';
+import { Maybe } from '../../types';
 
 export class BaseApiClient {
   constructor(private readonly httpClient: HttpClient, private readonly storage: DittoStorage) {}
