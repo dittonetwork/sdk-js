@@ -6,9 +6,9 @@ import {
   EthersContractFactory,
   EthersSigner,
   Provider,
-  SmartWalletFactoryContract,
+  SmartWalletFactory,
 } from '@ditto-sdk/ditto-sdk';
-import { ethers } from 'ethers';
+import { Contract, ethers } from 'ethers';
 import { useState } from 'react';
 
 const ConnectWalletButton = () => {
@@ -33,7 +33,7 @@ const ConnectWalletButton = () => {
       {connected ? (
         <Popover>
           <PopoverTrigger>
-            <Button>{formatAddress(account)}</Button>
+            {formatAddress(account)}
           </PopoverTrigger>
           <PopoverContent className="mt-2 w-44 bg-gray-100 border rounded-md shadow-lg right-0 z-10 top-10">
             <button
@@ -82,20 +82,22 @@ const NavBar = () => {
   );
 };
 
+const factoryAddress = "0xd80372247b20Bf3D726FebfbD79Ad5145875a328";
 
 export function App() {
   const [smartWalletAddress, setSmartWalletAddress] = useState<string>('');
 
   const handlePredictVaultAddressSDKClick = async () => {  
+    console.log('sdk');
     const signer = await new ethers.BrowserProvider(window.ethereum!).getSigner();
 
     const provider = new Provider({
       signer: new EthersSigner(signer),
       storage: new BrowserStorage(),
-      contractFactory: new EthersContractFactory(ethers.Contract, signer),
+      contractFactory: new EthersContractFactory(signer),
     });
 
-    const smartWalletFactory = new SmartWalletFactoryContract(provider, new EthersSigner(signer));
+    const smartWalletFactory = new SmartWalletFactory(provider, new EthersSigner(signer));
 
     const addr = await smartWalletFactory.predictVaultAddress();
     console.log('addr', addr);
@@ -140,7 +142,7 @@ export function App() {
               <div className="flex gap-2">
                 <Button
                   className="w-min"
-                  onClick={handlePredictVaultAddressClick}
+                  onClick={handlePredictVaultAddressSDKClick}
                 >
                   Predict Vault Address (SDK)
                 </Button>

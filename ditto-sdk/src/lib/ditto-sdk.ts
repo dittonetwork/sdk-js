@@ -5,7 +5,7 @@ import {
   EthersContractFactory,
   EthersContract,
   DittoContractNotInitializedError,
-  SmartWalletFactoryContract,
+  SmartWalletFactory,
 } from './blockchain/contracts';
 import { WorkflowsFactory } from './workflow';
 import type { WorkflowExecution } from './workflow';
@@ -20,7 +20,10 @@ export {
   DittoContractNotInitializedError,
   WorkflowsFactory,
   BaseApiError,
-  SmartWalletFactoryContract,
+  SmartWalletFactory,
 };
+
+export { smartWalletfactoryAbi } from './blockchain/abi';
+export { smartWalletAbi } from './blockchain/abi';
 
 export type { WorkflowExecution };

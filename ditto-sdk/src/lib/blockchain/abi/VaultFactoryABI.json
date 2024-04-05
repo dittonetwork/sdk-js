@@ -1,245 +1,314 @@
 [
   {
-    "inputs": [],
-    "name": "Ownable_NewOwnerCannotBeAddressZero",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      }
-    ],
-    "name": "Ownable_SenderIsNotOwner",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "VaultFactory_AlreadyInitialized",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "internalType": "uint16",
-        "name": "vaultId",
-        "type": "uint16"
-      }
-    ],
-    "name": "VaultFactory_IdAlreadyUsed",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "VaultFactory_InvalidDeployArguments",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "VaultFactory_VersionDoesNotExist",
-    "type": "error"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "vault",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint16",
-        "name": "vaultId",
-        "type": "uint16"
-      }
-    ],
-    "name": "VaultCreated",
-    "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newImplemetation",
-        "type": "address"
-      }
-    ],
+    "type": "function",
     "name": "addNewImplementation",
+    "inputs": [
+      {
+        "name": "newImplemetation",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "nonpayable"
   },
   {
+    "type": "function",
+    "name": "crossChainDeploy",
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "version",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint16",
-        "name": "vaultId",
-        "type": "uint16"
-      }
-    ],
-    "name": "deploy",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "version",
-        "type": "uint256"
-      }
-    ],
-    "name": "implementation",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "creator",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       },
       {
-        "internalType": "uint16",
+        "name": "version",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
         "name": "vaultId",
-        "type": "uint16"
+        "type": "uint16",
+        "internalType": "uint16"
       }
     ],
-    "name": "predictDeterministicVaultAddress",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "predicted",
-        "type": "address"
+        "name": "",
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "nonpayable"
   },
   {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
+    "type": "function",
+    "name": "deploy",
     "inputs": [
       {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
+        "name": "version",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "vaultId",
+        "type": "uint16",
+        "internalType": "uint16"
       }
     ],
-    "name": "transferOwnership",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "implementation",
+    "inputs": [
+      {
+        "name": "version",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "predictDeterministicVaultAddress",
+    "inputs": [
+      {
+        "name": "creator",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "vaultId",
+        "type": "uint16",
+        "internalType": "uint16"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "predicted",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "renounceOwnership",
+    "inputs": [],
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "nonpayable"
   },
   {
-    "inputs": [],
+    "type": "function",
+    "name": "setBridgeReceiverContract",
+    "inputs": [
+      {
+        "name": "_dittoBridgeReceiver",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setEntryPointCreatorAddress",
+    "inputs": [
+      {
+        "name": "_entryPointCreator",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "transferOwnership",
+    "inputs": [
+      {
+        "name": "newOwner",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "upgradeLogic",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "address",
         "name": "",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "vaultProxyAdmin",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "address",
         "name": "",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
   },
   {
-    "inputs": [],
+    "type": "function",
     "name": "versions",
+    "inputs": [],
     "outputs": [
       {
-        "internalType": "uint256",
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    "stateMutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferred",
+    "inputs": [
+      {
+        "name": "previousOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false,
+    "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+  },
+  {
+    "type": "event",
+    "name": "VaultCreated",
+    "inputs": [
+      {
+        "name": "creator",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "vault",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "vaultId",
+        "type": "uint16",
+        "indexed": false,
+        "internalType": "uint16"
+      }
+    ],
+    "anonymous": false,
+    "signature": "0x78f8ade376823ef6c3e593ee05639dd8d167f50df13b54ed4e283fc734b7daa1"
+  },
+  {
+    "type": "error",
+    "name": "Ownable_NewOwnerCannotBeAddressZero",
+    "inputs": [],
+    "signature": "0x7b30466f"
+  },
+  {
+    "type": "error",
+    "name": "Ownable_SenderIsNotOwner",
+    "inputs": [
+      {
+        "name": "sender",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "signature": "0x37c14b45"
+  },
+  {
+    "type": "error",
+    "name": "VaultFactory_AlreadyInitialized",
+    "inputs": [],
+    "signature": "0xd1a8e5c3"
+  },
+  {
+    "type": "error",
+    "name": "VaultFactory_IdAlreadyUsed",
+    "inputs": [
+      {
+        "name": "creator",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "vaultId",
+        "type": "uint16",
+        "internalType": "uint16"
+      }
+    ],
+    "signature": "0xb1c9479c"
+  },
+  {
+    "type": "error",
+    "name": "VaultFactory_InvalidDeployArguments",
+    "inputs": [],
+    "signature": "0x527df1b3"
+  },
+  {
+    "type": "error",
+    "name": "VaultFactory_NotAuthorized",
+    "inputs": [],
+    "signature": "0x1c1c04bb"
+  },
+  {
+    "type": "error",
+    "name": "VaultFactory_VersionDoesNotExist",
+    "inputs": [],
+    "signature": "0xd4e632e3"
   }
 ]

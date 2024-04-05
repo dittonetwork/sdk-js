@@ -1,42 +1,28 @@
-import { ethers } from 'ethers';
-import { WalletAddress } from '../../types';
-import { abi as factoryAbi } from '../../abi/IVaultFactory.json';
-
 import { DittoProvider } from '../../provider/types';
 import { DittoContract } from './types';
 import { DittoSigner } from '../signer/types';
+import { smartWalletfactoryAbi } from '../abi';
 
-const DEFAULT_FACTORY_ADDRESS = "0xd80372247b20Bf3D726FebfbD79Ad5145875a328";
+const DEFAULT_FACTORY_ADDRESS = "0xaB5F025297E40bd5ECf340d1709008eFF230C6cA";
 
-
-export class SmartWalletFactoryContract {
-  private _contract?: DittoContract;
+export class SmartWalletFactory {
+  private _contract!: DittoContract;
   private _vaultId = 1; 
   private _factoryAddress = DEFAULT_FACTORY_ADDRESS;
-  private _abi = factoryAbi;
+  private _abi = smartWalletfactoryAbi;
 
-  constructor(private readonly provider: DittoProvider, private readonly signer: DittoSigner) {}
-
-  async init() {
-    this._contract = await this.provider.getContractFactory().getContract(this._factoryAddress, this._abi);
+  constructor(private readonly provider: DittoProvider, private readonly signer: DittoSigner) {
+    this._contract = this.provider.getContractFactory().getContract(this._factoryAddress, JSON.stringify(this._abi));
   }
 
   public async predictVaultAddress() {
-    if (!this._contract) {
-      await this.init();
-    }
-
-    return (this._contract as any).predictDeterministicVaultAddress(
-        await this.signer.getAddress(),
-        this._vaultId,
-    );
+    const address = await this.signer.getAddress();
+    return this._contract.call('predictDeterministicVaultAddress', [address, this._vaultId])
   }
 
   public async deploy() {
-    if (!this._contract) {
-      await this.init();
-    }
-
-    return (this._contract as any).deploy(this._vaultId);
+    return this._contract.call('deploy', [this._vaultId])
   }
+
+  // TODO: list
 }
