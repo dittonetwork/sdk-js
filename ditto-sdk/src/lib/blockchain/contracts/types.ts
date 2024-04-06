@@ -6,7 +6,7 @@ export interface ContractFactory<T extends DittoContract, I extends DittoContrac
 }
 
 export interface DittoContract extends DittoContractInterface {
-  call<P, R>(method: string, params: P): Promise<R>;
+  call<P extends unknown[], R>(method: string, params: P): Promise<R>;
 }
 
 export interface DittoContractInterface {

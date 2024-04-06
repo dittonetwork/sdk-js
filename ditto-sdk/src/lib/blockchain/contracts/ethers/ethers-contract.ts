@@ -16,13 +16,13 @@ export class EthersContract implements DittoContract {
     this.contractInterface = new EthersContractInterface(abi);
   }
 
-  public async call<P, R>(method: string, params: P): Promise<R> {
+  public async call<P extends unknown[], R>(method: string, params: P): Promise<R> {
     if (!this.nativeContract) {
       throw new DittoContractNotInitializedError();
     }
 
     const result = params
-      ? await this.nativeContract[method](params)
+      ? await this.nativeContract[method](...params)
       : await this.nativeContract[method]();
 
     return result as R;
