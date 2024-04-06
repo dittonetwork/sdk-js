@@ -18,7 +18,7 @@ export class WorkflowsFactory implements IWorkflowFactory {
   }
 
   public create(options: WorkflowInitOptions): Promise<DittoWorkflow> {
-    const wf = new Workflow(this.provider.getSigner(), options);
+    const wf = new Workflow(options, this.provider);
 
     return Promise.resolve(wf);
   }

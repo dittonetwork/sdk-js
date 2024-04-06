@@ -1,6 +1,7 @@
 import { Execution } from './execution';
 import { CallDataBuilder } from './builders/types';
 import { Chain } from '../blockchain/chains/types';
+import { WalletAddress } from '../types';
 
 export enum WorkflowStatus {
   ACTIVE = 'active',
@@ -17,6 +18,8 @@ export interface WorkflowInitOptions {
 }
 
 export interface DittoWorkflow {
+  buildAndDeploy(accountAddress: WalletAddress): Promise<void>;
+
   deactivate(): Promise<boolean>;
   activate(): Promise<boolean>;
 

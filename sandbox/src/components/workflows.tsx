@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 import {
   BaseApiError,
   BrowserStorage,
+  Chain,
   EthersContractFactory,
   EthersSigner,
+  PriceTriggerCallDataBuilder,
   Provider,
+  tokens,
+  UniswapSwapActionCallDataBuilder,
   WorkflowExecution,
   WorkflowsFactory,
 } from '@ditto-sdk/ditto-sdk';
@@ -55,10 +59,77 @@ export const Workflows = () => {
     alert(JSON.stringify(workflow));
   };
 
-  const handleCreateLimitOrderWorkflowClick = async () => {
+  const handleCreateWorkflowClick = async () => {
     const workflowsFactory = new WorkflowsFactory(provider!);
 
-    //
+    const commonConfig = {
+      chainId: 137,
+      recipient: '0x8db38B3825D0C4EA7f826E7CA6D5e99F8f07D43a',
+      accountAddress: '0xAfe67Bfc16D0d7e2De988A1f89971aa3747221fF',
+      vaultAddress: '0x8db38B3825D0C4EA7f826E7CA6D5e99F8f07D43a',
+      provider: provider!,
+    };
+
+    const wf = await workflowsFactory.create({
+      name: 'test wf',
+      triggers: [
+        new PriceTriggerCallDataBuilder(
+          {
+            uniswapPoolFeeTier: 500,
+            triggerAtPrice: 500000000000000000, // 500000000000000000
+            priceMustBeHigherThan: true,
+            token: tokens.wrappedNative[Chain.Polygon],
+            baseToken: tokens.stableCoins[Chain.Polygon].USDT,
+          },
+          commonConfig
+        ),
+        // new TimeBasedTrigger(
+        //   {
+        //     startAtTimestamp: Number((new Date().getTime() / 1000).toFixed(0)) + 60,
+        //     repeatTimes: 2,
+        //     cycle: {
+        //       frequency: 1,
+        //       scale: TimeScale.Minutes,
+        //     },
+        //   },
+        //   commonConfig
+        // ),
+      ],
+      actions: [
+        /* new UniswapSwapActionCallDataBuilder(
+          {
+            fromToken: tokens.wrapped[Chain.Polygon].WMATIC,
+            toToken: tokens.native[Chain.Polygon],
+            fromAmount: `123450000000000`,
+            slippagePercent: 0.1,
+          },
+          commonConfig
+        ),*/
+
+        /* new UniswapSwapActionCallDataBuilder(
+          {
+            fromToken: tokens.native[Chain.Polygon],
+            toToken: tokens.stableCoins[Chain.Polygon].USDC,
+            fromAmount: `111110000000000`,
+            slippagePercent: 0.01,
+          },
+          commonConfig
+        ),*/
+
+        new UniswapSwapActionCallDataBuilder(
+          {
+            fromToken: tokens.native[Chain.Polygon],
+            toToken: tokens.stableCoins[Chain.Polygon].USDT,
+            fromAmount: `123456789000000000`,
+            slippagePercent: 0.05,
+          },
+          commonConfig
+        ),
+      ],
+      chainId: Chain.Polygon,
+    });
+
+    await wf.buildAndDeploy('0xAfe67Bfc16D0d7e2De988A1f89971aa3747221fF');
   };
 
   return (
@@ -77,6 +148,12 @@ export const Workflows = () => {
           onClick={handleGetWorkflowsHistoryClick}
         >
           Get workflows history
+        </button>
+        <button
+          className="mt-4 ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleCreateWorkflowClick}
+        >
+          Build and deploy a workflow
         </button>
       </div>
 

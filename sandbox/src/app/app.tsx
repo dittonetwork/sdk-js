@@ -1,6 +1,13 @@
 import { Button, formatAddress, Popover, PopoverContent, PopoverTrigger } from '@ditto-sdk/shared';
-import { useSDK, MetaMaskProvider } from "@metamask/sdk-react";
-import { Link } from "react-router-dom";
+import { useSDK, MetaMaskProvider } from '@metamask/sdk-react';
+import { Link } from 'react-router-dom';
+
+// https://github.com/Uniswap/smart-order-router/issues/484
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+window.Browser = {
+  T: () => undefined,
+};
 
 const ConnectWalletButton = () => {
   const { sdk, connected, connecting, account } = useSDK();
@@ -45,14 +52,13 @@ const ConnectWalletButton = () => {
 };
 
 const NavBar = () => {
-  const host =
-    typeof window !== "undefined" ? window.location.host : "defaultHost";
+  const host = typeof window !== 'undefined' ? window.location.host : 'defaultHost';
 
   const sdkOptions = {
     logging: { developerMode: false },
     checkInstallationImmediately: false,
     dappMetadata: {
-      name: "Next-Metamask-Boilerplate",
+      name: 'Next-Metamask-Boilerplate',
       url: host, // using the host constant defined above
     },
   };
@@ -72,7 +78,6 @@ const NavBar = () => {
     </nav>
   );
 };
-
 
 export function App() {
   return (

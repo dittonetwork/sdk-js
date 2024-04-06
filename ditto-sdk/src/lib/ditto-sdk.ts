@@ -1,4 +1,5 @@
 import { EthersSigner } from './blockchain/signer';
+import { tokens, Token } from './blockchain/tokens';
 import { Provider } from './provider';
 import { BrowserStorage } from './storage';
 import {
@@ -6,9 +7,14 @@ import {
   EthersContract,
   DittoContractNotInitializedError,
 } from './blockchain/contracts';
-import { WorkflowsFactory } from './workflow';
+import {
+  WorkflowsFactory,
+  PriceTriggerCallDataBuilder,
+  UniswapSwapActionCallDataBuilder,
+} from './workflow';
 import type { WorkflowExecution } from './workflow';
 import { BaseApiError } from './network/api-client';
+import { Chain } from './blockchain/chains/types';
 
 export {
   EthersSigner,
@@ -19,6 +25,10 @@ export {
   DittoContractNotInitializedError,
   WorkflowsFactory,
   BaseApiError,
+  PriceTriggerCallDataBuilder,
+  UniswapSwapActionCallDataBuilder,
+  tokens,
+  Chain,
 };
 
-export type { WorkflowExecution };
+export type { WorkflowExecution, Token };

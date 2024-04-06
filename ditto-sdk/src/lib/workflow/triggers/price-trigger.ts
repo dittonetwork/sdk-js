@@ -14,17 +14,18 @@ import VaultABI from '../../blockchain/abi/VaultABI.json';
 import { getRandomBytes } from '../../utils/get-random-bytes';
 import { DittoContractInterface } from '../../blockchain/contracts/types';
 import { Maybe } from '../../types';
+import { TokenLight } from '../../blockchain/tokens/types';
 
 type TriggerConfig = {
   uniswapPoolFeeTier: FeeAmount;
   triggerAtPrice: number;
   priceMustBeHigherThan?: boolean;
-  tokenAddress: string;
-  baseTokenAddress: string;
+  token: TokenLight;
+  baseToken: TokenLight;
 };
 
 export class PriceTriggerCallDataBuilder implements CallDataBuilder {
-  protected constructor(
+  constructor(
     protected readonly config: TriggerConfig,
     protected readonly commonCallDataBuilderConfig: CommonBuilderOptions
   ) {}
@@ -35,8 +36,8 @@ export class PriceTriggerCallDataBuilder implements CallDataBuilder {
 
     const { poolAddress } = this.computeUniswapPoolAddress(
       this.commonCallDataBuilderConfig.chainId,
-      this.config.tokenAddress,
-      this.config.baseTokenAddress,
+      this.config.token.address,
+      this.config.baseToken.address,
       this.config.uniswapPoolFeeTier
     );
 
@@ -53,12 +54,14 @@ export class PriceTriggerCallDataBuilder implements CallDataBuilder {
       ])
       .slice(0, -64);
 
+    const sigHash = this.getSigHash(vaultInterface)!;
+
     const callDataArray = new Set<CallData>();
     callDataArray.add({
       to: this.commonCallDataBuilderConfig.vaultAddress,
       initData,
-      callData: this.getSigHash(vaultInterface)!,
-      viewData: this.getSigHash(vaultInterface)!,
+      callData: sigHash,
+      viewData: sigHash,
     });
 
     return {
@@ -90,7 +93,7 @@ export class PriceTriggerCallDataBuilder implements CallDataBuilder {
 
   private async getTargetRate(): Promise<string> {
     const isBaseFirstToken =
-      parseInt(this.config.baseTokenAddress) > parseInt(this.config.tokenAddress);
+      parseInt(this.config.baseToken.address) > parseInt(this.config.token.address);
 
     if (isBaseFirstToken) {
       return this.config.triggerAtPrice.toString();
@@ -104,19 +107,19 @@ export class PriceTriggerCallDataBuilder implements CallDataBuilder {
       .getContractFactory()
       .getContract(oracleAddress, JSON.stringify(DittoOracleABI));
 
-    const targetRateBN = await oracleContract.call<unknown[], bigint>('consult', [
-      this.config.baseTokenAddress,
+    const targetRateBigInt = await oracleContract.call<unknown[], bigint>('consult', [
+      this.config.baseToken.address,
       this.config.triggerAtPrice,
-      this.config.tokenAddress,
+      this.config.token.address,
       this.config.uniswapPoolFeeTier,
       uniswapFactoryAddress,
     ]);
 
-    const targetRate = targetRateBN.toString();
+    const targetRate = targetRateBigInt.toString();
 
     if (!targetRate) throw new Error('Target rate not calculated for price-based trigger');
 
-    const rateBN = BigInt(targetRate);
+    const rateBN = targetRateBigInt;
     const priceBN = BigInt(this.config.triggerAtPrice);
 
     return priceBN > BigInt(1)
@@ -128,7 +131,7 @@ export class PriceTriggerCallDataBuilder implements CallDataBuilder {
     const gtSigHash = vaultInterface.selector('uniswapCheckGTTargetRate');
     const ltSigHash = vaultInterface.selector('uniswapCheckLTTargetRate');
     const isBaseFirstToken =
-      parseInt(this.config.baseTokenAddress) > parseInt(this.config.tokenAddress);
+      parseInt(this.config.baseToken.address) > parseInt(this.config.token.address);
     const direction = !this.config.priceMustBeHigherThan;
 
     /*
