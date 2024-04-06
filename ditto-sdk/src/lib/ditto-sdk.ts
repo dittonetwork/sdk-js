@@ -1,4 +1,5 @@
 import { EthersSigner } from './blockchain/signer';
+import { tokens, Token } from './blockchain/tokens';
 import { Provider } from './provider';
 import { BrowserStorage } from './storage';
 import {
@@ -7,9 +8,14 @@ import {
   DittoContractNotInitializedError,
   SmartWalletFactory,
 } from './blockchain/contracts';
-import { WorkflowsFactory } from './workflow';
+import {
+  WorkflowsFactory,
+  PriceTriggerCallDataBuilder,
+  UniswapSwapActionCallDataBuilder,
+} from './workflow';
 import type { WorkflowExecution } from './workflow';
 import { BaseApiError } from './network/api-client';
+import { Chain } from './blockchain/chains/types';
 
 export {
   EthersSigner,
@@ -21,9 +27,13 @@ export {
   WorkflowsFactory,
   BaseApiError,
   SmartWalletFactory,
+  PriceTriggerCallDataBuilder,
+  UniswapSwapActionCallDataBuilder,
+  tokens,
+  Chain,
 };
 
 export { smartWalletfactoryAbi } from './blockchain/abi';
 export { smartWalletAbi } from './blockchain/abi';
 
-export type { WorkflowExecution };
+export type { WorkflowExecution, Token };

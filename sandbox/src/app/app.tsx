@@ -328,6 +328,13 @@ const factoryAbi = `[
 ]
 `;
 
+// https://github.com/Uniswap/smart-order-router/issues/484
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+window.Browser = {
+  T: () => undefined,
+};
+
 const ConnectWalletButton = () => {
   const { sdk, connected, connecting, account } = useSDK();
 
