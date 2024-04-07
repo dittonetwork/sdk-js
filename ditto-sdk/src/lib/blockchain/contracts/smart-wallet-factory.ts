@@ -29,7 +29,8 @@ export class SmartWalletFactory {
   }
 
   public async deploy() {
-    return this._contract.call('deploy', [this._vaultId]);
+    // TODO: add deploy logic
+    throw new Error('Method not implemented.');
   }
 
   // TODO: list
