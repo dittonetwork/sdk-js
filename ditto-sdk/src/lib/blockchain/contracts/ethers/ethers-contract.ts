@@ -16,7 +16,7 @@ export class EthersContract implements DittoContract {
     this.contractInterface = new EthersContractInterface(abi);
   }
 
-  public async call<P extends unknown[], R>(method: string, params: P): Promise<R> {
+  public async call<R, P extends unknown[] = []>(method: string, ...params: P): Promise<R> {
     if (!this.nativeContract) {
       throw new DittoContractNotInitializedError();
     }

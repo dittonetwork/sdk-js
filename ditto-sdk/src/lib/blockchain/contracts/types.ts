@@ -6,11 +6,12 @@ export interface ContractFactory<T extends DittoContract, I extends DittoContrac
 }
 
 export interface DittoContract extends DittoContractInterface {
-  call<P extends unknown[], R>(method: string, params: P): Promise<R>;
+  call<R, P extends unknown[] = []>(method: string, ...params: P): Promise<R>;
 }
 
 export interface DittoContractInterface {
   selector(method: string): Maybe<string>;
+  // TODO: add typing for encodeFunctionData
   encodeFunctionData(method: string, params: unknown[]): string;
 }
 

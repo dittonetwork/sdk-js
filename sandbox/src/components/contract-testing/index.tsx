@@ -37,7 +37,7 @@ export const ContractTesting = () => {
       .getContractFactory()
       .getContract('0xd10e3E8EbC4B55eAE572181be1554356Fb2a7767', JSON.stringify(storageAbi));
 
-    const result = await contract.call<null, bigint>('retrieve', null);
+    const result = await contract.call<bigint>('retrieve');
     setValue(result.toString());
   };
 
@@ -48,7 +48,7 @@ export const ContractTesting = () => {
       .getContract('0xd10e3E8EbC4B55eAE572181be1554356Fb2a7767', JSON.stringify(storageAbi));
 
     // @ts-expect-error cast
-    const tx = await contract.call<string, { hash: string }>('store', BigInt(value!));
+    const tx = await contract.call<{ hash: string }, string>('store', BigInt(value!));
     setHash(`Wait for ${tx.hash} to be mined...`);
     // @ts-expect-error hack
     await tx.wait();

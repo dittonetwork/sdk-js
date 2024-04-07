@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button, formatAddress, Popover, PopoverContent, PopoverTrigger } from '@ditto-sdk/shared';
 import { useSDK, MetaMaskProvider } from '@metamask/sdk-react';
 import { Link } from 'react-router-dom';
@@ -9,324 +10,6 @@ import {
   SmartWalletFactory,
 } from '@ditto-sdk/ditto-sdk';
 import { Contract, ethers } from 'ethers';
-import React from 'react';
-
-const factoryAddress = '0xF03C8CaB74b5721eB81210592C9B06f662e9951E';
-const factoryAbi = `[
-  {
-    "type": "function",
-    "name": "addNewImplementation",
-    "inputs": [
-      {
-        "name": "newImplemetation",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "crossChainDeploy",
-    "inputs": [
-      {
-        "name": "creator",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "version",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "vaultId",
-        "type": "uint16",
-        "internalType": "uint16"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "deploy",
-    "inputs": [
-      {
-        "name": "version",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "vaultId",
-        "type": "uint16",
-        "internalType": "uint16"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "implementation",
-    "inputs": [
-      {
-        "name": "version",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "owner",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "predictDeterministicVaultAddress",
-    "inputs": [
-      {
-        "name": "creator",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "vaultId",
-        "type": "uint16",
-        "internalType": "uint16"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "predicted",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "renounceOwnership",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "setBridgeReceiverContract",
-    "inputs": [
-      {
-        "name": "_dittoBridgeReceiver",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "setEntryPointCreatorAddress",
-    "inputs": [
-      {
-        "name": "_entryPointCreator",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "transferOwnership",
-    "inputs": [
-      {
-        "name": "newOwner",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "upgradeLogic",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "vaultProxyAdmin",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "versions",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "event",
-    "name": "OwnershipTransferred",
-    "inputs": [
-      {
-        "name": "previousOwner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "newOwner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false,
-    "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
-  },
-  {
-    "type": "event",
-    "name": "VaultCreated",
-    "inputs": [
-      {
-        "name": "creator",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "vault",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "vaultId",
-        "type": "uint16",
-        "indexed": false,
-        "internalType": "uint16"
-      }
-    ],
-    "anonymous": false,
-    "signature": "0x78f8ade376823ef6c3e593ee05639dd8d167f50df13b54ed4e283fc734b7daa1"
-  },
-  {
-    "type": "error",
-    "name": "Ownable_NewOwnerCannotBeAddressZero",
-    "inputs": [],
-    "signature": "0x7b30466f"
-  },
-  {
-    "type": "error",
-    "name": "Ownable_SenderIsNotOwner",
-    "inputs": [
-      {
-        "name": "sender",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "signature": "0x37c14b45"
-  },
-  {
-    "type": "error",
-    "name": "VaultFactory_AlreadyInitialized",
-    "inputs": [],
-    "signature": "0xd1a8e5c3"
-  },
-  {
-    "type": "error",
-    "name": "VaultFactory_IdAlreadyUsed",
-    "inputs": [
-      {
-        "name": "creator",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "vaultId",
-        "type": "uint16",
-        "internalType": "uint16"
-      }
-    ],
-    "signature": "0xb1c9479c"
-  },
-  {
-    "type": "error",
-    "name": "VaultFactory_InvalidDeployArguments",
-    "inputs": [],
-    "signature": "0x527df1b3"
-  },
-  {
-    "type": "error",
-    "name": "VaultFactory_NotAuthorized",
-    "inputs": [],
-    "signature": "0x1c1c04bb"
-  },
-  {
-    "type": "error",
-    "name": "VaultFactory_VersionDoesNotExist",
-    "inputs": [],
-    "signature": "0xd4e632e3"
-  }
-]
-`;
 
 // https://github.com/Uniswap/smart-order-router/issues/484
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -347,7 +30,7 @@ const ConnectWalletButton = () => {
   };
 
   const disconnect = () => {
-    if (sdk) {
+    if {
       sdk.terminate();
     }
   };
@@ -446,24 +129,6 @@ export function App() {
     setSmartWalletAddress(addr as string);
   };
 
-  const handlePredictVaultAddressClick = async () => {
-    if (!provider) {
-      alert('Please init provider and connect wallet');
-      return;
-    }
-
-    const contractFactory = new Contract(
-      factoryAddress,
-      factoryAbi,
-      provider.getSigner().getRawSigner()
-    );
-    const address = await provider?.getSigner().getAddress();
-    const vaultId = 1;
-
-    const vault = await contractFactory.predictDeterministicVaultAddress(address, vaultId);
-    setSmartWalletAddress(vault);
-  };
-
   return (
     <div className="w-full h-screen">
       <NavBar />
@@ -477,7 +142,7 @@ export function App() {
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Button className="w-min" onClick={initProvider}>
-                  Init provider (SDK)
+                  Init provider
                 </Button>
               </div>
               <p className="text-gray-600">
@@ -494,7 +159,7 @@ export function App() {
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Button className="w-min" onClick={handleSignSDKClick}>
-                  Sign message (SDK)
+                  Sign message
                 </Button>
               </div>
               <p className="text-gray-600">Login status: {auth ? '✅ Logged in' : '❌ False'}</p>
@@ -507,10 +172,6 @@ export function App() {
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Button className="w-min" onClick={handlePredictVaultAddressSDKClick}>
-                  Predict Vault Address (SDK)
-                </Button>
-
-                <Button className="w-min" onClick={handlePredictVaultAddressClick}>
                   Predict Vault Address
                 </Button>
               </div>

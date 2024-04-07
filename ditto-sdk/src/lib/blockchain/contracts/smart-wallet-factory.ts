@@ -1,11 +1,12 @@
 import { DittoProvider } from '../../provider/types';
 import { DittoContract } from './types';
 import { smartWalletfactoryAbi } from '../abi';
+import { dittoSmartWalletFactoryAddresses } from '../addresses/smart-wallet-factory';
 
 const DEFAULT_FACTORY_ADDRESS = '0xF03C8CaB74b5721eB81210592C9B06f662e9951E';
-
 export class SmartWalletFactory {
   private _contract!: DittoContract;
+  // TODO: restore previous smart wallet index
   private _vaultId = 1;
   private _factoryAddress = DEFAULT_FACTORY_ADDRESS;
   private _abi = smartWalletfactoryAbi;
