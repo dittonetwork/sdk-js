@@ -2,19 +2,25 @@ import { DittoProvider } from '../../provider/types';
 import { DittoContract } from './types';
 import { smartWalletfactoryAbi } from '../abi';
 import { dittoSmartWalletFactoryAddresses } from '../addresses/smart-wallet-factory';
+import { Chain } from '../chains/types';
 
-const DEFAULT_FACTORY_ADDRESS = '0xF03C8CaB74b5721eB81210592C9B06f662e9951E';
 export class SmartWalletFactory {
   private _contract!: DittoContract;
   // TODO: restore previous smart wallet index
   private _vaultId = 1;
-  private _factoryAddress = DEFAULT_FACTORY_ADDRESS;
   private _abi = smartWalletfactoryAbi;
 
   constructor(private readonly provider: DittoProvider) {
+    const factoryAddress = this.getFactoryAddress();
     this._contract = this.provider
       .getContractFactory()
-      .getContract(this._factoryAddress, JSON.stringify(this._abi));
+      .getContract(factoryAddress, JSON.stringify(this._abi));
+  }
+
+  public getFactoryAddress() {
+    // TODO: get network from provider
+    const network = Chain.Polygon;
+    return dittoSmartWalletFactoryAddresses[network];
   }
 
   public async predictVaultAddress() {
