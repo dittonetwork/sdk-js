@@ -1,7 +1,13 @@
 import React from 'react';
 
 type PropsType = {
-  onSubmit: (from: string, to: string, amount: number) => void;
+  onSubmit: (
+    from: string,
+    fromDecimals: number,
+    to: string,
+    toDecimals: number,
+    amount: bigint
+  ) => Promise<void>;
 };
 
 export const Form: React.FC<PropsType> = (props) => {
@@ -11,10 +17,16 @@ export const Form: React.FC<PropsType> = (props) => {
   const [toTokenAddress, setToTokenAddress] = React.useState<string>(
     '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'
   );
-  const [amount, setAmount] = React.useState<number>(1234560000);
+  const [amount, setAmount] = React.useState<bigint>(BigInt(12345600000000000));
+  const [fromDecimals, setFromDecimals] = React.useState<number>(18);
+  const [toDecimals, setToDecimals] = React.useState<number>(6);
 
-  const onSubmit = () => {
-    props.onSubmit(fromTokenAddress, toTokenAddress, 1234560000);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  const onSubmit = async () => {
+    setIsLoading(true);
+    await props.onSubmit(fromTokenAddress, fromDecimals, toTokenAddress, toDecimals, amount);
+    setIsLoading(false);
   };
 
   return (
@@ -59,6 +71,14 @@ export const Form: React.FC<PropsType> = (props) => {
               value={fromTokenAddress}
               onChange={(e) => setFromTokenAddress(e.target.value)}
             />
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              id="fromDecimals"
+              type="number"
+              placeholder="0"
+              value={fromDecimals}
+              onChange={(e) => setFromDecimals(Number(e.target.value))}
+            />
           </div>
           <div className="mb-4">
             <label
@@ -75,18 +95,26 @@ export const Form: React.FC<PropsType> = (props) => {
               value={toTokenAddress}
               onChange={(e) => setToTokenAddress(e.target.value)}
             />
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              id="fromDecimals"
+              type="number"
+              placeholder="0"
+              value={toDecimals}
+              onChange={(e) => setToDecimals(Number(e.target.value))}
+            />
           </div>
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="amount">
-              Amount (Tokens):
+              Amount (in weis):
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="amount"
               type="number"
               placeholder="0"
-              value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
+              value={amount.toString()}
+              onChange={(e) => setAmount(BigInt(e.target.value))}
             />
           </div>
           <div className="flex items-center justify-between">
@@ -94,6 +122,7 @@ export const Form: React.FC<PropsType> = (props) => {
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
               onClick={onSubmit}
+              disabled={isLoading}
             >
               Send
             </button>

@@ -1,7 +1,7 @@
 import { regularTokens } from './regular';
 import { nativeTokens } from './native';
 import { stableCoins } from './stablecoins';
-import type { Token } from './types';
+import type { Token, TokenLight } from './types';
 import { wrappedNativeTokens } from './wrappedNative';
 
 export const tokens = {
@@ -11,4 +11,4 @@ export const tokens = {
   stableCoins: stableCoins,
 };
 
-export type { Token };
+export type { Token, TokenLight };

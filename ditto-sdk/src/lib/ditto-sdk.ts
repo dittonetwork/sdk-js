@@ -1,5 +1,5 @@
 import { EthersSigner } from './blockchain/signer';
-import type { Token } from './blockchain/tokens';
+import type { Token, TokenLight } from './blockchain/tokens';
 import { tokens } from './blockchain/tokens';
 import type { DittoContractInterface } from './blockchain/contracts';
 import { Provider } from './provider';
@@ -44,6 +44,7 @@ export {
 export type {
   WorkflowExecution,
   Token,
+  TokenLight,
   CallDataBuilder,
   CommonBuilderOptions,
   CallData,

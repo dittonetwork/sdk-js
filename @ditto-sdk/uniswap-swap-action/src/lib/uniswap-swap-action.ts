@@ -1,5 +1,5 @@
 import { AlphaRouter, AlphaRouterParams, SwapType } from '@uniswap/smart-order-router';
-import { ethers } from 'ethers';
+import { ethers } from 'ethers5';
 import { CurrencyAmount, Percent, Token as UniswapToken, TradeType } from '@uniswap/sdk-core';
 import {
   CallData,
@@ -10,7 +10,7 @@ import {
   DittoContractInterface,
   isAddressesEqual,
   isNativeToken,
-  Token,
+  TokenLight,
   wrappedNativeTokens,
 } from '@ditto-sdk/ditto-sdk';
 import { parseUniswapRouterCallData } from './utils/parse-uniswap-router-call-data';
@@ -20,8 +20,8 @@ import Erc20TokenABI from './abis/Erc20TokenABI.json';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 type ActionConfig = {
-  fromToken: Token;
-  toToken: Token;
+  fromToken: TokenLight;
+  toToken: TokenLight;
   fromAmount: string;
   slippagePercent?: number;
   providerStrategy:
@@ -126,7 +126,10 @@ export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
             this.config.providerStrategy.rpcUrl,
             this.config.providerStrategy.chainId
           )
-        : new ethers.providers.Web3Provider(this.config.providerStrategy.provider);
+        : // @ts-expect-error
+          new (ethers.providers?.Web3Provider || ethers.BrowserProvider)(
+            this.config.providerStrategy.provider
+          );
 
     // regular swap
     const uniswapRouterData = await this.createUniswapRoute(
