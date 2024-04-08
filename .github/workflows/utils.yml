@@ -1,0 +1,17 @@
+on:
+  issue_comment:
+    types: [created]
+  discussion:
+    types: [created, answered]
+name: Issue Commented
+jobs:
+  slackNotification:
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4.1.2
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_MESSAGE: ${{ github.event.comment.body }}
