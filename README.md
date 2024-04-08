@@ -15,12 +15,13 @@ interface DittoProvider {
   
   getStorage(): DittoStorage
   getHttpClient(): HttpClient
+  getContractFactory(): ContractFactory<DittoContract>
 }
 
 interface DittoProviderConfig {
   signer: Signer,
-  storage: DittoStorage, // Storage is reserved
-  httpClient: HttpClient,
+  storage: DittoStorage,
+  contractFactory: ContractFactory<DittoContract>,
 }
 ```
 
@@ -30,9 +31,13 @@ import { DittoProvider } from '@dittoproject/provider'
 import { Factory as WorkflowsFactory } from '@dittoproject/workflows'
 
 async function main() {
+  const signer = await new ethers.BrowserProvider(window.ethereum!).getSigner()
+  const dittoSigner =  new EthersSigner(signer)
+  
   const provider = new DittoProvider({
-    signer,
-    storage: new InMemoryStorage(),  
+    signer: dittoSigner,
+    storage: new InMemoryStorage(),
+    contractFactory: new EthersContractFactory(ethers.Contract, signer),
   })
 
   await provider.authenticate()
@@ -41,10 +46,71 @@ async function main() {
 }
 ```
 
+## Contract
+**Interfaces:**
+```typescript
+interface ContractFactory<T extends DittoContract> {
+  getContract(address: WalletAddress, abi: string): Promise<T>;
+}
+
+interface DittoContract {
+  call<P, R>(method: string, params: P): Promise<R>;
+}
+```
+
+**Example**
+```typescript
+const abi = `[
+  {
+    "inputs": [],
+    "name": "retrieve",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "num",
+        "type": "uint256"
+      }
+    ],
+    "name": "store",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]`
+const smartContractAddress = '0xd10e3E8EbC4B55eAE572181be1554356Fb2a7767'
+
+const provider = new DittoProvider({
+  // here we use wrapper over ethersjs contracts
+  contractFactory: new EthersContractFactory(ethers.Contract, signer),
+  ...
+})
+
+const contract = await provider.getContractFactory().getContract(smartContractAddress, abi);
+
+// write method
+const { hash } = await contract.call<string, { hash: string }>('store', 12345n);
+// wallet will be opened, you should write tx and send to blockchain and wait for tx mining
+
+// read method
+const storedNumber = await contract.call<null, bigint>('retrieve', null)
+// stored number is 12345n
+```
+
 ## Storage
 **Interfaces:**
 ```typescript
-interface Storage {
+interface DittoStorage {
   set(key: string, value: string): void | Promise<void>,
   get<T = Optional<string>>(key: string): T | Promise<T>,  
   remove(key: string): void | Promise<void>,  
@@ -103,9 +169,15 @@ enum WorkflowStatus {
   COMPLETED = 'completed',
 }
 
+interface WorkflowInitOptions {
+  name: string,
+  trigger: TriggerWithConfiguration
+  actions: ActionWithConfiguration[]
+  chainId: number
+}
 
 interface Workflow {
-  deactiate(): Promise<boolean>
+  deactivate(): Promise<boolean>
   activate(): Promise<boolean>
 
   isActivated(): boolean
@@ -113,26 +185,23 @@ interface Workflow {
   getStatus(): WorkflowStatus
 }
 
-
-
 type PaginationParams = {
   limit: number
   offset: number
 }
 
-type Trigger = {
-  // Need to be defined
+enum Triggers {
+  Schedule = "schedule",
+  Instant = "instant",
+  Price = "price"
 }
 
-type Actions = {
-  // Need to be defined
+enum Actions {
+  SwapWithUniswap = "swapWithUniswap"
 }
 
 interface Factory {
-  constructor(provider: DittoProvider): void;
-  
-  create(name: string, triggers: Trigger[], actions: Actions[], chainId: number): Promise<Workflow>
-
+  create(options: WorkflowInitOptions): Promise<Workflow>
 
   getHistory(pagination: PaginationParams): Promise<Execution[]>
   getList(statuses: WorkflowStatus[], pagination: PaginationParams): Promise<Workflow[]>
@@ -154,8 +223,6 @@ interface Factory {
     const workflows = new WorkflowsFactory(provider)
 
     await workflows.create('First Automation', [Trigger.Instant], [ Actions.SwapWithUniswap ], 137)
-    
-    ...
   }
 ```
 

@@ -1,27 +1,43 @@
-import { StrictMode } from 'react';
+import React, { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import App from './app/app';
 import { MetaMaskProvider } from '@metamask/sdk-react';
+import { ContractTesting } from './components/contract-testing';
+import { SignerTest } from './components/signer-test';
+import { Workflows } from './components/workflows';
+import { Navbar } from './navbar';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <StrictMode>
+    <Navbar />
+
     <BrowserRouter>
-      <MetaMaskProvider
-        debug
-        sdkOptions={{
-          dappMetadata: {
-            name: 'Ditto React Example Dapp',
-            url: window.location.href,
-          },
-        }}
-      >
-        <App />
-      </MetaMaskProvider>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <MetaMaskProvider
+              debug
+              sdkOptions={{
+                dappMetadata: {
+                  name: 'Ditto React Example Dapp',
+                  url: window.location.href,
+                },
+              }}
+            >
+              <App />
+            </MetaMaskProvider>
+          }
+        />
+        <Route path="/contracts" element={<ContractTesting />} />
+        <Route path="/auth" element={<SignerTest />} />
+        <Route path="/workflows" element={<Workflows />} />
+      </Routes>
     </BrowserRouter>
   </StrictMode>
 );
+
+//  <SignerTest /> for sdk testing
