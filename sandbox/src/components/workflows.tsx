@@ -8,11 +8,11 @@ import {
   PriceTriggerCallDataBuilder,
   Provider,
   tokens,
-  UniswapSwapActionCallDataBuilder,
   WorkflowExecution,
   WorkflowsFactory,
 } from '@ditto-sdk/ditto-sdk';
 import { ethers } from 'ethers';
+import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action';
 
 export const Workflows = () => {
   const [provider, setProvider] = useState<Provider | null>(null);

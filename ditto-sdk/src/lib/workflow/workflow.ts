@@ -3,11 +3,11 @@ import { CallData, CallDataBuilderReturnData, RepeatableCallDataBuilder } from '
 import { DittoProvider } from '../provider/types';
 import VaultABI from '../blockchain/abi/VaultABI.json';
 import IUniversalVault from '../blockchain/abi/IUniversalVault.json';
-import { WalletAddress } from '../types';
+import { TxHash, WalletAddress } from '../types';
 import { toUtf8Bytes } from '../utils/to-utf8-bytes';
 import { prop } from 'rambda';
 import { isInstantTrigger } from './triggers/utils/is-instant-trigger';
-import { isAddressesEqual } from '../blockchain/tokens/ utils/is-addresses-equal';
+import { isAddressesEqual } from '../blockchain/tokens/utils/is-addresses-equal';
 
 export class Workflow implements DittoWorkflow {
   constructor(
@@ -15,7 +15,7 @@ export class Workflow implements DittoWorkflow {
     private readonly provider: DittoProvider
   ) {}
 
-  public async buildAndDeploy(accountAddress: WalletAddress): Promise<void> {
+  public async buildAndDeploy(accountAddress: WalletAddress): Promise<TxHash> {
     const callData = new Set<CallData>();
     const vaultInterface = this.provider
       .getContractFactory()
@@ -69,6 +69,7 @@ export class Workflow implements DittoWorkflow {
       ? vaultInterface.encodeFunctionData('multicall', [vaultRelativeActionsCallData])
       : vaultInterface.encodeFunctionData('multicall', [[encodedAddWorkflowCall]]);
 
+    let hash = '';
     try {
       // deploy section
       await Promise.all(
@@ -82,16 +83,17 @@ export class Workflow implements DittoWorkflow {
         })
       );
 
-      await this.provider.getSigner().sendTransaction({
+      const tx = await this.provider.getSigner().sendTransaction({
         from: accountAddress,
         to: vault,
         data: encodedMultiCall,
         value,
       });
+
+      hash = tx.hash;
     } catch (error: unknown) {
-      console.error(error);
       const data = prop('data', error);
-      const signature = IUniversalVault.abi.find((item) => item.signature === data);
+      const signature = IUniversalVault.find((item) => item.signature === data);
       if (
         signature?.name ===
         'DexLogicLib_NotEnoughTokenBalances (DexLogicLib_NotEnoughTokenBalances)'
@@ -104,7 +106,11 @@ export class Workflow implements DittoWorkflow {
       if (signature?.name) {
         throw new Error(signature.name + ' error');
       }
+
+      throw error;
     }
+
+    return hash;
   }
 
   public activate(): Promise<boolean> {

@@ -10,7 +10,7 @@ export class EthersContract implements DittoContract {
   constructor(
     private readonly address: Address,
     private readonly abi: string,
-    private readonly signer: ethers.Signer
+    private readonly signer: ethers.Signer | ethers.Wallet
   ) {
     this.nativeContract = new ethers.Contract(address, abi, this.signer);
     this.contractInterface = new EthersContractInterface(abi);

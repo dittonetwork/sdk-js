@@ -1,0 +1,19 @@
+{
+  "name": "@ditto-sdk/uniswap-swap-action",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "@ditto-sdk/uniswap-swap-action/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/@ditto-sdk/uniswap-swap-action",
+        "main": "@ditto-sdk/uniswap-swap-action/src/index.ts",
+        "tsConfig": "@ditto-sdk/uniswap-swap-action/tsconfig.lib.json",
+        "assets": ["@ditto-sdk/uniswap-swap-action/*.md"]
+      }
+    }
+  },
+  "tags": []
+}
