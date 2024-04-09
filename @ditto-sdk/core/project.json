@@ -1,0 +1,19 @@
+{
+  "name": "@ditto-sdk/core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "@ditto-sdk/core/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/ditto-sdk",
+        "main": "@ditto-sdk/core/src/index.ts",
+        "tsConfig": "@ditto-sdk/core/tsconfig.lib.json",
+        "assets": ["@ditto-sdk/core/*.md"]
+      }
+    }
+  },
+  "tags": []
+}

@@ -12,7 +12,7 @@ import {
   isNativeToken,
   TokenLight,
   wrappedNativeTokens,
-} from '@ditto-sdk/ditto-sdk';
+} from '@ditto-sdk/core';
 import { parseUniswapRouterCallData } from './utils/parse-uniswap-router-call-data';
 import VaultABI from './abis/VaultABI.json';
 import Erc20TokenABI from './abis/Erc20TokenABI.json';

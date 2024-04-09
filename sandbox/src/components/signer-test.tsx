@@ -1,9 +1,4 @@
-import {
-  BrowserStorage,
-  EthersContractFactory,
-  EthersSigner,
-  Provider,
-} from '@ditto-sdk/ditto-sdk';
+import { BrowserStorage, EthersContractFactory, EthersSigner, Provider } from '@ditto-sdk/core';
 import { ethers } from 'ethers';
 import { useState } from 'react';
 

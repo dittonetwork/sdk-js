@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
-import {
-  BrowserStorage,
-  EthersContractFactory,
-  EthersSigner,
-  Provider,
-} from '@ditto-sdk/ditto-sdk';
+import { BrowserStorage, EthersContractFactory, EthersSigner, Provider } from '@ditto-sdk/core';
 import storageAbi from './storage.abi.json';
 
 export const ContractTesting = () => {

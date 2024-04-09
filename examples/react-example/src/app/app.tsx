@@ -10,7 +10,7 @@ import {
   WorkflowsFactory,
   tokens,
   Chain,
-} from '@ditto-sdk/ditto-sdk';
+} from '@ditto-sdk/core';
 import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action';
 
 function App() {

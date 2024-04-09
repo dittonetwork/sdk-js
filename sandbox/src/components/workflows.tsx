@@ -10,7 +10,7 @@ import {
   tokens,
   WorkflowExecution,
   WorkflowsFactory,
-} from '@ditto-sdk/ditto-sdk';
+} from '@ditto-sdk/core';
 import { BrowserProvider, ethers } from 'ethers';
 import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action';
 
@@ -120,7 +120,7 @@ export const Workflows = () => {
           {
             fromToken: tokens.native[Chain.Polygon],
             toToken: tokens.stableCoins[Chain.Polygon].USDT,
-            fromAmount: `123456789000000000`,
+            fromAmount: `1234567890000000`,
             slippagePercent: 0.05,
             providerStrategy: {
               type: 'browser',
