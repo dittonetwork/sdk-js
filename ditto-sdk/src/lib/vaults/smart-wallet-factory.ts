@@ -47,7 +47,7 @@ export class SmartWalletFactory {
       return vaults[0];
     }
 
-    let estimated = -1;
+    let estimated = BigInt(-1);
     try {
       estimated = await this._contract.estimateGas('deploy', [3, vaults.length + 1]);
     } catch (_) {
@@ -55,7 +55,7 @@ export class SmartWalletFactory {
     }
 
     // estimation of deploy is failed due to vault with id exists
-    if (estimated === -1) {
+    if (estimated === BigInt(-1)) {
       // if predicted is not in list, link it with account
       if (!vaults.find((v) => v.address === predictedAddress)) {
         const accountAddress = await this.provider.getSigner().getAddress();

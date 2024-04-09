@@ -1,9 +1,9 @@
-import { Signer, Transaction, BrowserProvider } from 'ethers';
+import { Signer, Transaction, BrowserProvider, Wallet } from 'ethers';
 import { DittoSigner } from './types';
 import { Address, TxHash, WalletAddress } from '../../types';
 
 export class EthersSigner implements DittoSigner {
-  constructor(private readonly ethersSigner: Signer) {}
+  constructor(private readonly ethersSigner: Signer | Wallet) {}
 
   public getAddress(): Promise<WalletAddress> {
     return this.ethersSigner.getAddress();

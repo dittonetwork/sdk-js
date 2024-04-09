@@ -8,8 +8,8 @@ export class EthersContract implements DittoContract {
   private readonly contractInterface: EthersContractInterface;
 
   constructor(
-    private readonly address: Address,
-    private readonly abi: string,
+    address: Address,
+    abi: string,
     private readonly signer: ethers.Signer | ethers.Wallet
   ) {
     this.nativeContract = new ethers.Contract(address, abi, this.signer);
@@ -36,7 +36,7 @@ export class EthersContract implements DittoContract {
     return this.contractInterface.encodeFunctionData(method, params);
   }
 
-  public estimateGas(method: string, params: unknown[]): Promise<number> {
+  public estimateGas(method: string, params: unknown[]): Promise<bigint> {
     return this.nativeContract[method].estimateGas(...params);
   }
 }

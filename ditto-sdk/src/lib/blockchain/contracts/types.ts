@@ -7,7 +7,7 @@ export interface ContractFactory<T extends DittoContract, I extends DittoContrac
 
 export interface DittoContract extends DittoContractInterface {
   call<R, P extends unknown[] = []>(method: string, ...params: P): Promise<R>;
-  estimateGas(method: string, params: unknown[]): Promise<number>;
+  estimateGas(method: string, params: unknown[]): Promise<bigint>;
 }
 
 export interface DittoContractInterface {

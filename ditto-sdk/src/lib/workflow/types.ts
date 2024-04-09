@@ -18,7 +18,7 @@ export interface WorkflowInitOptions {
 }
 
 export interface DittoWorkflow {
-  buildAndDeploy(accountAddress: WalletAddress): Promise<TxHash>;
+  buildAndDeploy(vaultAddress: WalletAddress, accountAddress: WalletAddress): Promise<TxHash>;
 
   deactivate(): Promise<boolean>;
   activate(): Promise<boolean>;

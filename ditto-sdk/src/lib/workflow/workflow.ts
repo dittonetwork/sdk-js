@@ -15,14 +15,14 @@ export class Workflow implements DittoWorkflow {
     private readonly provider: DittoProvider
   ) {}
 
-  public async buildAndDeploy(accountAddress: WalletAddress): Promise<TxHash> {
+  public async buildAndDeploy(
+    vaultAddress: WalletAddress,
+    accountAddress: WalletAddress
+  ): Promise<TxHash> {
     const callData = new Set<CallData>();
     const vaultInterface = this.provider
       .getContractFactory()
       .getContractInterface(JSON.stringify(VaultABI));
-
-    // @todo
-    const vault = '0x8db38B3825D0C4EA7f826E7CA6D5e99F8f07D43a';
 
     const actionsCallData = await Promise.all(this.options.actions.map((action) => action.build()));
     const triggersCallData = await Promise.all(
@@ -33,13 +33,21 @@ export class Workflow implements DittoWorkflow {
       return acc + BigInt(item.value);
     }, BigInt(0));
 
-    const vaultRelativeActionsCallData = this.getVaultRelativeCallData(actionsCallData, vault).map(
-      (item) => item.callData
+    const vaultRelativeActionsCallData = this.getVaultRelativeCallData(
+      actionsCallData,
+      vaultAddress
+    ).map((item) => item.callData);
+    const vaultRelativeTriggersCallData = this.getVaultRelativeCallData(
+      triggersCallData,
+      vaultAddress
     );
-    const vaultRelativeTriggersCallData = this.getVaultRelativeCallData(triggersCallData, vault);
 
-    this.getNotVaultRelativeCallData(actionsCallData, vault).forEach((item) => callData.add(item));
-    this.getNotVaultRelativeCallData(triggersCallData, vault).forEach((item) => callData.add(item));
+    this.getNotVaultRelativeCallData(actionsCallData, vaultAddress).forEach((item) =>
+      callData.add(item)
+    );
+    this.getNotVaultRelativeCallData(triggersCallData, vaultAddress).forEach((item) =>
+      callData.add(item)
+    );
 
     const triggersCallDataChunk = vaultRelativeTriggersCallData.map((cd) => [
       cd.callData,
@@ -58,7 +66,7 @@ export class Workflow implements DittoWorkflow {
     const encodedAddWorkflowCall = vaultInterface.encodeFunctionData('addWorkflowAndGelatoTask', [
       triggersCallDataChunk,
       actionsCallDataChunk,
-      vault,
+      vaultAddress,
       repeatCount,
     ]);
 
@@ -85,7 +93,7 @@ export class Workflow implements DittoWorkflow {
 
       const tx = await this.provider.getSigner().sendTransaction({
         from: accountAddress,
-        to: vault,
+        to: vaultAddress,
         data: encodedMultiCall,
         value,
       });
