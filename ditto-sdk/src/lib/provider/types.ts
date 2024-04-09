@@ -8,9 +8,8 @@ import { HttpClient } from '../network/http-client/types';
 import { DittoSigner } from '../blockchain/signer/types';
 
 export interface DittoProvider {
-  // @todo add typing for constructor
-
   authenticate(): Promise<boolean>;
+  needAuthentication(): Promise<boolean>;
 
   getStorage(): DittoStorage;
   getHttpClient(): HttpClient;

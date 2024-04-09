@@ -16,13 +16,17 @@ import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action
   const provider = new ethers.JsonRpcProvider(process.env.INFURA_API_URL!, chainId);
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
 
+  const storage = new InMemoryStorage();
   const dittoProvider = new Provider({
     signer: new EthersSigner(wallet),
-    storage: new InMemoryStorage(),
+    storage,
     contractFactory: new EthersContractFactory(wallet),
   });
 
-  await dittoProvider.authenticate();
+  const needAuth = await dittoProvider.needAuthentication();
+  if (needAuth) {
+    await dittoProvider.authenticate();
+  }
 
   const commonConfig = {
     chainId,

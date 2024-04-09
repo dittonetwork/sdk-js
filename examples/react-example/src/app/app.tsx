@@ -8,27 +8,29 @@ import {
   BrowserStorage,
   EthersContractFactory,
   WorkflowsFactory,
-  tokens,
-  Chain,
 } from '@ditto-sdk/ditto-sdk';
 import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [dittoProvider, setDittoProvider] = React.useState<DittoProvider>();
 
   useEffect(() => {
-    // @ts-expect-error
-    const browserProvider = new BrowserProvider(window.ethereum!);
-    browserProvider.getSigner().then((signer) => {
+    const init = async () => {
+      const browserProvider = new BrowserProvider((window as any).ethereum!);
+      const signer = await browserProvider.getSigner();
       const provider = new DittoProvider({
         signer: new EthersSigner(signer),
         storage: new BrowserStorage(),
         contractFactory: new EthersContractFactory(signer),
       });
 
+      const needAuth = await provider.needAuthentication();
+      setIsAuthenticated(!needAuth);
       setDittoProvider(provider);
-      // provider.authenticate();
-    });
+    };
+
+    init();
   }, []);
 
   const handleSubmit = async (
@@ -76,7 +78,24 @@ function App() {
     alert(`Workflow created with hash: ${hash}`);
   };
 
-  return <Form onSubmit={handleSubmit} />;
+  const handleAuthClick = async () => {
+    const isAuth = await dittoProvider!.authenticate();
+    setIsAuthenticated(isAuth);
+  };
+
+  return isAuthenticated ? (
+    <Form onSubmit={handleSubmit} />
+  ) : (
+    <div className="flex p-8 justify-center">
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        type="button"
+        onClick={handleAuthClick}
+      >
+        Auth
+      </button>
+    </div>
+  );
 }
 
 export default App;

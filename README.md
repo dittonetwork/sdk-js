@@ -12,6 +12,7 @@ interface DittoProvider {
   constructor(config: DittoProviderConfig): void;
     
   authenticate(): Promise<boolean>
+  needAuthentication(): Promise<boolean>
   
   getStorage(): DittoStorage
   getHttpClient(): HttpClient
@@ -40,7 +41,10 @@ async function main() {
     contractFactory: new EthersContractFactory(ethers.Contract, signer),
   })
 
-  await provider.authenticate()
+  const needAuth = await provider.needAuthentication()
+  if (needAuth) {
+    await provider.authenticate()
+  }
 
   const history = await new WorkflowsFactory(provider).getHistory({ limit: 10, offset: 0 })
 }
@@ -99,11 +103,11 @@ const provider = new DittoProvider({
 const contract = await provider.getContractFactory().getContract(smartContractAddress, abi);
 
 // write method
-const { hash } = await contract.call<string, { hash: string }>('store', 12345n);
+const { hash } = await contract.call<string, { hash: string }>('store', [12345n]);
 // wallet will be opened, you should write tx and send to blockchain and wait for tx mining
 
 // read method
-const storedNumber = await contract.call<null, bigint>('retrieve', null)
+const storedNumber = await contract.call<null, bigint>('retrieve', [null])
 // stored number is 12345n
 ```
 

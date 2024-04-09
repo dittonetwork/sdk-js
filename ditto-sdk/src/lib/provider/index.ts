@@ -10,15 +10,14 @@ import {
   DittoContractInterface,
 } from '../blockchain/contracts/types';
 import { HttpClient } from '../network/http-client/types';
+import { isJwtValid } from '../utils/is-jwt-valid';
+import { ACCESS_TOKEN_KEY } from '../constants';
 
 export class Provider implements DittoProvider {
   private readonly httpClient: DittoHttpClient;
   private readonly authApiClient: AuthApiClient;
-
   private readonly signer: DittoSigner;
-
   private readonly storage: DittoStorage;
-
   private readonly contractFactory: ContractFactory<DittoContract, DittoContractInterface>;
 
   constructor(private readonly config: DittoProviderConfig) {
@@ -38,9 +37,16 @@ export class Provider implements DittoProvider {
     const signedMessage = await this.signer.signMessage(nonce);
     const accessToken = await this.authApiClient.getAccessToken(signedMessage, walletAddress);
 
-    this.storage.set('access-token', accessToken);
+    this.storage.set(ACCESS_TOKEN_KEY, accessToken);
 
     return true;
+  }
+
+  public async needAuthentication(): Promise<boolean> {
+    const accessTokenRaw = this.storage.get(ACCESS_TOKEN_KEY);
+    const accessToken = accessTokenRaw instanceof Promise ? await accessTokenRaw : accessTokenRaw;
+
+    return !isJwtValid(accessToken);
   }
 
   public getStorage(): DittoStorage {
