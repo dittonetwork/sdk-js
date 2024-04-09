@@ -24,7 +24,7 @@ type TriggerConfig = {
   baseToken: TokenLight;
 };
 
-export class PriceTriggerCallDataBuilder implements CallDataBuilder {
+export class PriceTrigger implements CallDataBuilder {
   constructor(
     protected readonly config: TriggerConfig,
     protected readonly commonCallDataBuilderConfig: CommonBuilderOptions

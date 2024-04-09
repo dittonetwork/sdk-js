@@ -9,7 +9,7 @@ import {
   EthersContract,
   DittoContractNotInitializedError,
 } from './blockchain/contracts';
-import { WorkflowsFactory, PriceTriggerCallDataBuilder } from './workflow';
+import { WorkflowsFactory, PriceTrigger, TimeBasedTrigger, TimeScale } from './workflow';
 import { SmartWalletFactory } from './vaults';
 import type { WorkflowExecution } from './workflow';
 import { BaseApiError } from './network/api-client';
@@ -36,13 +36,15 @@ export {
   WorkflowsFactory,
   BaseApiError,
   SmartWalletFactory,
-  PriceTriggerCallDataBuilder,
+  PriceTrigger,
+  TimeScale,
   tokens,
   Chain,
   isNativeToken,
   isAddressesEqual,
   wrappedNativeTokens,
   UniswapSwapActionCallDataBuilder,
+  TimeBasedTrigger,
 };
 
 export type {

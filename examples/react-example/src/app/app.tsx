@@ -11,6 +11,8 @@ import {
   SmartWalletFactory,
   Chain,
   UniswapSwapActionCallDataBuilder,
+  TimeBasedTrigger,
+  TimeScale,
 } from '@ditto-sdk/ditto-sdk';
 
 function App() {
@@ -60,7 +62,19 @@ function App() {
 
     const wf = await workflowFactory.create({
       name: 'My first workflow',
-      triggers: [],
+      triggers: [
+        new TimeBasedTrigger(
+          {
+            repeatTimes: 3,
+            startAtTimestamp: new Date().getTime() / 1000 + 60,
+            cycle: {
+              frequency: 1,
+              scale: TimeScale.Minutes,
+            },
+          },
+          commonConfig
+        ),
+      ],
       actions: [
         new UniswapSwapActionCallDataBuilder(
           {

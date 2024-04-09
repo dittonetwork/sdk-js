@@ -5,14 +5,14 @@ import {
   Chain,
   EthersContractFactory,
   EthersSigner,
-  PriceTriggerCallDataBuilder,
+  PriceTrigger,
   Provider,
   tokens,
   WorkflowExecution,
   WorkflowsFactory,
 } from '@ditto-sdk/ditto-sdk';
 import { ethers } from 'ethers';
-import { UniswapSwapActionCallDataBuilder } from '../../../ditto-sdk/src/lib/workflow/actions';
+import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/ditto-sdk';
 
 export const Workflows = () => {
   const [provider, setProvider] = useState<Provider | null>(null);
@@ -73,7 +73,7 @@ export const Workflows = () => {
     const wf = await workflowsFactory.create({
       name: 'test wf',
       triggers: [
-        new PriceTriggerCallDataBuilder(
+        new PriceTrigger(
           {
             uniswapPoolFeeTier: 500,
             triggerAtPrice: 500000000000000000, // 500000000000000000

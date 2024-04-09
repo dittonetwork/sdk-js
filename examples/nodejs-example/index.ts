@@ -1,14 +1,16 @@
 import { ethers } from 'ethers';
 import {
+  Chain,
   EthersContractFactory,
+  EthersSigner,
   InMemoryStorage,
   Provider,
-  EthersSigner,
-  tokens,
-  Chain,
-  WorkflowsFactory,
   SmartWalletFactory,
+  TimeBasedTrigger,
+  TimeScale,
+  tokens,
   UniswapSwapActionCallDataBuilder,
+  WorkflowsFactory,
 } from '@ditto-sdk/ditto-sdk';
 
 (async () => {
@@ -47,7 +49,19 @@ import {
 
   const wf = await workflowsFactory.create({
     name: 'My first workflow',
-    triggers: [],
+    triggers: [
+      new TimeBasedTrigger(
+        {
+          repeatTimes: 3,
+          startAtTimestamp: new Date().getTime() / 1000 + 60,
+          cycle: {
+            frequency: 1,
+            scale: TimeScale.Minutes,
+          },
+        },
+        commonConfig
+      ),
+    ],
     actions: [
       new UniswapSwapActionCallDataBuilder(
         {

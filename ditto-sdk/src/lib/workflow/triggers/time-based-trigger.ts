@@ -8,6 +8,15 @@ import { TimeScale } from './types';
 import VaultABI from '../../blockchain/abi/VaultABI.json';
 import { getRandomBytes } from '../../utils/get-random-bytes';
 
+/**
+ * Configuration for scheduling triggers in a time-based system.
+ *
+ * @property {number} startAtTimestamp - The Unix timestamp in seconds (pay attention) when the trigger should first execute.
+ * @property {number} [repeatTimes] - Optional. The number of times the trigger should repeat. If not specified, the trigger may be considered as a one-time event or infinitely recurring, depending on the system's implementation.
+ * @property {Object} cycle - The cycle configuration for the trigger, defining how it repeats over time.
+ * @property {number} cycle.frequency - The frequency with which the trigger should repeat. The interpretation of this value depends on the `scale`.
+ * @property {TimeScale} cycle.scale - The timescale in which the frequency is measured, e.g., seconds, minutes, hours, etc. This should be of the `TimeScale` type, which could be an enumeration or a set of predefined constants representing different time scales.
+ */
 type TriggerConfig = {
   startAtTimestamp: number;
   repeatTimes?: number;
@@ -39,7 +48,7 @@ export class TimeBasedTrigger extends RepeatableCallDataBuilder {
 
     const initData = vaultInterface
       .encodeFunctionData('timeCheckerInitialize', [
-        this.config.startAtTimestamp - Number(repeatSeconds),
+        Math.ceil(this.config.startAtTimestamp - Number(repeatSeconds)),
         repeatSeconds,
         getRandomBytes(32),
       ])
