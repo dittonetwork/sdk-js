@@ -11,8 +11,8 @@ import {
   WorkflowExecution,
   WorkflowsFactory,
 } from '@ditto-sdk/ditto-sdk';
-import { BrowserProvider, ethers } from 'ethers';
-import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action';
+import { ethers } from 'ethers';
+import { UniswapSwapActionCallDataBuilder } from '../../../ditto-sdk/src/lib/workflow/actions';
 
 export const Workflows = () => {
   const [provider, setProvider] = useState<Provider | null>(null);

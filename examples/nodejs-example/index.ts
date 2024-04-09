@@ -8,8 +8,8 @@ import {
   Chain,
   WorkflowsFactory,
   SmartWalletFactory,
+  UniswapSwapActionCallDataBuilder,
 } from '@ditto-sdk/ditto-sdk';
-import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action';
 
 (async () => {
   const chainId = Chain.Polygon;

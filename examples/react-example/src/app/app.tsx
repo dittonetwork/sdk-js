@@ -10,8 +10,8 @@ import {
   WorkflowsFactory,
   SmartWalletFactory,
   Chain,
+  UniswapSwapActionCallDataBuilder,
 } from '@ditto-sdk/ditto-sdk';
-import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);

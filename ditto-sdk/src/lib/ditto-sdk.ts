@@ -23,6 +23,7 @@ import type {
 import { isNativeToken } from './blockchain/tokens/utils/is-native-token';
 import { isAddressesEqual } from './blockchain/tokens/utils/is-addresses-equal';
 import { wrappedNativeTokens } from './blockchain/tokens/wrappedNative';
+import { UniswapSwapActionCallDataBuilder } from './workflow/actions';
 
 export {
   EthersSigner,
@@ -41,6 +42,7 @@ export {
   isNativeToken,
   isAddressesEqual,
   wrappedNativeTokens,
+  UniswapSwapActionCallDataBuilder,
 };
 
 export type {
