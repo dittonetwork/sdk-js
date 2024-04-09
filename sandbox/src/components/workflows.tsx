@@ -124,8 +124,7 @@ export const Workflows = () => {
             slippagePercent: 0.05,
             providerStrategy: {
               type: 'browser',
-              // @ts-expect-error
-              provider: window.ethereum!,
+              provider: (window as any).ethereum,
             },
           },
           commonConfig
