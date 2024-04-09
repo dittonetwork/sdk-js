@@ -21,9 +21,7 @@ export class EthersContract implements DittoContract {
       throw new DittoContractNotInitializedError();
     }
 
-    const result = params
-      ? await this.nativeContract[method](...params)
-      : await this.nativeContract[method]();
+    const result = await this.nativeContract[method](...params);
 
     return result as R;
   }

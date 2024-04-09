@@ -6,8 +6,6 @@ import { Chain } from '../chains/types';
 
 export class SmartWalletFactory {
   private _contract!: DittoContract;
-  // TODO: restore previous smart wallet index
-  private _vaultId = 1;
   private _abi = smartWalletfactoryAbi;
 
   constructor(private readonly provider: DittoProvider) {
@@ -23,15 +21,56 @@ export class SmartWalletFactory {
     return dittoSmartWalletFactoryAddresses[network];
   }
 
-  public async predictVaultAddress() {
+  public async predictVaultAddress(vaultId: number) {
     const address = await this.provider.getSigner().getAddress();
-    return this._contract.call('predictDeterministicVaultAddress', [address, this._vaultId])
+    return this._contract.call('predictDeterministicVaultAddress', [address, vaultId]);
   }
 
-  public async deploy() {
-    // TODO: add deploy logic
-    throw new Error('Method not implemented.');
+  public async deploy(version: number, vaultId: number) {
+    return this._contract.call('deploy', [version, vaultId]);
   }
 
-  // TODO: list
+  public async addNewImplementation(newImplementation: string) {
+    return this._contract.call('addNewImplementation', [newImplementation]);
+  }
+
+  public async crossChainDeploy(creator: string, version: number, vaultId: number) {
+    return this._contract.call('crossChainDeploy', [creator, version, vaultId]);
+  }
+
+  public async owner() {
+    return this._contract.call('owner');
+  }
+
+  public async implementation(version: number) {
+    return this._contract.call('implementation', [version]);
+  }
+
+  public async versions() {
+    return this._contract.call('versions');
+  }
+
+  public async renounceOwnership() {
+    return this._contract.call('renounceOwnership');
+  }
+
+  public async setBridgeReceiverContract(dittoBridgeReceiver: string) {
+    return this._contract.call('setBridgeReceiverContract', [dittoBridgeReceiver]);
+  }
+
+  public async setEntryPointCreatorAddress(entryPointCreator: string) {
+    return this._contract.call('setEntryPointCreatorAddress', [entryPointCreator]);
+  }
+
+  public async transferOwnership(newOwner: string) {
+    return this._contract.call('transferOwnership', [newOwner]);
+  }
+
+  public async upgradeLogic() {
+    return this._contract.call('upgradeLogic');
+  }
+
+  public async vaultProxyAdmin() {
+    return this._contract.call('vaultProxyAdmin');
+  }
 }

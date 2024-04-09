@@ -125,7 +125,8 @@ export function App() {
 
     const smartWalletFactory = new SmartWalletFactory(provider);
 
-    const addr = await smartWalletFactory.predictVaultAddress();
+    const vaultId = 1;
+    const addr = await smartWalletFactory.predictVaultAddress(vaultId);
     setSmartWalletAddress(addr as string);
   };
 
