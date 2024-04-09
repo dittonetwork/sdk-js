@@ -4,6 +4,7 @@ import { useSDK, MetaMaskProvider } from '@metamask/sdk-react';
 import { Link } from 'react-router-dom';
 import {
   BrowserStorage,
+  Chain,
   EthersContractFactory,
   EthersSigner,
   Provider,
@@ -30,7 +31,7 @@ const ConnectWalletButton = () => {
   };
 
   const disconnect = () => {
-    if {
+    if (sdk) {
       sdk.terminate();
     }
   };
@@ -123,7 +124,7 @@ export function App() {
     console.log('handlePredictVaultAddressSDKClick');
     if (!provider) return;
 
-    const smartWalletFactory = new SmartWalletFactory(provider);
+    const smartWalletFactory = new SmartWalletFactory(provider, Chain.Polygon);
 
     const addr = await smartWalletFactory.predictVaultAddress();
     setSmartWalletAddress(addr as string);

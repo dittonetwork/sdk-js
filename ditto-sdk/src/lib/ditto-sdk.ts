@@ -6,13 +6,13 @@ import {
   EthersContractFactory,
   EthersContract,
   DittoContractNotInitializedError,
-  SmartWalletFactory,
 } from './blockchain/contracts';
 import {
   WorkflowsFactory,
   PriceTriggerCallDataBuilder,
   UniswapSwapActionCallDataBuilder,
 } from './workflow';
+import { SmartWalletFactory } from './vaults';
 import type { WorkflowExecution } from './workflow';
 import { BaseApiError } from './network/api-client';
 import { Chain } from './blockchain/chains/types';
@@ -32,8 +32,5 @@ export {
   tokens,
   Chain,
 };
-
-export { smartWalletfactoryAbi } from './blockchain/abi';
-export { smartWalletAbi } from './blockchain/abi';
 
 export type { WorkflowExecution, Token };

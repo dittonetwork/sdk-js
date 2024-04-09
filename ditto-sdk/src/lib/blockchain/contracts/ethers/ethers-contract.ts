@@ -35,4 +35,8 @@ export class EthersContract implements DittoContract {
   public encodeFunctionData(method: string, params: string[]): string {
     return this.contractInterface.encodeFunctionData(method, params);
   }
+
+  public estimateGas(method: string, params: unknown[]): Promise<number> {
+    return this.nativeContract[method].estimateGas(...params);
+  }
 }
