@@ -42,6 +42,10 @@ export class Provider implements DittoProvider {
     return true;
   }
 
+  public getSigner(): DittoSigner {
+    return this.signer;
+  }
+
   public async needAuthentication(): Promise<boolean> {
     const accessTokenRaw = this.storage.get(ACCESS_TOKEN_KEY);
     const accessToken = accessTokenRaw instanceof Promise ? await accessTokenRaw : accessTokenRaw;
@@ -59,9 +63,5 @@ export class Provider implements DittoProvider {
 
   public getContractFactory(): ContractFactory<DittoContract, DittoContractInterface> {
     return this.contractFactory;
-  }
-
-  public getSigner(): DittoSigner {
-    return this.signer;
   }
 }

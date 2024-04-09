@@ -8,6 +8,8 @@ import {
   BrowserStorage,
   EthersContractFactory,
   WorkflowsFactory,
+  SmartWalletFactory,
+  Chain,
 } from '@ditto-sdk/ditto-sdk';
 import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action';
 
@@ -40,13 +42,16 @@ function App() {
     toDecimals: number,
     amount: bigint
   ) => {
-    const vaultAddress = '0x8db38B3825D0C4EA7f826E7CA6D5e99F8f07D43a';
-    const accountAddress = '0xAfe67Bfc16D0d7e2De988A1f89971aa3747221fF';
+    const chainId = Chain.Polygon;
+    const accountAddress = await dittoProvider!.getSigner().getAddress();
 
+    const swFactory = new SmartWalletFactory(dittoProvider!, chainId);
+    const vault = await swFactory.getDefaultOrCreateVault(chainId);
+    const vaultAddress = vault.address;
     const workflowFactory = new WorkflowsFactory(dittoProvider!);
 
     const commonConfig = {
-      chainId: 137,
+      chainId,
       recipient: vaultAddress,
       accountAddress,
       vaultAddress,
@@ -74,7 +79,7 @@ function App() {
       chainId: 137,
     });
 
-    const hash = await wf.buildAndDeploy(accountAddress);
+    const hash = await wf.buildAndDeploy(vaultAddress, accountAddress);
     alert(`Workflow created with hash: ${hash}`);
   };
 

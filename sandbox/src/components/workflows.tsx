@@ -133,7 +133,10 @@ export const Workflows = () => {
       chainId: Chain.Polygon,
     });
 
-    await wf.buildAndDeploy('0xAfe67Bfc16D0d7e2De988A1f89971aa3747221fF');
+    await wf.buildAndDeploy(
+      '0x8db38B3825D0C4EA7f826E7CA6D5e99F8f07D43a',
+      '0xAfe67Bfc16D0d7e2De988A1f89971aa3747221fF'
+    );
   };
 
   return (

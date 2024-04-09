@@ -11,10 +11,10 @@ export interface DittoProvider {
   authenticate(): Promise<boolean>;
   needAuthentication(): Promise<boolean>;
 
+  getSigner(): DittoSigner;
   getStorage(): DittoStorage;
   getHttpClient(): HttpClient;
   getContractFactory(): ContractFactory<DittoContract, DittoContractInterface>;
-  getSigner(): DittoSigner;
 }
 
 export interface DittoProviderConfig {

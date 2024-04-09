@@ -103,11 +103,11 @@ export class PriceTriggerCallDataBuilder implements CallDataBuilder {
     const uniswapFactoryAddress =
       uniswapPoolFactoryAddresses[this.commonCallDataBuilderConfig.chainId];
 
-    const oracleContract = await this.commonCallDataBuilderConfig.provider
+    const oracleContract = this.commonCallDataBuilderConfig.provider
       .getContractFactory()
       .getContract(oracleAddress, JSON.stringify(DittoOracleABI));
 
-    const targetRateBigInt = await oracleContract.call<unknown[], bigint>('consult', [
+    const targetRateBigInt = await oracleContract.call<bigint, unknown[]>('consult', [
       this.config.baseToken.address,
       this.config.triggerAtPrice,
       this.config.token.address,

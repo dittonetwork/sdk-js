@@ -9,7 +9,7 @@ export class EthersContractFactory
 {
   constructor(private readonly signer: ethers.Signer | ethers.Wallet) {}
 
-  public async getContract(address: WalletAddress, abi: string) {
+  public getContract(address: WalletAddress, abi: string) {
     return new EthersContract(address, abi, this.signer);
   }
 

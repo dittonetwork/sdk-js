@@ -10,6 +10,7 @@ import {
   DittoContractNotInitializedError,
 } from './blockchain/contracts';
 import { WorkflowsFactory, PriceTriggerCallDataBuilder } from './workflow';
+import { SmartWalletFactory } from './vaults';
 import type { WorkflowExecution } from './workflow';
 import { BaseApiError } from './network/api-client';
 import { Chain } from './blockchain/chains/types';
@@ -33,6 +34,7 @@ export {
   DittoContractNotInitializedError,
   WorkflowsFactory,
   BaseApiError,
+  SmartWalletFactory,
   PriceTriggerCallDataBuilder,
   tokens,
   Chain,

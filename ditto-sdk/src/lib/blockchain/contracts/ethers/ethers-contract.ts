@@ -8,21 +8,21 @@ export class EthersContract implements DittoContract {
   private readonly contractInterface: EthersContractInterface;
 
   constructor(
-    private readonly address: Address,
-    private readonly abi: string,
+    address: Address,
+    abi: string,
     private readonly signer: ethers.Signer | ethers.Wallet
   ) {
     this.nativeContract = new ethers.Contract(address, abi, this.signer);
     this.contractInterface = new EthersContractInterface(abi);
   }
 
-  public async call<P, R>(method: string, params: P): Promise<R> {
+  public async call<R, P extends unknown[] = []>(method: string, ...params: P): Promise<R> {
     if (!this.nativeContract) {
       throw new DittoContractNotInitializedError();
     }
 
     const result = params
-      ? await this.nativeContract[method](params)
+      ? await this.nativeContract[method](...params)
       : await this.nativeContract[method]();
 
     return result as R;
@@ -34,5 +34,9 @@ export class EthersContract implements DittoContract {
 
   public encodeFunctionData(method: string, params: string[]): string {
     return this.contractInterface.encodeFunctionData(method, params);
+  }
+
+  public estimateGas(method: string, params: unknown[]): Promise<bigint> {
+    return this.nativeContract[method].estimateGas(...params);
   }
 }
