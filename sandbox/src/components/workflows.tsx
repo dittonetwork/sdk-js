@@ -8,11 +8,11 @@ import {
   PriceTriggerCallDataBuilder,
   Provider,
   tokens,
-  UniswapSwapActionCallDataBuilder,
   WorkflowExecution,
   WorkflowsFactory,
 } from '@ditto-sdk/ditto-sdk';
-import { ethers } from 'ethers';
+import { BrowserProvider, ethers } from 'ethers';
+import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/uniswap-swap-action';
 
 export const Workflows = () => {
   const [provider, setProvider] = useState<Provider | null>(null);
@@ -122,6 +122,10 @@ export const Workflows = () => {
             toToken: tokens.stableCoins[Chain.Polygon].USDT,
             fromAmount: `123456789000000000`,
             slippagePercent: 0.05,
+            providerStrategy: {
+              type: 'browser',
+              provider: (window as any).ethereum,
+            },
           },
           commonConfig
         ),

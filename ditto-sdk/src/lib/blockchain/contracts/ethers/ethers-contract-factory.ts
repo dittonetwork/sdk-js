@@ -7,7 +7,7 @@ import { EthersContractInterface } from './ethers-contract-interface';
 export class EthersContractFactory
   implements ContractFactory<EthersContract, EthersContractInterface>
 {
-  constructor(private readonly signer: ethers.Signer) {}
+  constructor(private readonly signer: ethers.Signer | ethers.Wallet) {}
 
   public getContract(address: WalletAddress, abi: string) {
     return new EthersContract(address, abi, this.signer);

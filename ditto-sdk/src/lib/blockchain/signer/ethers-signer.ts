@@ -1,9 +1,9 @@
-import { ethers, JsonRpcSigner, Transaction } from 'ethers';
+import { Signer, Transaction, BrowserProvider } from 'ethers';
 import { DittoSigner } from './types';
 import { Address, TxHash, WalletAddress } from '../../types';
 
 export class EthersSigner implements DittoSigner {
-  constructor(private readonly ethersSigner: JsonRpcSigner) {}
+  constructor(private readonly ethersSigner: Signer) {}
 
   public getAddress(): Promise<WalletAddress> {
     return this.ethersSigner.getAddress();
@@ -20,14 +20,14 @@ export class EthersSigner implements DittoSigner {
     return this.ethersSigner.signMessage(message);
   }
 
-  public getRawSigner(): JsonRpcSigner {
+  public getRawSigner(): Signer {
     return this.ethersSigner;
   }
 
   public async getBalance(address: Address): Promise<string> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    const balance = await new ethers.BrowserProvider(window.ethereum).getBalance(address);
+    const balance = await new BrowserProvider(window.ethereum).getBalance(address);
     return balance.toString();
   }
 }

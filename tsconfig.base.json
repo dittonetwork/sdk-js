@@ -15,8 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ditto-sdk/ditto-sdk": ["ditto-sdk/src/index.ts"],
       "@ditto-sdk/shared": ["shared/src/index.ts"],
-      "@ditto-sdk/ditto-sdk": ["ditto-sdk/src/index.ts"]
+      "@ditto-sdk/uniswap-swap-action": ["@ditto-sdk/uniswap-swap-action/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

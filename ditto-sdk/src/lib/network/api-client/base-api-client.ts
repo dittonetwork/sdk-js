@@ -3,6 +3,7 @@ import { HttpClient } from '../http-client/types';
 import { BaseApiError } from './errors/base-api-error';
 import { DittoStorage } from '../../storage/types';
 import { Maybe } from '../../types';
+import { ACCESS_TOKEN_KEY } from '../../constants';
 
 export class BaseApiClient {
   constructor(private readonly httpClient: HttpClient, private readonly storage: DittoStorage) {}
@@ -47,7 +48,7 @@ export class BaseApiClient {
   }
 
   private async getAuthKey(): Promise<Maybe<string>> {
-    const authKeyRaw = this.storage.get('access-token');
+    const authKeyRaw = this.storage.get(ACCESS_TOKEN_KEY);
     if (authKeyRaw instanceof Promise) {
       return await authKeyRaw;
     }

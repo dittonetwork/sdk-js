@@ -1,42 +1,39 @@
+import { AlphaRouter, AlphaRouterParams, SwapType } from '@uniswap/smart-order-router';
+import { ethers } from 'ethers5';
+import { CurrencyAmount, Percent, Token as UniswapToken, TradeType } from '@uniswap/sdk-core';
 import {
   CallData,
   CallDataBuilder,
   CallDataBuilderReturnData,
+  Chain,
   CommonBuilderOptions,
-} from '../builders/types';
-import { ZERO_ADDRESS } from '../../blockchain/addresses/zero-address';
-import VaultABI from '../../blockchain/abi/VaultABI.json';
-import Erc20TokenABI from '../../blockchain/abi/Erc20TokenABI.json';
-import { CurrencyAmount, Percent, Token as UniswapToken, TradeType } from '@uniswap/sdk-core';
-import { AlphaRouter, AlphaRouterParams, SwapType } from '@uniswap/smart-order-router';
-import { parseUniswapRouterCallData } from '../../utils/parse-uniswap-router-call-data';
-import { DittoContractInterface } from '../../blockchain/contracts/types';
-import { ethers } from 'ethers5';
-import { Address } from '../../types';
-import type { Token } from '../../ditto-sdk';
-import { isNativeToken } from '../../blockchain/tokens/ utils/is-native-token';
-import { isAddressesEqual } from '../../blockchain/tokens/ utils/is-addresses-equal';
-import { BalanceCheckerService } from '../../blockchain/services/balance-checker-service';
-import { wrappedNativeTokens } from '../../blockchain/tokens/wrappedNative';
+  DittoContractInterface,
+  isAddressesEqual,
+  isNativeToken,
+  TokenLight,
+  wrappedNativeTokens,
+} from '@ditto-sdk/ditto-sdk';
+import { parseUniswapRouterCallData } from './utils/parse-uniswap-router-call-data';
+import VaultABI from './abis/VaultABI.json';
+import Erc20TokenABI from './abis/Erc20TokenABI.json';
+
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 type ActionConfig = {
-  fromToken: Token;
-  toToken: Token;
+  fromToken: TokenLight;
+  toToken: TokenLight;
   fromAmount: string;
   slippagePercent?: number;
+  providerStrategy:
+    | { type: 'nodejs'; rpcUrl: string; chainId: Chain }
+    | { type: 'browser'; provider: ethers.providers.ExternalProvider };
 };
 
 export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
-  private readonly balanceCheckerService: BalanceCheckerService;
-
   constructor(
     protected readonly config: ActionConfig,
     protected readonly commonCallDataBuilderConfig: CommonBuilderOptions
-  ) {
-    this.balanceCheckerService = new BalanceCheckerService(
-      this.commonCallDataBuilderConfig.provider
-    );
-  }
+  ) {}
 
   public async build(): Promise<CallDataBuilderReturnData> {
     const checks: Array<() => Promise<boolean>> = [];
@@ -62,14 +59,6 @@ export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
 
     // when source token is native
     if (isFromTokenIsNative) {
-      checks.push(async () => {
-        return this.balanceCheckerService.hasEnoughBalance(
-          this.config.fromToken.address,
-          this.config.fromAmount,
-          this.commonCallDataBuilderConfig.chainId
-        );
-      });
-
       callData.add({
         to: this.commonCallDataBuilderConfig.vaultAddress,
         callData: vaultInterface.encodeFunctionData('wrapNativeFromVaultBalance', [
@@ -87,14 +76,6 @@ export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
         this.commonCallDataBuilderConfig.recipient,
         this.config.fromAmount,
       ]);
-
-      checks.push(async () =>
-        this.balanceCheckerService.hasEnoughBalance(
-          this.config.fromToken.address,
-          this.config.fromAmount,
-          this.commonCallDataBuilderConfig.chainId
-        )
-      );
 
       // @todo should I check for allowance?
 
@@ -139,6 +120,17 @@ export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
       });
     }
 
+    const provider =
+      this.config.providerStrategy.type === 'nodejs'
+        ? new ethers.providers.JsonRpcProvider(
+            this.config.providerStrategy.rpcUrl,
+            this.config.providerStrategy.chainId
+          )
+        : // @ts-expect-error
+          new (ethers.providers?.Web3Provider || ethers.BrowserProvider)(
+            this.config.providerStrategy.provider
+          );
+
     // regular swap
     const uniswapRouterData = await this.createUniswapRoute(
       this.config.fromAmount,
@@ -147,9 +139,7 @@ export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
         : this.config.fromToken,
       this.config.toToken,
       this.commonCallDataBuilderConfig.chainId as number,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      new ethers.providers.Web3Provider(window.ethereum!),
+      provider,
       this.commonCallDataBuilderConfig.recipient,
       this.config.slippagePercent !== undefined ? this.config.slippagePercent * 100 : undefined
     );
@@ -175,7 +165,7 @@ export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
     };
   }
 
-  private async createUniswapRoute<T extends { address: Address; decimals: number }>(
+  private async createUniswapRoute<T extends { address: string; decimals: number }>(
     amountIn: string,
     fromTokenLight: T,
     toTokenLight: T,
