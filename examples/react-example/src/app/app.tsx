@@ -13,6 +13,7 @@ import {
   UniswapSwapActionCallDataBuilder,
   TimeBasedTrigger,
   TimeScale,
+  TokenLight,
 } from '@ditto-sdk/ditto-sdk';
 
 function App() {
@@ -49,7 +50,7 @@ function App() {
 
     const swFactory = new SmartWalletFactory(dittoProvider!, chainId);
     const vault = await swFactory.getDefaultOrCreateVault(chainId);
-    const vaultAddress = vault.address;
+    const vaultAddress = '0x2fdC069F62767C28aB0E46674199A5C41dC4F1fE'; // vault.address;
     const workflowFactory = new WorkflowsFactory(dittoProvider!);
 
     const commonConfig = {
@@ -60,15 +61,18 @@ function App() {
       provider: dittoProvider!,
     };
 
+    const fromToken = { address: from, decimals: fromDecimals } satisfies TokenLight;
+    const toToken = { address: to, decimals: toDecimals } satisfies TokenLight;
+
     const wf = await workflowFactory.create({
       name: 'My first workflow',
       triggers: [
         new TimeBasedTrigger(
           {
-            repeatTimes: 3,
+            repeatTimes: 2,
             startAtTimestamp: new Date().getTime() / 1000 + 60,
             cycle: {
-              frequency: 1,
+              frequency: 2,
               scale: TimeScale.Minutes,
             },
           },
@@ -78,8 +82,8 @@ function App() {
       actions: [
         new UniswapSwapActionCallDataBuilder(
           {
-            fromToken: { address: from, decimals: fromDecimals },
-            toToken: { address: to, decimals: toDecimals },
+            fromToken,
+            toToken,
             fromAmount: `${amount}`,
             slippagePercent: 0.05,
             providerStrategy: {
@@ -90,7 +94,7 @@ function App() {
           commonConfig
         ),
       ],
-      chainId: 137,
+      chainId,
     });
 
     const hash = await wf.buildAndDeploy(vaultAddress, accountAddress);

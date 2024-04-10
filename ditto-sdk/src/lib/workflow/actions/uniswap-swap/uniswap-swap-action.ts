@@ -186,7 +186,7 @@ export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
       {
         recipient: recipient,
         slippageTolerance: new Percent(slippage, 10_000),
-        deadline: Math.floor(Date.now() / 1000 + 1800), // @todo for scheduled trigger it should be maximum
+        deadline: Math.floor(Date.now() / 1000 + 60 * 60 * 24 * 365), // for scheduled trigger should be maximum
         type: SwapType.SWAP_ROUTER_02,
       },
       {

@@ -18,10 +18,10 @@ import { TokenLight } from '../../blockchain/tokens/types';
 
 type TriggerConfig = {
   uniswapPoolFeeTier: FeeAmount;
-  triggerAtPrice: string;
+  triggerAtPrice: string; // weis * 10**fromToken.decimals
   priceMustBeHigherThan?: boolean;
-  token: TokenLight;
-  baseToken: TokenLight;
+  fromToken: TokenLight;
+  toToken: TokenLight;
 };
 
 export class PriceTrigger implements CallDataBuilder {
@@ -36,8 +36,8 @@ export class PriceTrigger implements CallDataBuilder {
 
     const { poolAddress } = this.computeUniswapPoolAddress(
       this.commonCallDataBuilderConfig.chainId,
-      this.config.token.address,
-      this.config.baseToken.address,
+      this.config.toToken.address,
+      this.config.fromToken.address,
       this.config.uniswapPoolFeeTier
     );
 
@@ -92,10 +92,10 @@ export class PriceTrigger implements CallDataBuilder {
   }
 
   private async getTargetRate(): Promise<string> {
-    const isBaseFirstToken =
-      parseInt(this.config.baseToken.address) > parseInt(this.config.token.address);
+    const isToTokenFirstToken =
+      Number(this.config.toToken.address) > Number(this.config.fromToken.address);
 
-    if (isBaseFirstToken) {
+    if (isToTokenFirstToken) {
       return this.config.triggerAtPrice;
     }
 
@@ -109,9 +109,9 @@ export class PriceTrigger implements CallDataBuilder {
 
     const targetRateBigInt = await oracleContract.call<bigint, unknown[]>(
       'consult',
-      this.config.baseToken.address,
+      this.config.toToken.address,
       this.config.triggerAtPrice,
-      this.config.token.address,
+      this.config.fromToken.address,
       this.config.uniswapPoolFeeTier,
       uniswapFactoryAddress
     );
@@ -124,7 +124,7 @@ export class PriceTrigger implements CallDataBuilder {
     const priceBN = BigInt(this.config.triggerAtPrice);
 
     return priceBN > BigInt(1)
-      ? (rateBN / priceBN).toString(0)
+      ? (rateBN / priceBN).toString()
       : (rateBN * (BigInt(1) / priceBN)).toString();
   }
 
@@ -132,7 +132,7 @@ export class PriceTrigger implements CallDataBuilder {
     const gtSigHash = vaultInterface.selector('uniswapCheckGTTargetRate');
     const ltSigHash = vaultInterface.selector('uniswapCheckLTTargetRate');
     const isBaseFirstToken =
-      parseInt(this.config.baseToken.address) > parseInt(this.config.token.address);
+      parseInt(this.config.fromToken.address) > parseInt(this.config.toToken.address);
     const direction = !this.config.priceMustBeHigherThan;
 
     /*

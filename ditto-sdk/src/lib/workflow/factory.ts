@@ -9,6 +9,8 @@ import { DittoProvider } from '../provider/types';
 import { Execution } from './execution';
 import { Workflow } from './workflow';
 import { WorkflowApiClient } from '../network/api-client/workflow-api-client';
+import VaultABI from '../blockchain/abi/VaultABI.json';
+import { TxHash } from '../types';
 
 export class WorkflowsFactory implements IWorkflowFactory {
   private readonly apiClient: WorkflowApiClient;
@@ -42,5 +44,14 @@ export class WorkflowsFactory implements IWorkflowFactory {
     pagination: PaginationParams
   ): Promise<DittoWorkflow[]> {
     throw new Error('Method not implemented.');
+  }
+
+  public async deactivateWorkflow(address: string, id: number): Promise<TxHash> {
+    const vaultContract = this.provider
+      .getContractFactory()
+      .getContract(address, JSON.stringify(VaultABI));
+
+    const tx = await vaultContract.call<{ hash: string }, [number]>('deactivateWorkflow', id);
+    return tx.hash;
   }
 }

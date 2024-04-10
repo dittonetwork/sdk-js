@@ -12,7 +12,7 @@ type PropsType = {
 
 export const Form: React.FC<PropsType> = (props) => {
   const [fromTokenAddress, setFromTokenAddress] = React.useState<string>(
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
   );
   const [toTokenAddress, setToTokenAddress] = React.useState<string>(
     '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'

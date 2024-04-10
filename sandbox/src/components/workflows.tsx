@@ -76,10 +76,10 @@ export const Workflows = () => {
         new PriceTrigger(
           {
             uniswapPoolFeeTier: 500,
-            triggerAtPrice: 500000000000000000, // 500000000000000000
+            triggerAtPrice: '500000000000000000',
             priceMustBeHigherThan: true,
-            token: tokens.wrappedNative[Chain.Polygon],
-            baseToken: tokens.stableCoins[Chain.Polygon].USDT,
+            fromToken: tokens.wrappedNative[Chain.Polygon],
+            toToken: tokens.stableCoins[Chain.Polygon].USDT,
           },
           commonConfig
         ),

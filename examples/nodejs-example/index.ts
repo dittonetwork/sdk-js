@@ -4,6 +4,7 @@ import {
   EthersContractFactory,
   EthersSigner,
   InMemoryStorage,
+  PriceTrigger,
   Provider,
   SmartWalletFactory,
   TimeBasedTrigger,
@@ -47,27 +48,50 @@ import {
 
   const workflowsFactory = new WorkflowsFactory(dittoProvider);
 
+  const wmatic = tokens.wrappedNative[Chain.Polygon];
+  const usdt = tokens.stableCoins[Chain.Polygon].USDT;
+
+  const timeTrigger = new TimeBasedTrigger(
+    {
+      repeatTimes: 4,
+      startAtTimestamp: new Date().getTime() / 1000 + 120,
+      cycle: {
+        frequency: 1,
+        scale: TimeScale.Minutes,
+      },
+    },
+    commonConfig
+  );
+
+  // rate = how much of fromToken you should pay to get one toToken
+  // rate should be:
+  // a) higher than triggerAtPrice if priceMustBeHigherThan is true
+  // b) lower than triggerAtPrice if priceMustBeHigherThan is false
+  // in this case rate is 0.88 (0.88 USDT for 1 WMATIC)
+  // triggerAtPrice is 0.3 (300000 / 1e6)
+  // current rate is higher than triggerAtPrice and priceMustBeHigherThan is true so the trigger should be triggered
+  const priceTrigger = new PriceTrigger(
+    {
+      uniswapPoolFeeTier: 3000,
+      triggerAtPrice: '300000',
+      priceMustBeHigherThan: true,
+      fromToken: usdt,
+      toToken: wmatic,
+    },
+    commonConfig
+  );
+
+  const usePriceTrigger = true;
+
   const wf = await workflowsFactory.create({
     name: 'My first workflow',
-    triggers: [
-      new TimeBasedTrigger(
-        {
-          repeatTimes: 3,
-          startAtTimestamp: new Date().getTime() / 1000 + 60,
-          cycle: {
-            frequency: 1,
-            scale: TimeScale.Minutes,
-          },
-        },
-        commonConfig
-      ),
-    ],
+    triggers: [usePriceTrigger ? priceTrigger : timeTrigger],
     actions: [
       new UniswapSwapActionCallDataBuilder(
         {
-          fromToken: tokens.native[chainId],
-          toToken: tokens.stableCoins[chainId].USDT,
-          fromAmount: `1234567890000000`,
+          fromToken: wmatic,
+          toToken: usdt,
+          fromAmount: `444444321000000`,
           slippagePercent: 0.05,
           providerStrategy: {
             type: 'nodejs',
