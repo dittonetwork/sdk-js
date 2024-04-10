@@ -18,7 +18,7 @@ import { TokenLight } from '../../blockchain/tokens/types';
 
 type TriggerConfig = {
   uniswapPoolFeeTier: FeeAmount;
-  triggerAtPrice: number;
+  triggerAtPrice: string;
   priceMustBeHigherThan?: boolean;
   token: TokenLight;
   baseToken: TokenLight;
@@ -96,7 +96,7 @@ export class PriceTrigger implements CallDataBuilder {
       parseInt(this.config.baseToken.address) > parseInt(this.config.token.address);
 
     if (isBaseFirstToken) {
-      return this.config.triggerAtPrice.toString();
+      return this.config.triggerAtPrice;
     }
 
     const oracleAddress = dittoOracleAddresses[this.commonCallDataBuilderConfig.chainId];
@@ -107,13 +107,14 @@ export class PriceTrigger implements CallDataBuilder {
       .getContractFactory()
       .getContract(oracleAddress, JSON.stringify(DittoOracleABI));
 
-    const targetRateBigInt = await oracleContract.call<bigint, unknown[]>('consult', [
+    const targetRateBigInt = await oracleContract.call<bigint, unknown[]>(
+      'consult',
       this.config.baseToken.address,
       this.config.triggerAtPrice,
       this.config.token.address,
       this.config.uniswapPoolFeeTier,
-      uniswapFactoryAddress,
-    ]);
+      uniswapFactoryAddress
+    );
 
     const targetRate = targetRateBigInt.toString();
 
