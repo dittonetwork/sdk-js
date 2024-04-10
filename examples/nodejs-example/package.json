@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@ditto-sdk/ditto-sdk": "file:../../ditto-sdk"
+    "@ditto-network/core": "file:../../@ditto-network/core",
+    "ethers": "^6.11.1"
   }
 }

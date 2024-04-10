@@ -12,7 +12,7 @@ import {
   tokens,
   UniswapSwapActionCallDataBuilder,
   WorkflowsFactory,
-} from '@ditto-sdk/ditto-sdk';
+} from '@ditto-network/core';
 
 (async () => {
   const chainId = Chain.Polygon;

@@ -15,8 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ditto-sdk/ditto-sdk": ["ditto-sdk/src/index.ts"],
-      "@ditto-sdk/shared": ["shared/src/index.ts"]
+      "@ditto-network/core": ["@ditto-network/core/src/index.ts"],
+      "@ditto-sdk/shared": ["sandbox/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

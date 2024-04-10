@@ -1,6 +1,6 @@
 {
-  "name": "@ditto-sdk/ditto-sdk",
-  "version": "0.0.1",
+  "name": "@ditto-network/core",
+  "version": "0.0.2",
   "dependencies": {
     "fetch-ponyfill": "7.1.0",
     "rambda": "9.2.0",
@@ -12,8 +12,11 @@
     "@uniswap/v3-sdk": "^3.10.0",
     "ethers5": "npm:ethers@5.7.1"
   },
+  "files": [
+    "src"
+  ],
   "type": "commonjs",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
-  "private": true
+  "private": false
 }

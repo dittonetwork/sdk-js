@@ -1,6 +1,3 @@
-# SDK js
-[Good reference](https://github.com/dittonetwork/sdk-core)
-
 ## Authenticate
 
 **Interfaces:**
