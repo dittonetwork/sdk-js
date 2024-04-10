@@ -71,11 +71,7 @@ export class TimeBasedTrigger extends RepeatableCallDataBuilder {
   }
 
   public getRepeatCount(): number {
-    return Number(
-      this.config.repeatTimes && this.config.repeatTimes > 1
-        ? this.formatSeconds(this.config.cycle.frequency, this.config.cycle.scale)
-        : 60
-    );
+    return Number(this.config.repeatTimes);
   }
 
   private formatSeconds(value: number, frequency: TimeScale) {
@@ -92,13 +88,13 @@ export class TimeBasedTrigger extends RepeatableCallDataBuilder {
         multiplier = 60;
         break;
       case TimeScale.Hours:
-        multiplier = 3600;
+        multiplier = 60 * 60;
         break;
       case TimeScale.Days:
-        multiplier = 86400;
+        multiplier = 60 * 60 * 24;
         break;
       case TimeScale.Weeks:
-        multiplier = 604800;
+        multiplier = 60 * 60 * 24 * 7;
         break;
       case TimeScale.Months:
         multiplier = 2629800;
