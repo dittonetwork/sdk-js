@@ -5,7 +5,7 @@ import {
   EthersContractFactory,
   EthersSigner,
   Provider,
-} from '@ditto-sdk/ditto-sdk';
+} from '@ditto-network/core';
 import storageAbi from './storage.abi.json';
 
 export const ContractTesting = () => {

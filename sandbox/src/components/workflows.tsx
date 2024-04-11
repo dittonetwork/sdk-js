@@ -10,9 +10,9 @@ import {
   tokens,
   WorkflowExecution,
   WorkflowsFactory,
-} from '@ditto-sdk/ditto-sdk';
+  UniswapSwapActionCallDataBuilder
+} from '@ditto-network/core';
 import { ethers } from 'ethers';
-import { UniswapSwapActionCallDataBuilder } from '@ditto-sdk/ditto-sdk';
 
 export const Workflows = () => {
   const [provider, setProvider] = useState<Provider | null>(null);

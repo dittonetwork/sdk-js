@@ -14,7 +14,7 @@ import {
   TimeBasedTrigger,
   TimeScale,
   TokenLight,
-} from '@ditto-sdk/ditto-sdk';
+} from '@ditto-network/core';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);

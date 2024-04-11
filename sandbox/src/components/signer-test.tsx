@@ -3,7 +3,7 @@ import {
   EthersContractFactory,
   EthersSigner,
   Provider,
-} from '@ditto-sdk/ditto-sdk';
+} from '@ditto-network/core';
 import { ethers } from 'ethers';
 import { useState } from 'react';
 

@@ -9,8 +9,8 @@ import {
   EthersSigner,
   Provider,
   SmartWalletFactory,
-} from '@ditto-sdk/ditto-sdk';
-import { Contract, ethers } from 'ethers';
+} from '@ditto-network/core';
+import { ethers } from 'ethers';
 
 // https://github.com/Uniswap/smart-order-router/issues/484
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

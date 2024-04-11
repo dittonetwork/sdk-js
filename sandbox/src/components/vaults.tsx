@@ -7,9 +7,9 @@ import {
   EthersSigner,
   Provider,
   SmartWalletFactory,
-} from '@ditto-sdk/ditto-sdk';
+} from '@ditto-network/core';
 
-export const Vaults: React.FC<{}> = () => {
+export const Vaults: React.FC = () => {
   const [provider, setProvider] = React.useState<Provider | null>(null);
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
 
