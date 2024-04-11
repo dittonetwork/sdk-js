@@ -2,7 +2,7 @@ import VaultFactoryABI from '../blockchain/abi/VaultFactoryABI.json';
 import { DittoContract } from '../blockchain/contracts/types';
 import { DittoProvider } from '../provider/types';
 import { Chain } from '../ditto-sdk';
-import { dittoSmartWalletFactoryAddresses } from '../blockchain/addresses/smart-wallet-factory';
+import { vaultFactoryAddresses } from '../blockchain/addresses/vault-factory';
 import { AccountApiClient } from './account-api-client';
 import { pathOr } from 'rambda';
 
@@ -23,7 +23,7 @@ export class SmartWalletFactory {
   }
 
   public getFactoryAddress(chain: Chain) {
-    return dittoSmartWalletFactoryAddresses[chain];
+    return vaultFactoryAddresses[chain];
   }
 
   public async predictVaultAddress(): Promise<string> {
