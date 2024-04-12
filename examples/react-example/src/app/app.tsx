@@ -15,6 +15,7 @@ import {
   TimeScale,
   TokenLight,
 } from '@ditto-network/core';
+import { Address } from '@ditto-network/core';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -39,16 +40,16 @@ function App() {
   }, []);
 
   const handleSubmit = async (
-    from: string,
+    from: Address,
     fromDecimals: number,
-    to: string,
+    to: Address,
     toDecimals: number,
     amount: bigint
   ) => {
     const chainId = Chain.Polygon;
     const accountAddress = await dittoProvider!.getSigner().getAddress();
 
-    const swFactory = new SmartWalletFactory(dittoProvider!, chainId);
+    const swFactory = new SmartWalletFactory(dittoProvider!);
     const vault = await swFactory.getDefaultOrCreateVault(chainId);
     const vaultAddress = '0x2fdC069F62767C28aB0E46674199A5C41dC4F1fE'; // vault.address;
     const workflowFactory = new WorkflowsFactory(dittoProvider!);

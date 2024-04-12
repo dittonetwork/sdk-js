@@ -1,20 +1,21 @@
 import React from 'react';
+import { Address } from '@ditto-network/core';
 
 type PropsType = {
   onSubmit: (
-    from: string,
+    from: Address,
     fromDecimals: number,
-    to: string,
+    to: Address,
     toDecimals: number,
     amount: bigint
   ) => Promise<void>;
 };
 
 export const Form: React.FC<PropsType> = (props) => {
-  const [fromTokenAddress, setFromTokenAddress] = React.useState<string>(
+  const [fromTokenAddress, setFromTokenAddress] = React.useState<Address>(
     '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
   );
-  const [toTokenAddress, setToTokenAddress] = React.useState<string>(
+  const [toTokenAddress, setToTokenAddress] = React.useState<Address>(
     '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'
   );
   const [amount, setAmount] = React.useState<bigint>(BigInt(12345600000000000));
@@ -69,7 +70,7 @@ export const Form: React.FC<PropsType> = (props) => {
               type="text"
               placeholder="0x..."
               value={fromTokenAddress}
-              onChange={(e) => setFromTokenAddress(e.target.value)}
+              onChange={(e) => setFromTokenAddress(e.target.value as Address)}
             />
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -93,7 +94,7 @@ export const Form: React.FC<PropsType> = (props) => {
               type="text"
               placeholder="0x..."
               value={toTokenAddress}
-              onChange={(e) => setToTokenAddress(e.target.value)}
+              onChange={(e) => setToTokenAddress(e.target.value as Address)}
             />
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"

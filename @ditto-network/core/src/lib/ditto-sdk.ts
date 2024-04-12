@@ -24,6 +24,7 @@ import { isNativeToken } from './blockchain/tokens/utils/is-native-token';
 import { isAddressesEqual } from './blockchain/tokens/utils/is-addresses-equal';
 import { wrappedNativeTokens } from './blockchain/tokens/wrappedNative';
 import { UniswapSwapActionCallDataBuilder } from './workflow/actions';
+import type { Address } from './types';
 
 export {
   EthersSigner,
@@ -56,4 +57,5 @@ export type {
   CallData,
   CallDataBuilderReturnData,
   DittoContractInterface,
+  Address,
 };

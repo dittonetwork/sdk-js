@@ -1,3 +1,5 @@
+import { Address } from '../../types';
+
 export interface FullData {
   id: string;
   accounts: Account[];
@@ -18,7 +20,7 @@ export interface Vault {
   id: string;
   chainId: number;
   accountId: string;
-  address: string;
+  address: Address;
   createdAt: Date;
 }
 
