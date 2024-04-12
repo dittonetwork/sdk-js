@@ -1,11 +1,12 @@
 import { HttpClient, HttpClientMethod } from './types';
 import fetchPonyfill from 'fetch-ponyfill';
 import { Optional } from '../../types';
+import { config } from '../../config/config';
 
 export class DittoHttpClient implements HttpClient {
   private readonly fetch = fetchPonyfill().fetch;
 
-  private baseUrl = 'https://backend.dittonetwork.io';
+  private baseUrl = config.apiBaseUrl;
 
   public get(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     return this.fetch(...this.enrichRequest('get', input, init));
