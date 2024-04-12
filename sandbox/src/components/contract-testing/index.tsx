@@ -5,7 +5,7 @@ import {
   EthersContractFactory,
   EthersSigner,
   Provider,
-} from '@ditto-sdk/ditto-sdk';
+} from '@ditto-network/core';
 import storageAbi from './storage.abi.json';
 
 export const ContractTesting = () => {
@@ -33,22 +33,22 @@ export const ContractTesting = () => {
   };
 
   const handleGetValueClick = async () => {
-    const contract = await provider!
+    const contract = provider!
       .getContractFactory()
       .getContract('0xd10e3E8EbC4B55eAE572181be1554356Fb2a7767', JSON.stringify(storageAbi));
 
-    const result = await contract.call<null, bigint>('retrieve', null);
+    const result = await contract.call<bigint>('retrieve');
     setValue(result.toString());
   };
 
   const handleSetValueClick = async () => {
     const value = prompt('Enter a value');
-    const contract = await provider!
+    const contract = provider!
       .getContractFactory()
       .getContract('0xd10e3E8EbC4B55eAE572181be1554356Fb2a7767', JSON.stringify(storageAbi));
 
     // @ts-expect-error cast
-    const tx = await contract.call<string, { hash: string }>('store', BigInt(value!));
+    const tx = await contract.call<{ hash: string }, string>('store', BigInt(value!));
     setHash(`Wait for ${tx.hash} to be mined...`);
     // @ts-expect-error hack
     await tx.wait();

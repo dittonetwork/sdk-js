@@ -8,6 +8,7 @@ import { ContractTesting } from './components/contract-testing';
 import { SignerTest } from './components/signer-test';
 import { Workflows } from './components/workflows';
 import { Navbar } from './navbar';
+import { Vaults } from './components/vaults';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -35,6 +36,7 @@ root.render(
         <Route path="/contracts" element={<ContractTesting />} />
         <Route path="/auth" element={<SignerTest />} />
         <Route path="/workflows" element={<Workflows />} />
+        <Route path="/vaults" element={<Vaults />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

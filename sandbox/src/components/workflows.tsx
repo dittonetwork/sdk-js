@@ -5,13 +5,13 @@ import {
   Chain,
   EthersContractFactory,
   EthersSigner,
-  PriceTriggerCallDataBuilder,
+  PriceTrigger,
   Provider,
   tokens,
-  UniswapSwapActionCallDataBuilder,
   WorkflowExecution,
   WorkflowsFactory,
-} from '@ditto-sdk/ditto-sdk';
+  UniswapSwapActionCallDataBuilder
+} from '@ditto-network/core';
 import { ethers } from 'ethers';
 
 export const Workflows = () => {
@@ -73,13 +73,13 @@ export const Workflows = () => {
     const wf = await workflowsFactory.create({
       name: 'test wf',
       triggers: [
-        new PriceTriggerCallDataBuilder(
+        new PriceTrigger(
           {
             uniswapPoolFeeTier: 500,
-            triggerAtPrice: 500000000000000000, // 500000000000000000
+            triggerAtPrice: '500000000000000000',
             priceMustBeHigherThan: true,
-            token: tokens.wrappedNative[Chain.Polygon],
-            baseToken: tokens.stableCoins[Chain.Polygon].USDT,
+            fromToken: tokens.wrappedNative[Chain.Polygon],
+            toToken: tokens.stableCoins[Chain.Polygon].USDT,
           },
           commonConfig
         ),
@@ -122,6 +122,10 @@ export const Workflows = () => {
             toToken: tokens.stableCoins[Chain.Polygon].USDT,
             fromAmount: `123456789000000000`,
             slippagePercent: 0.05,
+            providerStrategy: {
+              type: 'browser',
+              provider: (window as any).ethereum,
+            },
           },
           commonConfig
         ),
@@ -129,7 +133,10 @@ export const Workflows = () => {
       chainId: Chain.Polygon,
     });
 
-    await wf.buildAndDeploy('0xAfe67Bfc16D0d7e2De988A1f89971aa3747221fF');
+    await wf.buildAndDeploy(
+      '0x8db38B3825D0C4EA7f826E7CA6D5e99F8f07D43a',
+      '0xAfe67Bfc16D0d7e2De988A1f89971aa3747221fF'
+    );
   };
 
   return (

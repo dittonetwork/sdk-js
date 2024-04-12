@@ -16,6 +16,9 @@ export const Navbar = () => (
         <a href="/workflows" className="hover:text-gray-300">
           Workflows
         </a>
+        <a href="/vaults" className="hover:text-gray-300">
+          Vaults
+        </a>
       </div>
     </div>
   </nav>
