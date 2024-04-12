@@ -1,7 +1,7 @@
-import { Maybe, WalletAddress } from '../../types';
+import { Address, Maybe } from '../../types';
 
 export interface ContractFactory<T extends DittoContract, I extends DittoContractInterface> {
-  getContract(address: WalletAddress, abi: string): T;
+  getContract(address: Address, abi: string): T;
   getContractInterface(abi: string): I;
 }
 

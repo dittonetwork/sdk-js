@@ -4,7 +4,11 @@
   "sourceRoot": "@ditto-network/core/src",
   "projectType": "library",
   "targets": {
-    "build": {
+    "prepare-prod-config": {
+      "command": "mv ./dist/ditto-sdk/src/lib/config/config.prod.js ./dist/ditto-sdk/src/lib/config/config.js",
+      "dependsOn": ["compile"]
+    },
+    "compile": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
@@ -13,6 +17,10 @@
         "tsConfig": "@ditto-network/core/tsconfig.lib.json",
         "assets": ["@ditto-network/core/*.md"]
       }
+    },
+    "build": {
+      "command": "pwd",
+      "dependsOn": ["prepare-prod-config"]
     }
   },
   "tags": []

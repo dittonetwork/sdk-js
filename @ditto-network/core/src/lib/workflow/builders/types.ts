@@ -1,8 +1,9 @@
 import { Chain } from '../../blockchain/chains/types';
 import { DittoProvider } from '../../provider/types';
+import { Address } from '../../ditto-sdk';
 
 export type CallData = {
-  to: string;
+  to: Address;
   callData: string;
   initData?: string;
   viewData?: string;
@@ -10,9 +11,9 @@ export type CallData = {
 
 export interface CommonBuilderOptions {
   chainId: Chain;
-  recipient: string;
+  recipient: Address;
   accountAddress: string;
-  vaultAddress: string;
+  vaultAddress: Address;
   provider: DittoProvider;
 }
 

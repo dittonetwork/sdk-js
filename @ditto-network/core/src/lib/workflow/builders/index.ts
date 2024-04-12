@@ -4,7 +4,7 @@ export const noopBuilderData = {
   callData: new Set([
     {
       callData: '',
-      to: '',
+      to: '0x',
     },
   ]),
   value: BigInt(0),

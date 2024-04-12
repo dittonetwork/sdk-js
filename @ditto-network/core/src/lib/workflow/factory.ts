@@ -10,7 +10,7 @@ import { Execution } from './execution';
 import { Workflow } from './workflow';
 import { WorkflowApiClient } from '../network/api-client/workflow-api-client';
 import VaultABI from '../blockchain/abi/VaultABI.json';
-import { TxHash } from '../types';
+import { Address, TxHash } from '../types';
 
 export class WorkflowsFactory implements IWorkflowFactory {
   private readonly apiClient: WorkflowApiClient;
@@ -46,7 +46,7 @@ export class WorkflowsFactory implements IWorkflowFactory {
     throw new Error('Method not implemented.');
   }
 
-  public async deactivateWorkflow(address: string, id: number): Promise<TxHash> {
+  public async deactivateWorkflow(address: Address, id: number): Promise<TxHash> {
     const vaultContract = this.provider
       .getContractFactory()
       .getContract(address, JSON.stringify(VaultABI));
