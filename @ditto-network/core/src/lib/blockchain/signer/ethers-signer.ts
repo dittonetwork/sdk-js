@@ -5,8 +5,9 @@ import { Address, TxHash, WalletAddress } from '../../types';
 export class EthersSigner implements DittoSigner {
   constructor(private readonly ethersSigner: Signer | Wallet) {}
 
-  public getAddress(): Promise<WalletAddress> {
-    return this.ethersSigner.getAddress();
+  public async getAddress(): Promise<WalletAddress> {
+    const address = await this.ethersSigner.getAddress();
+    return address as WalletAddress;
   }
 
   public async sendTransaction(

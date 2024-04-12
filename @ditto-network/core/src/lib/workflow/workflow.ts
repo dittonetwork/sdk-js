@@ -161,7 +161,7 @@ export class Workflow implements DittoWorkflow {
       .map((item) => item.callData)
       .map((item) => Array.from(item))
       .flat()
-      .filter((item) => isAddressesEqual(item.to.toLowerCase(), vaultAddress.toLowerCase()));
+      .filter((item) => isAddressesEqual(item.to, vaultAddress));
   }
 
   private getNotVaultRelativeCallData(
@@ -172,6 +172,6 @@ export class Workflow implements DittoWorkflow {
       .map((item) => item.callData)
       .map((item) => Array.from(item))
       .flat()
-      .filter((item) => !isAddressesEqual(item.to.toLowerCase(), vaultAddress.toLowerCase()));
+      .filter((item) => !isAddressesEqual(item.to, vaultAddress));
   }
 }
