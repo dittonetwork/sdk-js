@@ -1,5 +1,4 @@
-import { Address } from '../../ditto-sdk';
-import { Maybe } from '../../types';
+import { Address, Maybe } from '../../types';
 
 export type Asset = {
   id: string;

@@ -1,5 +1,5 @@
 import { Chain } from '../chains/types';
-import { Token } from '../../ditto-sdk';
+import { Token } from './types';
 
 export const wrappedNativeTokens: { [key in Chain]: Token & { chain: key } } = {
   [Chain.Polygon]: {

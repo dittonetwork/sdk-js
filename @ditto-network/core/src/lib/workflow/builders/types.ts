@@ -1,6 +1,6 @@
 import { Chain } from '../../blockchain/chains/types';
 import { DittoProvider } from '../../provider/types';
-import { Address } from '../../ditto-sdk';
+import { Address } from '../../types';
 
 export type CallData = {
   to: Address;

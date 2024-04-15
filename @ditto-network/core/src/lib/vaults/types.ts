@@ -1,5 +1,4 @@
-import { Chain } from '../ditto-sdk';
-import { Maybe } from '../types';
+import { Chain } from '../blockchain/chains/types';
 import { SmartWallet } from './smart-wallet/smart-wallet';
 
 export interface Factory {

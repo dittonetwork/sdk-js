@@ -1,7 +1,6 @@
 import VaultFactoryABI from '../blockchain/abi/VaultFactoryABI.json';
 import { DittoContract } from '../blockchain/contracts/types';
 import { DittoProvider } from '../provider/types';
-import { Chain } from '../ditto-sdk';
 import { AccountApiClient } from './account-api-client';
 import { pathOr } from 'rambda';
 import { Address, Maybe } from '../types';
@@ -10,6 +9,7 @@ import { SmartWallet } from './smart-wallet/smart-wallet';
 import { SmartWalletVersion } from './smart-wallet/types';
 import { SmartWalletCreationError } from './smart-wallet/errors/SmartWalletCreationError';
 import { config } from '../config/config';
+import { Chain } from '../blockchain/chains/types';
 
 export class SmartWalletFactory implements Factory {
   private readonly apiClient: AccountApiClient;

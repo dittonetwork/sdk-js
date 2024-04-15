@@ -1,6 +1,7 @@
+import { Chain } from '../../blockchain/chains/types';
 import { BaseApiClient } from '../../network/api-client/base-api-client';
+import { Address } from '../../types';
 import { FullData, VaultDto } from './types';
-import { Address, Chain } from '../../ditto-sdk';
 import { omit } from 'rambda';
 
 export class AccountApiClient extends BaseApiClient {

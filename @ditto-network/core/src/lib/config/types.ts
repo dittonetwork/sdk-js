@@ -1,4 +1,5 @@
-import { Address, Chain } from '../ditto-sdk';
+import { Chain } from '../blockchain/chains/types';
+import { Address } from '../types';
 
 export type DittoConfig = {
   apiBaseUrl: string;

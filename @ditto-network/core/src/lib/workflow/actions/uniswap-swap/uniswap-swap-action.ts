@@ -4,18 +4,16 @@ import { CurrencyAmount, Percent, Token as UniswapToken, TradeType } from '@unis
 import { parseUniswapRouterCallData } from './utils/parse-uniswap-router-call-data';
 import VaultABI from '../../../blockchain/abi/VaultABI.json';
 import Erc20TokenABI from '../../../blockchain/abi/Erc20TokenABI.json';
+import { TokenLight, tokens } from '../../../blockchain/tokens';
+import { Chain } from '../../../blockchain/chains/types';
 import {
   CallData,
   CallDataBuilder,
   CallDataBuilderReturnData,
-  Chain,
   CommonBuilderOptions,
-  DittoContractInterface,
-  isAddressesEqual,
-  isNativeToken,
-  TokenLight,
-  wrappedNativeTokens,
-} from '../../../ditto-sdk';
+} from '../../builders/types';
+import { isNativeToken, isAddressesEqual } from '../../../blockchain/tokens/utils';
+import { DittoContractInterface } from '../../../blockchain/contracts/types';
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
@@ -87,7 +85,7 @@ export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
 
     // when transfer from native token to wrapped native token
     const wrappedNativeTokenAddress =
-      wrappedNativeTokens[this.commonCallDataBuilderConfig.chainId].address;
+      tokens.wrappedNative[this.commonCallDataBuilderConfig.chainId].address;
     if (
       isFromTokenIsNative &&
       isAddressesEqual(this.config.toToken.address, wrappedNativeTokenAddress)
@@ -132,7 +130,7 @@ export class UniswapSwapActionCallDataBuilder implements CallDataBuilder {
     const uniswapRouterData = await this.createUniswapRoute(
       this.config.fromAmount,
       isFromTokenIsNative
-        ? wrappedNativeTokens[this.commonCallDataBuilderConfig.chainId]
+        ? tokens.wrappedNative[this.commonCallDataBuilderConfig.chainId]
         : this.config.fromToken,
       this.config.toToken,
       this.commonCallDataBuilderConfig.chainId as number,

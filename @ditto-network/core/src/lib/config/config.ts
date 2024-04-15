@@ -1,8 +1,8 @@
 // we use this file for environment related configurations
 // all production related things are in config.prod.ts
 
+import { Chain } from '../blockchain/chains/types';
 import { DittoConfig } from './types';
-import { Chain } from '../ditto-sdk';
 
 export const config: DittoConfig = {
   apiBaseUrl: 'https://authentication-backend.dev.dittonetwork.io',

@@ -7,6 +7,17 @@
   },
   "private": true,
   "dependencies": {
+    "tslib": "^2.3.0",
+    "fetch-ponyfill": "7.1.0",
+    "rambda": "9.2.0",
+    "ethers": "6.11.1",
+    "@uniswap/sdk-core": "^3.2.6",
+    "@uniswap/smart-order-router": "3.16.26",
+    "@uniswap/v3-core": "^1.0.1",
+    "@uniswap/v3-sdk": "^3.10.0",
+    "ethers5": "npm:ethers@5.7.1"
+  },
+  "devDependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@metamask/sdk-react": "^0.18.0",
     "@radix-ui/react-accordion": "^1.1.2",
@@ -45,9 +56,6 @@
     "react-router-dom": "6.11.2",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
-    "tslib": "^2.3.0"
-  },
-  "devDependencies": {
     "@babel/core": "^7.14.5",
     "@babel/preset-react": "^7.14.5",
     "@nx/esbuild": "18.2.3",

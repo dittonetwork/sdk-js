@@ -4,10 +4,11 @@ import { DittoProvider } from '../../provider/types';
 import VaultFactoryABI from '../../blockchain/abi/VaultFactoryABI.json';
 import VaultAbi from '../../blockchain/abi/VaultABI.json';
 import { SmartWalletWithIdExistsError } from './errors/SmartWalletWithIdExistsError';
-import { Address, Chain, isAddressesEqual } from '../../ditto-sdk';
 import { config } from '../../config/config';
-import { Maybe, Nullable } from '../../types';
+import { Address, Maybe, Nullable } from '../../types';
 import { SmartWalletNotDeployedError } from './errors/SmartWalletNotDeployedError';
+import { Chain } from '../../blockchain/chains/types';
+import { isAddressesEqual } from '../../blockchain/tokens/utils';
 
 export class SmartWallet implements ISmartWallet {
   private readonly vaultFactoryContract: DittoContract;

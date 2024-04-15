@@ -1,5 +1,5 @@
+import { Chain } from '../../blockchain/chains/types';
 import { Address } from '../../types';
-import { Chain } from '../../ditto-sdk';
 
 export interface FullData {
   id: string;
