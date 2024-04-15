@@ -121,10 +121,14 @@ interface DittoStorage {
 **Example**
 ```typescript
 // for browser usage
-class BrowserStorage implements DittoStorage { ... }
+class BrowserStorage implements DittoStorage {
+  //
+}
 
 // for server usage
-class FileStorage implements DittoStorage { ... }
+class FileStorage implements DittoStorage { 
+  //
+}
 
 // example of custom storage
 class InMemoryStorage implements DittoStorage {
@@ -239,9 +243,11 @@ type Asset = {
 
 interface Factory {
   constructor(provider: DittoProvider): void;
+
+  getDefaultOrCreateVault(chainId: Chain): Promise<Maybe<SmartWallet>>
+  getByAddress(chainId: number, address: string): Promise<SmartWallet>
   
   list(chainId: number): Promise<SmartWallet[]>
-  getByAddress(chainId: number, address: string): Promise<SmartWallet>
 }
 
 interface SmartWallet {
@@ -256,7 +262,7 @@ interface SmartWallet {
 
   isDeployed(): boolean
   getAddress(): string
-  getAvailableVersions(): Promise<string[]>
+  getMaximumVersion(): Promise<SmartWalletVersion>
   getAssets(): Asset[]
   getBalance(): Asset
   getName(): string

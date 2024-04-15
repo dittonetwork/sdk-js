@@ -1,4 +1,5 @@
 import { Address } from '../../types';
+import { Chain } from '../../ditto-sdk';
 
 export interface FullData {
   id: string;
@@ -18,11 +19,17 @@ export interface Account {
 
 export interface Vault {
   id: string;
-  chainId: number;
+  chainId: Chain;
   accountId: string;
   address: Address;
   createdAt: Date;
 }
+
+export type VaultDto = Omit<Vault, 'id'> & {
+  id: number;
+  uuid: string;
+  ownerAddress: Address;
+};
 
 interface ReferralCode {
   code: string;

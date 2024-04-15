@@ -7,6 +7,11 @@ import { Chain } from '../ditto-sdk';
 export const config: DittoConfig = {
   apiBaseUrl: 'https://backend.dittonetwork.io',
 
+  vaultFactoryAddresses: {
+    [Chain.Polygon]: '0xaB5F025297E40bd5ECf340d1709008eFF230C6cA',
+    [Chain.Arbitrum]: '0xaB5F025297E40bd5ECf340d1709008eFF230C6cA',
+  },
+
   vaultImplementations: {
     [Chain.Polygon]: [
       '0xa4918Eb4ce5Cb72dde220963AB643c02c09374cf',
