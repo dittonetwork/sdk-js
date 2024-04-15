@@ -29,69 +29,103 @@ export const Vaults: React.FC = () => {
     init();
   }, []);
 
+  const handleGetDefaultVaultClick = async () => {
+    if (!provider) {
+      alert('No provider');
+      return;
+    }
+
+    try {
+      const sw = new SmartWalletFactory(provider);
+      const defaultVault = await sw.getDefaultOrCreateVault(Chain.Polygon);
+      alert(defaultVault.getAddress());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleGetListClick = async () => {
+    if (!provider) {
+      alert('No provider');
+      return;
+    }
+
+    try {
+      const sw = new SmartWalletFactory(provider!);
+      const list = await sw.list(Chain.Polygon);
+      console.log('list', list);
+      alert(`There are ${list.length} vaults in the list.`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleTestVersions = async () => {
+    if (!provider) {
+      alert('No provider');
+      return;
+    }
+
+    try {
+      const sw = new SmartWalletFactory(provider!);
+      const list = await sw.list(Chain.Polygon);
+
+      const versions = await Promise.all(
+        list.map(async (vault) => [vault.getAddress(), await vault.getVersion()])
+      );
+
+      alert(`There are versions ${JSON.stringify(Object.fromEntries(versions))}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <h1 className="pt-4 text-center">Vaults</h1>
       <br />
       <div className="flex min-h-screen justify-center">
         <div className="flex flex-col gap-4">
+          {!isAuthenticated && (
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={async () => {
+                if (!provider) {
+                  alert('No provider');
+                  return;
+                }
+
+                try {
+                  await provider.authenticate();
+                  setIsAuthenticated(true);
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+            >
+              Authenticate
+            </button>
+          )}
+
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={async () => {
-              if (!provider) {
-                alert('No provider');
-                return;
-              }
-
-              try {
-                await provider.authenticate();
-                setIsAuthenticated(true);
-              } catch (error) {
-                console.error(error);
-              }
-            }}
-          >
-            Authenticate
-          </button>
-
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={async () => {
-              if (!provider) {
-                alert('No provider');
-                return;
-              }
-
-              try {
-                const sw = new SmartWalletFactory(provider!, Chain.Polygon);
-                const defaultVault = await sw.getDefaultOrCreateVault(Chain.Polygon);
-                alert(defaultVault.address);
-              } catch (error) {
-                console.error(error);
-              }
-            }}
+            onClick={handleGetDefaultVaultClick}
           >
             Get default vault
           </button>
 
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={async () => {
-              if (!provider) {
-                alert('No provider');
-                return;
-              }
-
-              try {
-                const sw = new SmartWalletFactory(provider!, Chain.Polygon);
-                const predictedAddress = await sw.predictVaultAddress();
-                alert(predictedAddress);
-              } catch (error) {
-                console.error(error);
-              }
-            }}
+            onClick={handleGetListClick}
           >
-            Predict Vault Address
+            Get list
+          </button>
+
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={handleTestVersions}
+          >
+            Test versions
           </button>
         </div>
       </div>

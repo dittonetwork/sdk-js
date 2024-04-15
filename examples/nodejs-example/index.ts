@@ -34,9 +34,9 @@ import {
 
   const accountAddress = await dittoProvider.getSigner().getAddress();
 
-  const swFactory = new SmartWalletFactory(dittoProvider, chainId);
+  const swFactory = new SmartWalletFactory(dittoProvider);
   const vault = await swFactory.getDefaultOrCreateVault(chainId);
-  const vaultAddress = vault.address;
+  const vaultAddress = vault.getAddress();
 
   const commonConfig = {
     chainId,
