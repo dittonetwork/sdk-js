@@ -1,8 +1,7 @@
-import { JSONBody } from './types';
 import { HttpClient } from '../http-client/types';
 import { BaseApiError } from './errors/base-api-error';
 import { DittoStorage } from '../../storage/types';
-import { Maybe } from '../../types';
+import { JSONBody, Maybe } from '../../types';
 import { ACCESS_TOKEN_KEY } from '../../constants';
 
 export class BaseApiClient {
