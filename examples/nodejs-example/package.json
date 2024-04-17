@@ -2,9 +2,5 @@
   "name": "nodejs-example",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "@ditto-network/core": "file:../../@ditto-network/core",
-    "ethers": "^6.11.1"
-  }
+  "license": "MIT"
 }

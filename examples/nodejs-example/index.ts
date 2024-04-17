@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import {
   Chain,
+  CommonBuilderOptions,
   EthersContractFactory,
   EthersSigner,
   InMemoryStorage,
@@ -36,7 +37,7 @@ import {
 
   const swFactory = new SmartWalletFactory(dittoProvider);
   const vault = await swFactory.getDefaultOrCreateVault(chainId);
-  const vaultAddress = vault.getAddress();
+  const vaultAddress = vault.getAddress()!;
 
   const commonConfig = {
     chainId,
@@ -44,7 +45,7 @@ import {
     accountAddress,
     vaultAddress,
     provider: dittoProvider,
-  };
+  } satisfies CommonBuilderOptions;
 
   const workflowsFactory = new WorkflowsFactory(dittoProvider);
 
