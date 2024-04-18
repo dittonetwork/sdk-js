@@ -21,6 +21,13 @@
     "build": {
       "command": "pwd",
       "dependsOn": ["prepare-prod-config"]
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/core",
+        "commands": ["tsc -p tsconfig.lib.json --noEmit"],
+      }
     }
   },
   "tags": []
