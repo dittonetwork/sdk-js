@@ -1,7 +1,10 @@
-name: Build and Test on PR
+name: Build and Lint on PR
 
 on:
   pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
   pr_checks:
