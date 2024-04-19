@@ -22,15 +22,14 @@ jobs:
         with:
           node-version: '20' # Specify the Node.js version you are using
           cache: 'npm'
-          cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run affected linting
-        run: ./node_modules/.bin/nx affected:lint --base=origin/${{ github.base_ref }} --head=origin/${{ github.head_ref }}
+        run: npx nx affected:lint --base=origin/${{ github.base_ref }} --head=origin/${{ github.head_ref }}
       - name: Run affected build
-        run: ./node_modules/.bin/nx affected:build --base=origin/${{ github.base_ref }} --head=origin/${{ github.head_ref }}
+        run: npx nx affected:build --base=origin/${{ github.base_ref }} --head=origin/${{ github.head_ref }}
 
       - name: Validate PR commits with commitlint
         if: github.event_name == 'pull_request'
