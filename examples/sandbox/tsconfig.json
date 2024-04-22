@@ -9,9 +9,7 @@
     "resolveJsonModule": true,
     "paths": {
       "@ditto-sdk/shared/*": ["examples/sandbox/shared/src/*"],
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "baseUrl": "."
   },

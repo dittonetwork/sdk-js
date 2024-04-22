@@ -10,7 +10,7 @@ import {
   tokens,
   WorkflowExecution,
   WorkflowsFactory,
-  UniswapSwapActionCallDataBuilder
+  UniswapSwapActionCallDataBuilder,
 } from '@ditto-network/core';
 import { ethers } from 'ethers';
 
