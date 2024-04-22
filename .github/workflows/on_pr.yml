@@ -26,11 +26,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # when PR opened or any commits pushed
       - name: Run affected linting
+        if: github.event_name == 'pull_request'
         run: npx nx affected:lint --base=origin/${{ github.base_ref }} --head=origin/${{ github.head_ref }}
       - name: Run affected build
+        if: github.event_name == 'pull_request'
         run: npx nx affected:build --base=origin/${{ github.base_ref }} --head=origin/${{ github.head_ref }}
-
       - name: Validate PR commits with commitlint
         if: github.event_name == 'pull_request'
         run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+      # when PR merged
+      - name: Lint all
+        if: github.event_name == 'push'
+        run: npx nx run-many --target=lint
+      - name: Build all
+        if: github.event_name == 'push'
+        run: npx nx run-many --target=build
+
