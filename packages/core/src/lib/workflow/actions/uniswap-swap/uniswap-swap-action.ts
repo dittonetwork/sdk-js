@@ -13,7 +13,7 @@ import {
   CommonBuilderOptions,
 } from '../../builders/types';
 import { isNativeToken, isAddressesEqual } from '../../../blockchain/tokens/utils';
-import { DittoContractInterface } from '../../../blockchain/contracts/types';
+import { DittoContractInterface } from '../../../contracts/types';
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 

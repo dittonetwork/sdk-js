@@ -2,8 +2,6 @@ import { ethers } from 'ethers';
 import {
   Chain,
   CommonBuilderOptions,
-  EthersContractFactory,
-  EthersSigner,
   InMemoryStorage,
   PriceTrigger,
   Provider,
@@ -14,6 +12,7 @@ import {
   UniswapSwapActionCallDataBuilder,
   WorkflowsFactory,
 } from '@ditto-network/core';
+import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
 
 (async () => {
   const chainId = Chain.Polygon;

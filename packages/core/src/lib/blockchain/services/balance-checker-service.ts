@@ -2,7 +2,7 @@ import { DittoProvider } from '../../provider/types';
 import { Chain } from '../chains/types';
 import { isNativeToken } from '../tokens/utils/is-native-token';
 import Erc20TokenABI from '../abi/Erc20TokenABI.json';
-import { Address } from '../../ditto-sdk';
+import { Address } from '../../types';
 
 export class BalanceCheckerService {
   constructor(private readonly provider: DittoProvider) {}

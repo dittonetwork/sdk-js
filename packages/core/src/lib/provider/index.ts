@@ -3,15 +3,11 @@ import { DittoStorage } from '../storage/types';
 import { VoidStorage } from '../storage/void-storage';
 import { DittoHttpClient } from '../network/http-client';
 import { AuthApiClient } from '../network/api-client/auth-api-client';
-import { DittoSigner } from '../blockchain/signer/types';
-import {
-  ContractFactory,
-  DittoContract,
-  DittoContractInterface,
-} from '../blockchain/contracts/types';
 import { HttpClient } from '../network/http-client/types';
 import { isJwtValid } from '../utils/is-jwt-valid';
 import { ACCESS_TOKEN_KEY } from '../constants';
+import { DittoSigner } from '../signer/types';
+import { ContractFactory, DittoContract, DittoContractInterface } from '../contracts/types';
 
 export class Provider implements DittoProvider {
   private readonly httpClient: DittoHttpClient;

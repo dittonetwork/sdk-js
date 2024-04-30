@@ -1,7 +1,7 @@
-import { DittoContractNotInitializedError, DittoContract } from '../types';
 import { ethers } from 'ethers';
-import { Address, Maybe } from '../../../types';
 import { EthersContractInterface } from './ethers-contract-interface';
+import { Address, Maybe } from '@ditto-network/core';
+import { DittoContract, DittoContractNotInitializedError } from '@ditto-network/core';
 
 export class EthersContract implements DittoContract {
   private readonly nativeContract: ethers.Contract;

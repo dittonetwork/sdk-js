@@ -1,14 +1,14 @@
 import { Asset, ISmartWallet, SmartWalletVersion } from './types';
-import { DittoContract } from '../../blockchain/contracts/types';
 import { DittoProvider } from '../../provider/types';
 import VaultFactoryABI from '../../blockchain/abi/VaultFactoryABI.json';
 import VaultAbi from '../../blockchain/abi/VaultABI.json';
 import { SmartWalletWithIdExistsError } from './errors/SmartWalletWithIdExistsError';
 import { config } from '../../config/config';
-import { Address, Maybe, Nullable } from '../../types';
 import { SmartWalletNotDeployedError } from './errors/SmartWalletNotDeployedError';
 import { Chain } from '../../blockchain/chains/types';
 import { isAddressesEqual } from '../../blockchain/tokens/utils';
+import { Address, Maybe, Nullable } from '../../types';
+import { DittoContract } from '../../contracts/types';
 
 export class SmartWallet implements ISmartWallet {
   private readonly vaultFactoryContract: DittoContract;

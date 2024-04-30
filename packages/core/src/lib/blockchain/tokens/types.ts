@@ -1,5 +1,5 @@
-import { Address } from '../../types';
 import { Chain } from '../chains/types';
+import { Address } from '../../types';
 
 export type TokenLight = {
   address: Address;

@@ -3,11 +3,11 @@ import { CallData, CallDataBuilderReturnData, RepeatableCallDataBuilder } from '
 import { DittoProvider } from '../provider/types';
 import VaultABI from '../blockchain/abi/VaultABI.json';
 import IUniversalVault from '../blockchain/abi/IUniversalVault.json';
-import { TxHash, WalletAddress } from '../types';
 import { toUtf8Bytes } from '../utils/to-utf8-bytes';
 import { prop } from 'rambda';
 import { isInstantTrigger } from './triggers/utils/is-instant-trigger';
 import { isAddressesEqual } from '../blockchain/tokens/utils/is-addresses-equal';
+import { Address, TxHash } from '../types';
 
 export class Workflow implements DittoWorkflow {
   constructor(
@@ -15,10 +15,7 @@ export class Workflow implements DittoWorkflow {
     private readonly provider: DittoProvider
   ) {}
 
-  public async buildAndDeploy(
-    vaultAddress: WalletAddress,
-    accountAddress: WalletAddress
-  ): Promise<TxHash> {
+  public async buildAndDeploy(vaultAddress: Address, accountAddress: Address): Promise<TxHash> {
     const callData = new Set<CallData>();
     const vaultInterface = this.provider
       .getContractFactory()
@@ -155,7 +152,7 @@ export class Workflow implements DittoWorkflow {
 
   private getVaultRelativeCallData(
     buildCallData: CallDataBuilderReturnData[],
-    vaultAddress: WalletAddress
+    vaultAddress: Address
   ) {
     return buildCallData
       .map((item) => item.callData)
@@ -166,7 +163,7 @@ export class Workflow implements DittoWorkflow {
 
   private getNotVaultRelativeCallData(
     buildCallData: CallDataBuilderReturnData[],
-    vaultAddress: WalletAddress
+    vaultAddress: Address
   ) {
     return buildCallData
       .map((item) => item.callData)

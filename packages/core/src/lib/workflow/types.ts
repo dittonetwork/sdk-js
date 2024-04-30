@@ -1,7 +1,7 @@
 import { Execution } from './execution';
 import { CallDataBuilder } from './builders/types';
 import { Chain } from '../blockchain/chains/types';
-import { TxHash, WalletAddress } from '../types';
+import { Address, TxHash } from '../types';
 
 export enum WorkflowStatus {
   ACTIVE = 'active',
@@ -18,7 +18,7 @@ export interface WorkflowInitOptions {
 }
 
 export interface DittoWorkflow {
-  buildAndDeploy(vaultAddress: WalletAddress, accountAddress: WalletAddress): Promise<TxHash>;
+  buildAndDeploy(vaultAddress: Address, accountAddress: Address): Promise<TxHash>;
 
   deactivate(): Promise<boolean>;
   activate(): Promise<boolean>;
