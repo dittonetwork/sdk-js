@@ -1,5 +1,5 @@
 {
-  "name": "@ditto-sdk/source",
+  "name": "ditto-sdk-monorepo",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "targets": {
     "local-registry": {

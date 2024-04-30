@@ -1,4 +1,5 @@
 {
+  "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
     "default": ["{projectRoot}/*", "{projectRoot}/**/*", "sharedGlobals"],
@@ -14,48 +15,6 @@
     ],
     "sharedGlobals": []
   },
-  "plugins": [
-    {
-      "plugin": "@nx/vite/plugin",
-      "options": {
-        "buildTargetName": "build",
-        "previewTargetName": "preview",
-        "testTargetName": "test",
-        "serveTargetName": "serve",
-        "serveStaticTargetName": "serve-static"
-      }
-    },
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    },
-    {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
-      }
-    }
-  ],
-  "generators": {
-    "@nx/react": {
-      "application": {
-        "babel": true,
-        "style": "tailwind",
-        "linter": "eslint",
-        "bundler": "vite"
-      },
-      "component": {
-        "style": "tailwind"
-      },
-      "library": {
-        "style": "tailwind",
-        "linter": "eslint",
-        "unitTestRunner": "vitest"
-      }
-    }
-  },
   "targetDefaults": {
     "@nx/js:tsc": {
       "dependsOn": ["^build"],
@@ -67,8 +26,39 @@
     }
   },
   "release": {
+    "projects": ["*"],
     "version": {
-      "preVersionCommand": "npx nx run-many -t build"
+      "preVersionCommand": "npx nx run-many -t build",
+      "conventionalCommits": true
+    },
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github",
+        "renderOptions": {
+          "authors": false
+        }
+      }
+    },
+    "conventionalCommits": {
+      "types": {
+        "refactor": {
+          "semverBump": "patch",
+          "title": "Refactoring"
+        }
+      }
+    }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ],
+  "pluginsConfig": {
+    "@nx/js": {
+      "analyzeSourceFiles": true
     }
   }
 }

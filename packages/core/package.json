@@ -1,6 +1,6 @@
 {
   "name": "@ditto-network/core",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "files": [
     "src"
   ],
@@ -11,7 +11,7 @@
     "ethers": "6.11.1",
     "ethers5": "npm:ethers@5.7.1",
     "fetch-ponyfill": "7.1.0",
-    "rambda": "9.2.0"
+    "rambda": "^9.2.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",

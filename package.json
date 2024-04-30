@@ -1,6 +1,6 @@
 {
-  "name": "@ditto-sdk/source",
-  "version": "0.0.0",
+  "name": "ditto-sdk-monorepo",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -69,7 +69,7 @@
     "vite": "~5.0.0",
     "vite-plugin-dts": "~2.3.0",
     "vitest": "^1.3.1",
-    "@ditto-network/core": "file:packages/core",
+    "@ditto-network/core": "0.4.0",
     "@ditto-network/ethers": "file:packages/ethers",
     "@ditto-network/web3.js": "file:packages/web3js",
     "web3": "4.8.0"
@@ -82,6 +82,9 @@
       "path": "@commitlint/cz-commitlint"
     }
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "nx": {
     "includedScripts": []
   }
