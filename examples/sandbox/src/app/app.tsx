@@ -3,14 +3,8 @@ import { Button, Popover, PopoverContent, PopoverTrigger } from '../components/u
 import { formatAddress } from '../lib/utils';
 import { useSDK, MetaMaskProvider } from '@metamask/sdk-react';
 import { Link } from 'react-router-dom';
-import {
-  BrowserStorage,
-  Chain,
-  EthersContractFactory,
-  EthersSigner,
-  Provider,
-  SmartWalletFactory,
-} from '@ditto-network/core';
+import { BrowserStorage, Chain, Provider, SmartWalletFactory } from '@ditto-network/core';
+import { EthersContractFactory, EthersSigner } from '@ditto-network/ethers';
 import { ethers } from 'ethers';
 
 // https://github.com/Uniswap/smart-order-router/issues/484
@@ -121,16 +115,6 @@ export function App() {
     setAuth(authResult);
   };
 
-  const handlePredictVaultAddressSDKClick = async () => {
-    console.log('handlePredictVaultAddressSDKClick');
-    if (!provider) return;
-
-    const smartWalletFactory = new SmartWalletFactory(provider, Chain.Polygon);
-
-    const addr = await smartWalletFactory.predictVaultAddress();
-    setSmartWalletAddress(addr as string);
-  };
-
   return (
     <div className="w-full h-screen">
       <NavBar />
@@ -170,20 +154,6 @@ export function App() {
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl font-bold">Smart Wallet</h2>
             <p className="text-gray-600">Create a smart wallet and deploy it to the blockchain</p>
-
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2">
-                <Button className="w-min" onClick={handlePredictVaultAddressSDKClick}>
-                  Predict Vault Address
-                </Button>
-              </div>
-              <p className="text-gray-600">
-                This will predict the address of the smart wallet based on the wallet address
-              </p>
-              <p className="text-gray-600">
-                Predicted address: {smartWalletAddress ? smartWalletAddress : '❌ Not predicted'}
-              </p>
-            </div>
           </div>
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl font-bold">Workflow</h2>

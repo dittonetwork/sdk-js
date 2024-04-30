@@ -13,22 +13,41 @@ import {
   TimeBasedTrigger,
   TimeScale,
 } from '@ditto-network/core';
-import { EthersContractFactory, EthersSigner } from '@ditto-network/ethers';
-import { ethers } from 'ethers';
+import { Web3jsContractFactory, Web3jsSigner } from '@ditto-network/web3.js';
+import { Web3 } from 'web3';
 
-export const Workflows = () => {
+export const WorkflowsWeb3js = () => {
   const [provider, setProvider] = useState<Provider | null>(null);
   const [workflowExecutions, setWorkflowExecutions] = useState<WorkflowExecution[]>([]);
 
+  const getProvider = async () => {
+    const web3 = new Web3(window.ethereum);
+    await window.ethereum!.request({ method: 'eth_requestAccounts' });
+    const accounts = await web3.eth.getAccounts();
+    const account = accounts[0] as Address;
+
+    console.log('Current account:', account);
+
+    const txParamsBuildFn = async () => {
+      const { baseFeePerGas } = await web3.eth.getBlock('pending');
+
+      return {
+        from: account,
+        maxFeePerGas: `${BigInt(2) * baseFeePerGas!}`,
+        maxPriorityFeePerGas: `${baseFeePerGas! / BigInt(2)}`,
+      };
+    };
+
+    return new Provider({
+      signer: new Web3jsSigner(web3, account, txParamsBuildFn),
+      storage: new BrowserStorage(),
+      contractFactory: new Web3jsContractFactory(web3, txParamsBuildFn),
+    });
+  };
+
   useEffect(() => {
-    new ethers.BrowserProvider(window.ethereum!).getSigner().then((signer) => {
-      setProvider(
-        new Provider({
-          signer: new EthersSigner(signer),
-          storage: new BrowserStorage(),
-          contractFactory: new EthersContractFactory(signer),
-        })
-      );
+    getProvider().then((provider) => {
+      setProvider(provider);
     });
   }, []);
 
@@ -120,9 +139,9 @@ export const Workflows = () => {
 
         new UniswapSwapActionCallDataBuilder(
           {
-            fromToken: tokens.native[Chain.Polygon],
+            fromToken: tokens.wrappedNative[Chain.Polygon],
             toToken: tokens.stableCoins[Chain.Polygon].USDT,
-            fromAmount: `123456789000000000`,
+            fromAmount: `12345678900000`,
             slippagePercent: 0.05,
             providerStrategy: {
               type: 'browser',
@@ -135,10 +154,12 @@ export const Workflows = () => {
       chainId: Chain.Polygon,
     });
 
-    await wf.buildAndDeploy(
-      '0x8db38B3825D0C4EA7f826E7CA6D5e99F8f07D43a',
+    const hash = await wf.buildAndDeploy(
+      '0xb1Ec673122AC9eb2f3efb51c62911D16d3a29919',
       '0xAfe67Bfc16D0d7e2De988A1f89971aa3747221fF'
     );
+
+    console.log('hash', hash);
   };
 
   return (

@@ -1,4 +1,5 @@
 import { Address, Maybe } from '../types';
+import { JSONObject } from '../network/api-client/types';
 
 export interface ContractFactory<T extends DittoContract, I extends DittoContractInterface> {
   getContract(address: Address, abi: string): T;
@@ -6,8 +7,12 @@ export interface ContractFactory<T extends DittoContract, I extends DittoContrac
 }
 
 export interface DittoContract extends DittoContractInterface {
-  call<R, P extends unknown[] = []>(method: string, ...params: P): Promise<R>;
-  estimateGas(method: string, params: unknown[]): Promise<bigint>;
+  call<R, P extends unknown[] = []>(
+    method: string,
+    params?: P,
+    additionalTxParams?: JSONObject
+  ): Promise<R>;
+  estimateGas(method: string, params: unknown[], additionalTxParams?: JSONObject): Promise<bigint>;
 }
 
 export interface DittoContractInterface {
@@ -16,3 +21,5 @@ export interface DittoContractInterface {
 }
 
 export class DittoContractNotInitializedError extends Error {}
+
+export class DittoContractMethodNotFoundError extends Error {}

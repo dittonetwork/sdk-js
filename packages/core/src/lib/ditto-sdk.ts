@@ -19,7 +19,10 @@ import { wrappedNativeTokens } from './blockchain/tokens/wrappedNative';
 import { UniswapSwapActionCallDataBuilder } from './workflow/actions';
 import { DittoSigner } from './signer/types';
 import type { DittoContractInterface, ContractFactory, DittoContract } from './contracts/types';
-import { DittoContractNotInitializedError } from './contracts/types';
+import {
+  DittoContractNotInitializedError,
+  DittoContractMethodNotFoundError,
+} from './contracts/types';
 import type {
   Address,
   Maybe,
@@ -28,6 +31,7 @@ import type {
   Optional,
   WalletAddress,
   Transaction,
+  MutationTransactionReturnType,
 } from './types';
 
 export {
@@ -47,6 +51,7 @@ export {
   UniswapSwapActionCallDataBuilder,
   TimeBasedTrigger,
   DittoContractNotInitializedError,
+  DittoContractMethodNotFoundError,
 };
 
 export type {
@@ -68,4 +73,5 @@ export type {
   Optional,
   WalletAddress,
   Transaction,
+  MutationTransactionReturnType,
 };

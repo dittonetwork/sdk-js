@@ -1,5 +1,10 @@
-import { Signer, Transaction, BrowserProvider, Wallet } from 'ethers';
-import { Address, TxHash, DittoSigner } from '@ditto-network/core';
+import { Signer, Wallet } from 'ethers';
+import {
+  Address,
+  DittoSigner,
+  Transaction,
+  MutationTransactionReturnType,
+} from '@ditto-network/core';
 
 export class EthersSigner implements DittoSigner {
   constructor(private readonly ethersSigner: Signer | Wallet) {}
@@ -9,9 +14,7 @@ export class EthersSigner implements DittoSigner {
     return address as Address;
   }
 
-  public async sendTransaction(
-    tx: Transaction
-  ): Promise<{ hash: TxHash; wait: () => Promise<unknown> }> {
+  public async sendTransaction(tx: Transaction): Promise<MutationTransactionReturnType> {
     const { hash, wait } = await this.ethersSigner.sendTransaction(tx);
     return { hash, wait };
   }
@@ -25,9 +28,7 @@ export class EthersSigner implements DittoSigner {
   }
 
   public async getBalance(address: Address): Promise<string> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const balance = await new BrowserProvider(window.ethereum).getBalance(address);
+    const balance = await this.ethersSigner.provider!.getBalance(address);
     return balance.toString();
   }
 }

@@ -1,10 +1,9 @@
-import { Address, Transaction, TxHash, WalletAddress } from '../types';
-import { ethers } from 'ethers';
+import { Address, MutationTransactionReturnType, Transaction } from '../types';
+import { JSONObject } from '../network/api-client/types';
 
 export interface DittoSigner {
-  getRawSigner(): ethers.Signer;
-  getAddress(): Promise<WalletAddress>;
-  sendTransaction(tx: Transaction): Promise<{ hash: TxHash; wait: () => Promise<unknown> }>;
+  getAddress(): Promise<Address>;
+  sendTransaction(tx: Transaction & JSONObject): Promise<MutationTransactionReturnType>;
   signMessage(message: string): Promise<string>;
   getBalance(address: Address): Promise<string>;
 }

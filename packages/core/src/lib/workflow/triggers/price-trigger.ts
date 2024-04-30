@@ -107,14 +107,13 @@ export class PriceTrigger implements CallDataBuilder {
       .getContractFactory()
       .getContract(oracleAddress, JSON.stringify(DittoOracleABI));
 
-    const targetRateBigInt = await oracleContract.call<bigint, unknown[]>(
-      'consult',
+    const targetRateBigInt = await oracleContract.call<bigint, unknown[]>('consult', [
       this.config.toToken.address,
       this.config.triggerAtPrice,
       this.config.fromToken.address,
       this.config.uniswapPoolFeeTier,
-      uniswapFactoryAddress
-    );
+      uniswapFactoryAddress,
+    ]);
 
     const targetRate = targetRateBigInt.toString();
 
