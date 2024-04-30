@@ -1,13 +1,7 @@
 import React, { useEffect } from 'react';
 import { ethers } from 'ethers';
-import {
-  BrowserStorage,
-  Chain,
-  EthersContractFactory,
-  EthersSigner,
-  Provider,
-  SmartWalletFactory,
-} from '@ditto-network/core';
+import { BrowserStorage, Chain, Provider, SmartWalletFactory } from '@ditto-network/core';
+import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
 
 export const Vaults: React.FC = () => {
   const [provider, setProvider] = React.useState<Provider | null>(null);

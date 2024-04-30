@@ -35,7 +35,11 @@ export default {
         'test',
       ],
     ] as [RuleConfigSeverity, RuleConfigCondition, string[]],
-    'scope-enum': [RuleConfigSeverity.Error, 'always', ['global', 'core', 'examples', 'ethers']],
+    'scope-enum': [
+      RuleConfigSeverity.Error,
+      'always',
+      ['global', 'core', 'examples', 'ethers', 'web3.js'],
+    ],
   },
   prompt: {
     questions: {

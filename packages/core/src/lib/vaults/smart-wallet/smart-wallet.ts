@@ -7,7 +7,7 @@ import { config } from '../../config/config';
 import { SmartWalletNotDeployedError } from './errors/SmartWalletNotDeployedError';
 import { Chain } from '../../blockchain/chains/types';
 import { isAddressesEqual } from '../../blockchain/tokens/utils';
-import { Address, Maybe, Nullable } from '../../types';
+import { Address, Maybe, MutationTransactionReturnType, Nullable } from '../../types';
 import { DittoContract } from '../../contracts/types';
 
 export class SmartWallet implements ISmartWallet {
@@ -67,11 +67,10 @@ export class SmartWallet implements ISmartWallet {
       throw new SmartWalletWithIdExistsError(this.id);
     }
 
-    await this.vaultFactoryContract.call<{ wait: () => Promise<unknown> }, unknown[]>(
-      'deploy',
+    await this.vaultFactoryContract.call<MutationTransactionReturnType, unknown[]>('deploy', [
       this.version,
-      this.id
-    );
+      this.id,
+    ]);
 
     return true;
   }

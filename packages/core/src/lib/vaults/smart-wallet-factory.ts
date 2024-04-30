@@ -8,7 +8,7 @@ import { SmartWalletVersion } from './smart-wallet/types';
 import { SmartWalletCreationError } from './smart-wallet/errors/SmartWalletCreationError';
 import { config } from '../config/config';
 import { Chain } from '../blockchain/chains/types';
-import { Address, Maybe } from '../types';
+import { Address, Maybe, MutationTransactionReturnType } from '../types';
 import { DittoContract } from '../contracts/types';
 
 export class SmartWalletFactory implements Factory {
@@ -29,11 +29,10 @@ export class SmartWalletFactory implements Factory {
       throw new Error(`Vault with id=${id} already exists`);
     }
 
-    return this.getContract(chainId).call<{ wait: () => Promise<unknown> }, unknown[]>(
-      'deploy',
+    return this.getContract(chainId).call<MutationTransactionReturnType, unknown[]>('deploy', [
       version,
-      id
-    );
+      id,
+    ]);
   }
 
   public async list(chainId: Chain): Promise<SmartWallet[]> {
@@ -109,11 +108,10 @@ export class SmartWalletFactory implements Factory {
     chainId: Chain,
     vaultId: number
   ): Promise<Address> {
-    return this.getContract(chainId).call(
-      'predictDeterministicVaultAddress',
+    return this.getContract(chainId).call('predictDeterministicVaultAddress', [
       accountAddress,
-      vaultId
-    );
+      vaultId,
+    ]);
   }
 
   private async fetchFirstVault(chainId: Chain): Promise<Maybe<SmartWallet>> {

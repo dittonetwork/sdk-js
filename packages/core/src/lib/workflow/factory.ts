@@ -51,7 +51,7 @@ export class WorkflowsFactory implements IWorkflowFactory {
       .getContractFactory()
       .getContract(address, JSON.stringify(VaultABI));
 
-    const tx = await vaultContract.call<{ hash: string }, [number]>('deactivateWorkflow', id);
+    const tx = await vaultContract.call<{ hash: string }, [number]>('deactivateWorkflow', [id]);
     return tx.hash;
   }
 }

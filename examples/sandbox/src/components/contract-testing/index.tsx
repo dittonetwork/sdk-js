@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
-import { BrowserStorage, EthersContractFactory, EthersSigner, Provider } from '@ditto-network/core';
+import {
+  Address,
+  BrowserStorage,
+  MutationTransactionReturnType,
+  Provider,
+} from '@ditto-network/core';
 import storageAbi from './storage.abi.json';
+import { Web3 } from 'web3';
+import { Web3jsContractFactory, Web3jsSigner } from '@ditto-network/web3.js';
 
 export const ContractTesting = () => {
   const [auth, setAuth] = useState(false);
@@ -9,18 +15,46 @@ export const ContractTesting = () => {
   const [hash, setHash] = useState('');
   const [value, setValue] = useState<string>('');
 
-  useEffect(() => {
-    const browserProvider = new ethers.BrowserProvider(window.ethereum!);
-    browserProvider.getSigner().then((signer) => {
-      const provider = new Provider({
-        signer: new EthersSigner(signer),
-        storage: new BrowserStorage(),
-        contractFactory: new EthersContractFactory(signer),
-      });
+  const getProvider = async () => {
+    const web3 = new Web3(window.ethereum);
+    await window.ethereum!.request({ method: 'eth_requestAccounts' });
+    const accounts = await web3.eth.getAccounts();
+    const account = accounts[0] as Address;
 
+    const txParamsBuildFn = async () => {
+      const { baseFeePerGas } = await web3.eth.getBlock('pending');
+      return {
+        from: account,
+        maxFeePerGas: `${BigInt(2) * baseFeePerGas!}`,
+        maxPriorityFeePerGas: `${baseFeePerGas! / BigInt(2)}`,
+      };
+    };
+
+    return new Provider({
+      signer: new Web3jsSigner(web3, account, txParamsBuildFn),
+      storage: new BrowserStorage(),
+      contractFactory: new Web3jsContractFactory(web3, txParamsBuildFn),
+    });
+  };
+
+  useEffect(() => {
+    getProvider().then((provider) => {
       setProvider(provider);
     });
   }, []);
+
+  // useEffect(() => {
+  //   const browserProvider = new ethers.BrowserProvider(window.ethereum!);
+  //   browserProvider.getSigner().then((signer) => {
+  //     const provider = new Provider({
+  //       signer: new EthersSigner(signer),
+  //       storage: new BrowserStorage(),
+  //       contractFactory: new EthersContractFactory(signer),
+  //     });
+  //
+  //     setProvider(provider);
+  //   });
+  // }, []);
 
   const handleSignClick = async () => {
     const authResult = await provider!.authenticate();
@@ -42,10 +76,11 @@ export const ContractTesting = () => {
       .getContractFactory()
       .getContract('0xd10e3E8EbC4B55eAE572181be1554356Fb2a7767', JSON.stringify(storageAbi));
 
-    // @ts-expect-error cast
-    const tx = await contract.call<{ hash: string }, string>('store', BigInt(value!));
+    const tx = await contract.call<MutationTransactionReturnType, [bigint]>('store', [
+      BigInt(value!),
+    ]);
     setHash(`Wait for ${tx.hash} to be mined...`);
-    // @ts-expect-error hack
+
     await tx.wait();
     setValue('');
     setHash(`Tx mined! Pls retieve the value`);

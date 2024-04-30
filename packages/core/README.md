@@ -109,7 +109,7 @@ const { hash } = await contract.call<string, { hash: string }>('store', [12345n]
 // wallet will be opened, you should write tx and send to blockchain and wait for tx mining
 
 // read method
-const storedNumber = await contract.call<null, bigint>('retrieve', [null])
+const storedNumber = await contract.call<null, bigint>('retrieve', [])
 // stored number is 12345n
 ```
 
