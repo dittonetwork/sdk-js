@@ -35,7 +35,7 @@ export default {
         'test',
       ],
     ] as [RuleConfigSeverity, RuleConfigCondition, string[]],
-    'scope-enum': [RuleConfigSeverity.Error, 'always', ['global', 'core', 'examples']],
+    'scope-enum': [RuleConfigSeverity.Error, 'always', ['global', 'core', 'examples', 'ethers']],
   },
   prompt: {
     questions: {

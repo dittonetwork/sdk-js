@@ -1,13 +1,12 @@
 import { Signer, Transaction, BrowserProvider, Wallet } from 'ethers';
-import { DittoSigner } from './types';
-import { Address, TxHash, WalletAddress } from '../../types';
+import { Address, TxHash, DittoSigner } from '@ditto-network/core';
 
 export class EthersSigner implements DittoSigner {
   constructor(private readonly ethersSigner: Signer | Wallet) {}
 
-  public async getAddress(): Promise<WalletAddress> {
+  public async getAddress(): Promise<Address> {
     const address = await this.ethersSigner.getAddress();
-    return address as WalletAddress;
+    return address as Address;
   }
 
   public async sendTransaction(

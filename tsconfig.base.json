@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ditto-network/core": ["packages/core/src/index.ts"]
+      "@ditto-network/core": ["packages/core/src/index.ts"],
+      "@ditto-network/ethers": ["packages/ethers/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

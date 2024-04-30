@@ -1,8 +1,8 @@
 import { Chain } from '../../blockchain/chains/types';
 import { BaseApiClient } from '../../network/api-client/base-api-client';
-import { Address } from '../../types';
 import { FullData, VaultDto } from './types';
 import { omit } from 'rambda';
+import { Address } from '../../types';
 
 export class AccountApiClient extends BaseApiClient {
   public getFullData() {

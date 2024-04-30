@@ -1,6 +1,6 @@
-import { DittoContractInterface } from '../types';
-import { Maybe } from '../../../types';
 import { ethers } from 'ethers';
+import { Maybe } from '@ditto-network/core';
+import { DittoContractInterface } from '@ditto-network/core';
 
 export class EthersContractInterface implements DittoContractInterface {
   private readonly ethersInterface: ethers.Interface;

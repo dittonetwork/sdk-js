@@ -12,9 +12,9 @@ import { uniswapPoolFactoryAddresses } from '../../blockchain/addresses/uniswap-
 import DittoOracleABI from '../../blockchain/abi/DittoOracleABI.json';
 import VaultABI from '../../blockchain/abi/VaultABI.json';
 import { getRandomBytes } from '../../utils/get-random-bytes';
-import { DittoContractInterface } from '../../blockchain/contracts/types';
-import { Maybe } from '../../types';
 import { TokenLight } from '../../blockchain/tokens/types';
+import { Maybe } from '../../types';
+import { DittoContractInterface } from '../../contracts/types';
 
 type TriggerConfig = {
   uniswapPoolFeeTier: FeeAmount;
