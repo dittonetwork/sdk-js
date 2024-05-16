@@ -45,3 +45,23 @@ A JavaScript SDK for interacting with the Ditto Network — we pioneer a Smart A
 
 - Merge any hotfix branches or subsequent feature branches following the same process.
 - Ensure the `master` branch remains the source of truth.
+
+
+## Using the Local NPM Registry with Verdaccio
+
+This project uses Verdaccio to set up a local npm registry for testing packages before publishing them to a public npm registry. This allows you to test your packages in an isolated environment.
+
+
+### Useful Commands
+
+1. **Start the Local Registry**: Start the Verdaccio server:
+
+    ```sh
+    nx run ditto-network:local-registry
+    ```
+
+2. **Publish Packages Locally**: Once the Verdaccio server is running, publish your packages to the local registry:
+
+    ```sh
+    npm publish --registry http://localhost:4873
+    ```
