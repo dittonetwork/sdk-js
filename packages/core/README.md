@@ -1,3 +1,7 @@
+## [Triggers](src/lib/workflow/triggers/README.md)
+
+## [Actions](src/lib/workflow/actions/README.md)
+
 ## Authenticate
 
 **Interfaces:**
