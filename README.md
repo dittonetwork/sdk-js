@@ -57,11 +57,23 @@ This project uses Verdaccio to set up a local npm registry for testing packages 
 1. **Start the Local Registry**: Start the Verdaccio server:
 
     ```sh
-    nx run ditto-network:local-registry
+    npm run local-registry
     ```
 
 2. **Publish Packages Locally**: Once the Verdaccio server is running, publish your packages to the local registry:
 
     ```sh
     npm publish --registry http://localhost:4873
+    ```
+
+3. **Use Packages from Local Registry**: Set the npm registry to the local Verdaccio instance to install packages from there:
+
+    ```sh
+    npm set registry http://localhost:4873
+    ```
+
+4. **Revert to Public Registry**: Revert back to the public npm registry after testing:
+
+    ```sh
+    npm set registry https://registry.npmjs.org
     ```
