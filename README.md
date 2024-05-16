@@ -1,22 +1,47 @@
-# @ditto-network js sdk monorepo
+# Ditto Network JS SDK
 
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+A JavaScript SDK for interacting with the Ditto Network — we pioneer a Smart Account experience.
 
-### Commits convention
+> [!WARNING]  
+> THESE ARE STILL IN DEVELOPMENT AND CAN BE CHANGED AT ANY TIME.
 
-We use commits convention and linting commits (via git hooks). \
-For convince use `npm run commit` for calling interactive cli that allows you to choose appropriate type and scope for commit (list of scopes and types are in `commitlint.config.ts`).
 
-## Feature development process
-1. Create new branch from 'master' branch
-2. Develop feature
-3. Commit changes (don't forget about linting commits)
-4. Push changes to remote branch
-5. Create pull request to 'master' branch
-6. Make sure that all checks are passed
-7. Wait for review and approval
-8. Publish new version to releases and npm:
-   - run locally `npx nx release --dry-run` and check that if everything is ok (versions bumped correctly, changelog looks good).
-   - run `./gh-release` script (make sure that you have `GH_TOKEN` in `.env` file). This script will create new release on github and commit new changelog.
-   - now you have built packages in `./dist` folder and you are ready for publishing packages. run `npx nx release publish` and follow instructions.
-9. Merge pull request to 'master' branch
+## Feature Development Process
+
+> We use commit conventions and linting commits (via git hooks). \
+  For convenience, use `npm run commit` for an interactive CLI that allows you to choose the appropriate type and scope for commits (list of scopes and types are in `commitlint.config.ts`).
+
+1. Create a new branch from the 'master' branch.
+2. Develop the feature.
+3. Commit changes (ensure commits follow the convention using `npm run commit`).
+4. Push changes to the remote branch.
+5. Create a pull request to the 'master' branch.
+6. Ensure all checks pass.
+7. Wait for review and approval.
+8. Merge the pull request to the 'master' branch.
+
+
+## Release Process
+
+1. Ensure the `master` branch is stable and all tests pass.
+2. Run `npm run release` to:
+   - Bump the version.
+   - Update the changelog.
+   - Commit these changes.
+   - Tag the commit with the new version.
+3. Push the changes and the tag to the remote repository.
+
+
+### Automated Release Workflow
+
+- A CI/CD pipeline will be triggered by the new tag and will:
+  1. Verify all tests pass.
+  2. Build the packages.
+  3. Publish the packages to npm.
+  4. Create a GitHub release using `GH_TOKEN`.
+
+
+### Post-Release
+
+- Merge any hotfix branches or subsequent feature branches following the same process.
+- Ensure the `master` branch remains the source of truth.
