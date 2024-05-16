@@ -1,3 +1,10 @@
+## 0.3.0 (2024-05-16)
+
+
+### 🚀 Features
+
+- **global:** add release command
+
 ## 0.2.0 (2024-04-30)
 
 
