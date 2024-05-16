@@ -38,7 +38,7 @@ export default {
     'scope-enum': [
       RuleConfigSeverity.Error,
       'always',
-      ['global', 'core', 'examples', 'ethers', 'web3.js'],
+      ['global', 'core', 'examples', 'ethers', 'web3.js', 'release'],
     ],
   },
   prompt: {
