@@ -6,6 +6,7 @@
     "nx": "nx",
     "commit": "cz",
     "release": "standard-version && git push --follow-tags origin master",
+    "local-registry": "nx run ditto-network:local-registry",
     "prepare": "husky"
   },
   "private": true,
