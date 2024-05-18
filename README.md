@@ -38,7 +38,7 @@ A JavaScript SDK for interacting with the Ditto Network — we pioneer a Smart A
   1. Verify all tests pass.
   2. Build the packages.
   3. Publish the packages to npm.
-  4. Create a GitHub release using `GH_TOKEN`.
+  4. Create a GitHub release using `GITHUB_TOKEN`.
 
 
 ### Post-Release
