@@ -1,3 +1,10 @@
+## 0.3.1 (2024-05-18)
+
+
+### 🩹 Fixes
+
+- **global:** run npm install to fix lock file ([a82be53](https://github.com/dittonetwork/sdk-js/commit/a82be53))
+
 ## 0.3.0 (2024-05-18)
 
 
