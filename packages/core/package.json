@@ -1,8 +1,15 @@
 {
   "name": "@ditto-network/core",
   "version": "0.1.0",
+  "scripts": {
+    "build": "npm run build:cjs && npm run build:types && npm run prepare-prod-config",
+    "build:cjs": "tsc --project ./tsconfig.json --outDir ./dist/cjs --verbatimModuleSyntax false",
+    "build:types": "tsc --project ./tsconfig.json --module esnext --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+    "prepare-prod-config": "mv dist/cjs/lib/config/config.prod.js dist/cjs/lib/config/config.js"
+  },
   "files": [
-    "src"
+    "dist/**/*",
+    "README.md"
   ],
   "dependencies": {
     "@uniswap/sdk-core": "^3.2.6",
@@ -14,7 +21,8 @@
     "rambda": "^9.2.0"
   },
   "type": "commonjs",
-  "main": "./src/index.js",
-  "typings": "./src/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "types": "./dist/types/exports/index.d.ts",
+  "typings": "./dist/types/exports/index.d.ts",
   "private": false
 }
