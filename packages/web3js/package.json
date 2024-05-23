@@ -1,5 +1,5 @@
 {
-  "name": "@ditto-network/web3.js",
+  "name": "@ditto-network/web3js",
   "version": "0.0.1",
   "dependencies": {
     "@ditto-network/core": "file:../core",
@@ -7,8 +7,7 @@
     "web3": "4.8.0",
     "web3-types": "1.6.0"
   },
-  "type": "commonjs",
-  "main": "./src/index.js",
-  "typings": "./src/index.d.ts",
-  "private": false
+  "main": "./index.js",
+  "module": "./index.mjs",
+  "typings": "./index.d.ts"
 }

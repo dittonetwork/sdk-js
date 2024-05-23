@@ -1,1 +1,1 @@
-export default ['packages/*/vite.config.ts', 'packages/*/vitest.config.ts'];
+export default ['**/*/vite.config.ts', '**/*/vitest.config.ts'];

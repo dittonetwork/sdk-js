@@ -3,26 +3,10 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/core/src",
   "projectType": "library",
-  "release": {
-    "version": {
-      "generatorOptions": {
-        "packageRoot": "dist/{projectRoot}",
-        "currentVersionResolver": "git-tag"
-      }
-    }
-  },
+  "tags": [],
   "targets": {
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "dist/{projectRoot}"
-      }
-    },
-    "prepare-prod-config": {
-      "command": "mv dist/packages/core/src/lib/config/config.prod.js dist/packages/core/src/lib/config/config.js",
-      "dependsOn": ["compile"]
-    },
-    "compile": {
-      "executor": "@nx/js:tsc",
+    "build": {
+      "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/core",
@@ -31,17 +15,10 @@
         "assets": ["packages/core/*.md"]
       }
     },
-    "build": {
-      "command": "pwd",
-      "dependsOn": ["prepare-prod-config"]
-    },
-    "typecheck": {
-      "executor": "nx:run-commands",
+    "nx-release-publish": {
       "options": {
-        "cwd": "packages/core",
-        "commands": ["tsc -p tsconfig.lib.json --noEmit"]
+        "packageRoot": "dist/{projectRoot}"
       }
     }
-  },
-  "tags": []
+  }
 }
