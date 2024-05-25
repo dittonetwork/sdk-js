@@ -7,9 +7,9 @@ import { extname, relative, resolve } from 'path'
 import { fileURLToPath } from 'node:url'
 import { glob } from 'glob'
 
-console.log(  glob.sync('./src/**/*.{ts,tsx}', {
+console.log(glob.sync('./src/**/*.{ts,tsx}', {
   ignore: ["src/**/*.d.ts"],
-        }))
+}))
 export default defineConfig({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/packages/core',
