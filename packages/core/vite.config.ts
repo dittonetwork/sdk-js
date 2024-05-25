@@ -3,7 +3,13 @@ import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { extname, relative, resolve } from 'path'
+import { fileURLToPath } from 'node:url'
+import { glob } from 'glob'
 
+console.log(  glob.sync('./src/**/*.{ts,tsx}', {
+  ignore: ["src/**/*.d.ts"],
+        }))
 export default defineConfig({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/packages/core',
@@ -42,6 +48,25 @@ export default defineConfig({
     rollupOptions: {
       // External packages that should not be bundled into your library.
       external: ['@ditto-network/core'],
+      input: Object.fromEntries(
+        glob.sync('src/**/*.{ts,tsx}', {
+          ignore: ["src/**/*.d.ts"],
+        }).map((file: string) => [
+          // The name of the entry point
+          // lib/nested/foo.ts becomes nested/foo
+          relative(
+            'lib',
+            file.slice(0, file.length - extname(file).length)
+          ),
+          // The absolute path to the entry file
+          // lib/nested/foo.ts becomes /project/lib/nested/foo.ts
+          fileURLToPath(new URL(file, import.meta.url))
+        ])
+      ),
+      output: {
+        assetFileNames: 'assets/[name][extname]',
+        entryFileNames: '[name].js',
+      }
     },
   },
 
