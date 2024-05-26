@@ -1,3 +1,10 @@
+## 0.6.0 (2024-05-26)
+
+
+### 🩹 Fixes
+
+- **core:** remove files prop from package.json ([1751f5e](https://github.com/dittonetwork/sdk-js/commit/1751f5e))
+
 ## 0.5.0 (2024-05-26)
 
 
