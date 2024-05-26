@@ -1,3 +1,10 @@
+## 0.8.1 (2024-05-26)
+
+
+### 🚀 Features
+
+- **global:** add CI for publish on tag ([7ac13f5](https://github.com/dittonetwork/sdk-js/commit/7ac13f5))
+
 ## 0.8.0 (2024-05-26)
 
 
