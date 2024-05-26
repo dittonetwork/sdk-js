@@ -1,3 +1,10 @@
+## 0.7.1 (2024-05-26)
+
+
+### 🩹 Fixes
+
+- **global:** remove unnecessary nx from package.json ([edcbd8e](https://github.com/dittonetwork/sdk-js/commit/edcbd8e))
+
 ## 0.7.0 (2024-05-26)
 
 
