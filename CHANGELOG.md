@@ -1,3 +1,10 @@
+## 0.9.6 (2024-05-26)
+
+
+### 🩹 Fixes
+
+- **global:** remove --dry-run and start real publishing ([68659b3](https://github.com/dittonetwork/sdk-js/commit/68659b3))
+
 ## 0.9.5 (2024-05-26)
 
 This was a version bump only, there were no code changes.
