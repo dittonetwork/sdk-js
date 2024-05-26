@@ -1,3 +1,10 @@
+## 0.9.4 (2024-05-26)
+
+
+### 🩹 Fixes
+
+- **global:** set --dry-run options until access will be fixed ([47086a3](https://github.com/dittonetwork/sdk-js/commit/47086a3))
+
 ## 0.9.3 (2024-05-26)
 
 
