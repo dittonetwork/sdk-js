@@ -1,35 +1,15 @@
 {
-  "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "namedInputs": {
-    "default": ["{projectRoot}/*", "{projectRoot}/**/*", "sharedGlobals"],
-    "production": [
-      "default",
-      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-      "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/.eslintrc.json",
-      "!{projectRoot}/eslint.config.js",
-      "!{projectRoot}/jest.config.[jt]s",
-      "!{projectRoot}/src/test-setup.[jt]s",
-      "!{projectRoot}/test-setup.[jt]s"
-    ],
-    "sharedGlobals": []
-  },
   "targetDefaults": {
     "@nx/js:tsc": {
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
-    },
-    "@nx/esbuild:esbuild": {
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "inputs": ["default", "^default"]
     }
   },
   "release": {
     "projects": ["packages/*"],
     "version": {
-      "preVersionCommand": "npx nx run-many -t build",
-      "conventionalCommits": true
+      "preVersionCommand": "npx nx run-many -t build"
     },
     "changelog": {
       "workspaceChangelog": {
@@ -46,6 +26,10 @@
           "title": "Refactoring"
         }
       }
+    },
+    "git": {
+      "commit": true,
+      "tag": true
     }
   },
   "plugins": [
