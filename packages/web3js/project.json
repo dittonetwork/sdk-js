@@ -18,6 +18,13 @@
       "options": {
         "packageRoot": "dist/{projectRoot}"
       }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/web3js",
+        "commands": ["tsc -p tsconfig.lib.json --noEmit"]
+      }
     }
   },
   "tags": []
