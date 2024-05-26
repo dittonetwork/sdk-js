@@ -1,3 +1,11 @@
+## 0.6.1 (2024-05-26)
+
+
+### 🩹 Fixes
+
+- **global:** add skipLockFileUpdate option to nx release ([a8b03ce](https://github.com/dittonetwork/sdk-js/commit/a8b03ce))
+- **global:** restore package-lock ([972eca5](https://github.com/dittonetwork/sdk-js/commit/972eca5))
+
 ## 0.6.0 (2024-05-26)
 
 
