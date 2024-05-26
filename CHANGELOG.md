@@ -1,3 +1,12 @@
+## 0.5.0 (2024-05-26)
+
+
+### 🩹 Fixes
+
+- **global:** fix package-lock ([a044869](https://github.com/dittonetwork/sdk-js/commit/a044869))
+- **global:** ensure using prod config in core ([267dec8](https://github.com/dittonetwork/sdk-js/commit/267dec8))
+- **web3.js:** add typecheck target ([f0fdabe](https://github.com/dittonetwork/sdk-js/commit/f0fdabe))
+
 ## 0.4.0 (2024-05-26)
 
 
