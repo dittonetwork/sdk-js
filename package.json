@@ -5,7 +5,7 @@
   "scripts": {
     "nx": "nx",
     "commit": "cz",
-    "release": "standard-version && git push --follow-tags origin master",
+    "release": "nx release --skip-publish",
     "local-registry": "nx run ditto-network:local-registry",
     "prepare": "husky"
   },
