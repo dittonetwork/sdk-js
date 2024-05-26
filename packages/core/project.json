@@ -4,7 +4,7 @@
   "sourceRoot": "packages/core/src",
   "projectType": "library",
   "targets": {
-    "build": {
+    "original-build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
@@ -12,11 +12,11 @@
         "main": "packages/core/src/index.ts",
         "tsConfig": "packages/core/tsconfig.lib.json",
         "assets": ["packages/core/*.md"]
-      },
-      "dependencies": ["prepare-prod-config"]
+      }
     },
-    "prepare-prod-config": {
-      "command": "mv dist/packages/core/src/lib/config/config.prod.js dist/packages/core/src/lib/config/config.js"
+    "build": {
+      "command": "mv dist/packages/core/src/lib/config/config.prod.js dist/packages/core/src/lib/config/config.js",
+      "dependsOn": ["original-build"]
     },
     "nx-release-publish": {
       "options": {
