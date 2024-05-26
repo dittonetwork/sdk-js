@@ -1,8 +1,8 @@
 {
   "name": "@ditto-network/web3.js",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "dependencies": {
-    "@ditto-network/core": "0.9.4",
+    "@ditto-network/core": "0.9.5",
     "tslib": "^2.3.0",
     "web3": "4.8.0",
     "web3-types": "1.6.0"
