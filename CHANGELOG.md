@@ -1,3 +1,15 @@
+## 0.8.0 (2024-05-26)
+
+
+### 🚀 Features
+
+- **global:** run nx migrate nx@18.2.3 ([2bf8c97](https://github.com/dittonetwork/sdk-js/commit/2bf8c97))
+- **global:** track global version in root of monorepo ([8eeea42](https://github.com/dittonetwork/sdk-js/commit/8eeea42))
+
+### 🩹 Fixes
+
+- **global:** remove unnecessary gh-release ([5395a81](https://github.com/dittonetwork/sdk-js/commit/5395a81))
+
 ## 0.7.1 (2024-05-26)
 
 
