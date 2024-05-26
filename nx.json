@@ -7,7 +7,7 @@
     }
   },
   "release": {
-    "projects": ["packages/*"],
+    "projects": ["*"],
     "version": {
       "preVersionCommand": "npx nx run-many -t build",
       "generatorOptions": {
