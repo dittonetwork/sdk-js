@@ -1,3 +1,10 @@
+## 0.7.0 (2024-05-26)
+
+
+### 🩹 Fixes
+
+- **global:** update release command in package.json ([7b5e55c](https://github.com/dittonetwork/sdk-js/commit/7b5e55c))
+
 ## 0.6.1 (2024-05-26)
 
 
