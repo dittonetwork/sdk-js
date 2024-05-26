@@ -1,10 +1,10 @@
 {
   "name": "@ditto-network/ethers",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "dependencies": {
     "tslib": "^2.3.0",
     "ethers": "6.11.1",
-    "@ditto-network/core": "0.8.1"
+    "@ditto-network/core": "0.8.2"
   },
   "type": "commonjs",
   "main": "./src/index.js",

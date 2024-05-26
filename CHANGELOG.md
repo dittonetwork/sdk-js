@@ -1,3 +1,10 @@
+## 0.8.2 (2024-05-26)
+
+
+### 🩹 Fixes
+
+- **global:** upd package-lock ([e0d14c5](https://github.com/dittonetwork/sdk-js/commit/e0d14c5))
+
 ## 0.8.1 (2024-05-26)
 
 
