@@ -1,3 +1,7 @@
+## 0.9.2 (2024-05-26)
+
+This was a version bump only, there were no code changes.
+
 ## 0.9.1 (2024-05-26)
 
 This was a version bump only, there were no code changes.
