@@ -1,3 +1,10 @@
+## 0.4.0 (2024-05-26)
+
+
+### 🩹 Fixes
+
+- **global:** fix package-lock ([a044869](https://github.com/dittonetwork/sdk-js/commit/a044869))
+
 ## 0.3.9 (2024-05-20)
 
 This was a version bump only, there were no code changes.
