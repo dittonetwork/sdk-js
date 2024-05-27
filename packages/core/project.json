@@ -3,25 +3,8 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/core/src",
   "projectType": "library",
-  "release": {
-    "version": {
-      "generatorOptions": {
-        "packageRoot": "dist/{projectRoot}",
-        "currentVersionResolver": "git-tag"
-      }
-    }
-  },
   "targets": {
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "dist/{projectRoot}"
-      }
-    },
-    "prepare-prod-config": {
-      "command": "mv dist/packages/core/src/lib/config/config.prod.js dist/packages/core/src/lib/config/config.js",
-      "dependsOn": ["compile"]
-    },
-    "compile": {
+    "original-build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
@@ -32,8 +15,13 @@
       }
     },
     "build": {
-      "command": "pwd",
-      "dependsOn": ["prepare-prod-config"]
+      "command": "mv dist/packages/core/src/lib/config/config.prod.js dist/packages/core/src/lib/config/config.js",
+      "dependsOn": ["original-build"]
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "{projectRoot}"
+      }
     },
     "typecheck": {
       "executor": "nx:run-commands",

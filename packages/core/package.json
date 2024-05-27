@@ -1,9 +1,6 @@
 {
   "name": "@ditto-network/core",
-  "version": "0.1.0",
-  "files": [
-    "src"
-  ],
+  "version": "0.9.6",
   "dependencies": {
     "@uniswap/sdk-core": "^3.2.6",
     "@uniswap/smart-order-router": "3.16.26",
@@ -15,6 +12,5 @@
   },
   "type": "commonjs",
   "main": "./src/index.js",
-  "typings": "./src/index.d.ts",
-  "private": false
+  "typings": "./src/index.d.ts"
 }

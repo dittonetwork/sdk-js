@@ -18,15 +18,14 @@
       "options": {
         "packageRoot": "dist/{projectRoot}"
       }
-    }
-  },
-  "tags": [],
-  "release": {
-    "version": {
-      "generatorOptions": {
-        "packageRoot": "dist/{projectRoot}",
-        "currentVersionResolver": "git-tag"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/web3js",
+        "commands": ["tsc -p tsconfig.lib.json --noEmit"]
       }
     }
-  }
+  },
+  "tags": []
 }
