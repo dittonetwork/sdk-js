@@ -1,11 +1,8 @@
-# ethers
+# @ditto-network/ethers
 
-This library was generated with [Nx](https://nx.dev).
+Ethers adapter for Ditto Network SDK.
+
 
 ## Building
 
 Run `nx build ethers` to build the library.
-
-## Running unit tests
-
-Run `nx test ethers` to execute the unit tests via [Vitest](https://vitest.dev/).
