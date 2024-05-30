@@ -1,11 +1,31 @@
-# ethers
+# @ditto-network/ethers
 
-This library was generated with [Nx](https://nx.dev).
+This package provides an `ethers` adapter for the Ditto Network.
+
+
+## Overview
+
+This package is a thin adapter that allows you to use Ethers.js with the Ditto Network's core functionality. For comprehensive documentation and details on how to use the Ditto Network, please refer to the documentation in the [`@ditto-network/core`](../core/README.md) package.
+
+
+## Installation
+
+```bash
+npm install @ditto-network/ethers
+```
+
+or 
+
+```bash
+yarn add @ditto-network/ethers
+```
+
+
+## Usage
+
+Refer to the main documentation in the [`@ditto-network/core`](../core/README.md) package for detailed usage instructions and examples.
+
 
 ## Building
 
 Run `nx build ethers` to build the library.
-
-## Running unit tests
-
-Run `nx test ethers` to execute the unit tests via [Vitest](https://vitest.dev/).
