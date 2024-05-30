@@ -1,6 +1,6 @@
 {
   "name": "@ditto-network/core",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "dependencies": {
     "@uniswap/sdk-core": "^3.2.6",
     "@uniswap/smart-order-router": "3.16.26",
