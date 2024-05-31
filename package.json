@@ -1,6 +1,6 @@
 {
   "name": "ditto-network",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "license": "MIT",
   "scripts": {
     "commit": "cz",
@@ -25,8 +25,8 @@
     "@commitlint/config-conventional": "^19.2.2",
     "@commitlint/cz-commitlint": "^19.2.0",
     "@ditto-network/core": "0.4.0",
-    "@ditto-network/ethers": "0.9.8",
-    "@ditto-network/web3.js": "0.9.8",
+    "@ditto-network/ethers": "0.9.9",
+    "@ditto-network/web3.js": "0.9.9",
     "@nx/esbuild": "18.2.3",
     "@nx/eslint": "18.2.3",
     "@nx/eslint-plugin": "18.2.3",
