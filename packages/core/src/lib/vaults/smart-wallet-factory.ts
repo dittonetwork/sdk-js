@@ -22,6 +22,10 @@ export class SmartWalletFactory implements Factory {
     this.apiClient = new AccountApiClient(provider.getHttpClient(), provider.getStorage());
   }
 
+  public getContractAddress(chainId: number): Address {
+    return config.vaultFactoryAddresses[chainId as Chain];
+  }
+
   public async deploy(id: number, chainId: Chain, version: SmartWalletVersion = 3) {
     const isVaultExists = await this.isVaultWithIdExists(id, chainId);
 
