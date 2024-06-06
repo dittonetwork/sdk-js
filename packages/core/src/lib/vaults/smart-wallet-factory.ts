@@ -59,9 +59,7 @@ export class SmartWalletFactory implements Factory {
       .map((promise) => (promise as PromiseFulfilledResult<SmartWallet>).value);
   }
 
-  public async getDefaultOrCreateVault(chainId: Chain): Promise<SmartWallet> {
-    const defaultId = 1;
-
+  public async getDefaultOrCreateVault(chainId: Chain, defaultId = 1): Promise<SmartWallet> {
     const accountAddress = await this.provider.getSigner().getAddress();
 
     const defaultVault = await this.fetchFirstVault(chainId);
@@ -91,6 +89,11 @@ export class SmartWalletFactory implements Factory {
 
     const firstVault = await this.fetchFirstVault(chainId);
     return firstVault!;
+  }
+
+  public async getVaultAddress(chainId: Chain, defaultId = 1): Promise<Address> {
+    const accountAddress = await this.provider.getSigner().getAddress();
+    return this.predictVaultAddress(accountAddress, chainId, defaultId);
   }
 
   public getByAddress(_chainId: Chain, _address: string): Promise<SmartWallet> {
