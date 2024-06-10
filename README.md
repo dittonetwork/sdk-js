@@ -7,7 +7,7 @@ A JavaScript SDK for building workflows on the Ditto Network, enabling a Smart A
 
 ## Documentation
 
-For comprehensive documentation and details on how to use the Ditto Network, please refer to the main documentation in the [`@ditto-network/core`](packages/core/README.md) package.
+For comprehensive documentation and details on how to use the Ditto Network, please refer to the main documentation in the [`@ditto-network/core`](https://github.com/dittonetwork/sdk-js/blob/master/packages/core/README.md) package.
 
 ## Contributing
 
