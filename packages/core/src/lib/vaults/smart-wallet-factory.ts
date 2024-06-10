@@ -23,7 +23,13 @@ export class SmartWalletFactory implements Factory {
   }
 
   public getContractAddress(chainId: number): Address {
-    return config.vaultFactoryAddresses[chainId as Chain];
+    const address = config.vaultFactoryAddresses[chainId as Chain];
+    
+    if (!address) {
+      throw new Error(`Vault factory address for chain ${chainId} not found`);
+    }
+    
+    return address;
   }
 
   public async deploy(id: number, chainId: Chain, version: SmartWalletVersion = 3) {
