@@ -170,6 +170,8 @@ export class SmartWalletFactory implements Factory {
     return exist;
   }
 
+  // TODO: Get the next available vault ID for the account from the contract
+  // when supported by the contract
   public async getNextVaultId(chainId: Chain): Promise<number> {
     const accountAddress = await this.provider.getSigner().getAddress();
 
