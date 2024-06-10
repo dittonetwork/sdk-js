@@ -17,6 +17,7 @@ import {
   BrowserStorage,
 } from '@ditto-network/core';
 import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
+import useLocalStorage from '../hooks/use-local-storage';
 
 const networkNames = {
   [Chain.Polygon]: 'Polygon Mainnet',
@@ -59,13 +60,15 @@ export function App() {
 
   const [signer, setSigner] = React.useState<ethers.Signer | null>(null);
   const [provider, setProvider] = React.useState<DittoProvider | null>(null);
+  const [swFactory, setSWFactory] = React.useState<SmartWalletFactory | null>(null);
   const [isAuthenticated, setAuth] = React.useState(false);
-  const [smartWalletAddress, setSmartWalletAddress] = React.useState('');
+  const [swAddress, setSWAddress] = React.useState('');
   const [workflowHash, setWorkflowHash] = React.useState<string>('');
+  const [nextVaultId, setNextVaultId] = useLocalStorage<number>('nextVaultId', 1);
 
   React.useEffect(() => {
-    initProvider();
-  }, []);
+    if (chainId) initProvider();
+  }, [chainId]);
 
   const initProvider = async () => {
     try {
@@ -76,11 +79,17 @@ export function App() {
         storage: new BrowserStorage(),
         contractFactory: new EthersContractFactory(signer),
       });
+      const swFactory = new SmartWalletFactory(provider);
+      const nextVaultId = chainId ? await swFactory.getNextVaultId(+chainId) : 1;
+      const vaultAddress = chainId ? await swFactory.getVaultAddress(+chainId, nextVaultId) : '';
       const needAuth = await provider.needAuthentication();
 
       setAuth(!needAuth);
       setSigner(signer);
       setProvider(provider);
+      setSWFactory(swFactory);
+      setSWAddress(vaultAddress);
+      setNextVaultId(nextVaultId);
     } catch (error) {
       console.error('Error initializing provider:', error);
     }
@@ -99,25 +108,24 @@ export function App() {
   };
 
   const handleGetSmartWalletAddressClick = async () => {
-    if (!provider || !signer || !chainId) return;
+    if (!provider || !signer || !chainId || !swFactory) return;
 
     try {
-      const swFactory = new SmartWalletFactory(provider);
-      const vaultAddress = await swFactory.getVaultAddress(chainId);
-      setSmartWalletAddress(vaultAddress);
+      const vaultAddress = await swFactory.getVaultAddress(+chainId, nextVaultId);
+      setSWAddress(vaultAddress);
     } catch (error) {
       console.error('Error getting smart wallet address:', error);
     }
   };
 
   const handleDeploySmartWalletClick = async () => {
-    if (!provider || !signer || !chainId) return;
+    if (!provider || !signer || !chainId || !swFactory) return;
 
     try {
-      const swFactory = new SmartWalletFactory(provider);
-      const vault = await swFactory.getDefaultOrCreateVault(chainId);
+      const vault = await swFactory.createVault(+chainId, nextVaultId);
       const vaultAddress = vault.getAddress()!;
-      setSmartWalletAddress(vaultAddress);
+      setSWAddress(vaultAddress);
+      setNextVaultId(nextVaultId + 1); // Increment vault ID and save to local storage
     } catch (error) {
       console.error('Error deploying smart wallet:', error);
     }
@@ -200,7 +208,8 @@ export function App() {
             </div>
             <p className="text-gray-600">
               Smart Wallet Address:{' '}
-              {smartWalletAddress ? `✅ ${smartWalletAddress}` : '❌ Not created'}
+              {swAddress ? `✅ ${swAddress}` : '❌ Not created'}<br/>
+              Next wallet id: {nextVaultId}
             </p>
           </div>
 

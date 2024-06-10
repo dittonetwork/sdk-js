@@ -106,6 +106,32 @@ export class SmartWalletFactory implements Factory {
     throw new Error('Method not implemented.');
   }
 
+  public async createVault(chainId: Chain, vaultId: number, version: SmartWalletVersion = 3): Promise<SmartWallet> {
+    const accountAddress = await this.provider.getSigner().getAddress();
+
+    // Check if the vault already exists
+    const isVaultExists = await this.isVaultWithIdExists(vaultId, chainId);
+    if (isVaultExists) {
+      throw new Error(`Vault with id=${vaultId} already exists`);
+    }
+
+    // Deploy the vault
+    const tx = await this.deploy(vaultId, chainId, version);
+    const receipt = await tx.wait();
+
+    // Get the vault address from the receipt
+    const vaultAddress = pathOr(null, ['events', 1, 'args', 1], receipt);
+    if (!vaultAddress) {
+      throw new SmartWalletCreationError();
+    }
+
+    // Link the vault to the account
+    await this.apiClient.linkVault(chainId, vaultAddress, accountAddress);
+
+    // Return the new SmartWallet instance
+    return new SmartWallet(this.provider, chainId, version, vaultAddress, vaultId);
+  }
+
   private getContract(chainId: Chain): DittoContract {
     if (!this.chainToContractMap[chainId]) {
       this.chainToContractMap[chainId] = this.provider
@@ -142,5 +168,25 @@ export class SmartWalletFactory implements Factory {
     }
 
     return exist;
+  }
+
+  public async getNextVaultId(chainId: Chain): Promise<number> {
+    const accountAddress = await this.provider.getSigner().getAddress();
+
+    const events = await this.getContract(chainId).getPastEvents('VaultCreated', {
+      fromBlock: 0,
+      toBlock: 'latest'
+    });
+    const relatedEvents = events.filter(event => event.args[0] === accountAddress);
+
+    let highestVaultId = 0;
+    relatedEvents.forEach((event) => {
+      const vaultId = parseInt(event.args[2], 10);
+      if (vaultId > highestVaultId) {
+        highestVaultId = vaultId;
+      }
+    });
+
+    return highestVaultId + 1;
   }
 }
