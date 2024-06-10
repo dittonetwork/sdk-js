@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../components/ui';
 import { useSDK } from '@metamask/sdk-react';
-import { ethers } from 'ethers';
+import { ethers, parseUnits } from 'ethers';
 import {
   Chain,
   CommonBuilderOptions,
@@ -15,6 +15,7 @@ import {
   UniswapSwapActionCallDataBuilder,
   WorkflowsFactory,
   BrowserStorage,
+  Address,
 } from '@ditto-network/core';
 import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
 import useLocalStorage from '../hooks/use-local-storage';
@@ -54,17 +55,57 @@ const ConnectWalletButton = () => {
   );
 };
 
+interface Token {
+  address: Address;
+  name: string;
+  decimals: number;
+  symbol: string;
+  chain: Chain;
+}
+
+const tokensMap: Record<Chain, Record<string, Token>> = {
+  [Chain.Polygon]: {
+    wmatic: {
+      address: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+      name: 'Wrapped MATIC',
+      decimals: 18,
+      symbol: 'WMATIC',
+      chain: Chain.Polygon,
+    },
+    usdt: {
+      address: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
+      name: 'USDT',
+      decimals: 6,
+      symbol: 'USDT',
+      chain: Chain.Polygon,
+    }
+  },
+  [Chain.Arbitrum]: {
+
+  }
+}
+
 export function App() {
   const { account, chainId: _chainId } = useSDK();
-  const chainId = (_chainId as unknown) as Chain | undefined;
+  const chainId = Number(_chainId) as Chain | undefined;
+  const tokens = chainId ? tokensMap[chainId] : {};
+  console.log('tokens', chainId, tokens)
 
   const [signer, setSigner] = React.useState<ethers.Signer | null>(null);
   const [provider, setProvider] = React.useState<DittoProvider | null>(null);
   const [swFactory, setSWFactory] = React.useState<SmartWalletFactory | null>(null);
   const [isAuthenticated, setAuth] = React.useState(false);
-  const [swAddress, setSWAddress] = React.useState('');
+  const [swAddress, setSWAddress] = React.useState<Address | null>(null);
   const [workflowHash, setWorkflowHash] = React.useState<string>('');
   const [nextVaultId, setNextVaultId] = useLocalStorage<number>('nextVaultId', 1);
+
+  const commonConfig = React.useMemo(() => ({  
+    chainId: chainId!,
+    recipient: swAddress as Address,
+    accountAddress: account as Address,
+    vaultAddress: swAddress as Address,
+    provider: provider!,
+  }), [chainId ,account, swAddress, provider]);
 
   React.useEffect(() => {
     if (chainId) initProvider();
@@ -88,7 +129,7 @@ export function App() {
       setSigner(signer);
       setProvider(provider);
       setSWFactory(swFactory);
-      setSWAddress(vaultAddress);
+      if (vaultAddress) setSWAddress(vaultAddress);
       setNextVaultId(nextVaultId);
     } catch (error) {
       console.error('Error initializing provider:', error);
@@ -132,9 +173,50 @@ export function App() {
   };
 
   const handleCreateWorkflow = async () => {
-    if (!provider || !signer || !chainId) return;
+    if (!account || !provider || !signer || !chainId || !swAddress) return;
 
-    console.log('not implemented');
+    try {
+      const workflowFactory = new WorkflowsFactory(provider);
+
+      const wf = await workflowFactory.create({
+        name: 'My first workflow',
+        triggers: [
+          new TimeBasedTrigger(
+            {
+              repeatTimes: 2,
+              startAtTimestamp: new Date().getTime() / 1000 + 60,
+              cycle: {
+                frequency: 2,
+                scale: TimeScale.Minutes,
+              },
+            },
+            commonConfig
+          ),
+        ],
+        actions: [
+          new UniswapSwapActionCallDataBuilder(
+            {
+              fromToken: tokens.wmatic,
+              toToken: tokens.usdt,
+              fromAmount: parseUnits('100', 6).toString(),
+              slippagePercent: 0.05,
+              providerStrategy: {
+                type: 'browser',
+                provider: (window as any).ethereum!,
+              },
+            },
+            commonConfig
+          ),
+        ],
+        chainId,
+      });
+
+      const deployedWorkflow = await wf.buildAndDeploy(swAddress, account as Address);
+
+      setWorkflowHash(deployedWorkflow);
+    } catch (error) {
+      console.error('Error creating workflow:', error);
+    }
   };
 
   return (
