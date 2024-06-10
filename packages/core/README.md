@@ -1,7 +1,3 @@
-Here's an updated version of the README that includes details about all triggers based on the content of the provided files:
-
----
-
 # @ditto-network/core
 
 A JavaScript SDK for building workflows on the Ditto Network, enabling a Smart Account experience at any level of your project. This SDK provides the necessary tools and adapters for interacting with the blockchain and constructing workflows. You can use the provided adapters or implement your own.
@@ -20,8 +16,7 @@ A JavaScript SDK for building workflows on the Ditto Network, enabling a Smart A
     - [Price-Based Trigger](#price-based-trigger)
     - [Time-Based Trigger](#time-based-trigger)
 - [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Installation
 
@@ -29,33 +24,29 @@ A JavaScript SDK for building workflows on the Ditto Network, enabling a Smart A
 npm install @ditto-network/core @ditto-network/web3.js web3
 ```
 
-or 
-
-```bash
-yarn add @ditto-network/core @ditto-network/web3.js web3
-```
 
 ## Getting Started
 
 Here’s a quick guide to get you started with the Ditto Network SDK:
 
+
 ### Initialize SDK
 
 ```javascript
-const { DittoNetwork } = require('@ditto-network/core');
+import { Provider, SmartWalletFactory, BrowserStorage } from '@ditto-network/core';
+import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
 
-const ditto = new DittoNetwork({
-  provider: 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID',
-  privateKey: 'YOUR_PRIVATE_KEY'
+const provider = new Provider({
+  signer: new EthersSigner(signer),
+  storage: new BrowserStorage(),
+  contractFactory: new EthersContractFactory(signer),
 });
+const swFactory = new SmartWalletFactory(provider);
 
-// Example function to check account balance
-async function getBalance(address) {
-  const balance = await ditto.getBalance(address);
-  console.log(`Balance: ${balance}`);
-}
+const sw = await swFactory.getDefaultOrCreateVault();
+const vaultAddress = sw.getAddress();
 
-getBalance('0xYourEthereumAddress');
+console.log('Vault address:', vaultAddress);
 ```
 
 ## Examples
@@ -69,7 +60,7 @@ For Node.js examples, see:
 
 ### React
 
-For React examples, see the sandbox project in [examples/sandbox](https://github.com/dittonetwork/sdk-js/tree/master/examples/sandbox).
+For React examples, see the sandbox project in [examples/sandbox](https://github.com/dittonetwork/sdk-js/tree/master/examples/sandbox) or [examples/react-example](https://github.com/dittonetwork/sdk-js/tree/master/examples/react-example).
 
 To run the React examples:
 
@@ -77,17 +68,13 @@ To run the React examples:
 npm run serve
 ```
 
-or 
-
-```bash
-yarn serve
-```
 
 ## Actions and Triggers
 
 ### Actions
 
-Actions are the building blocks of a workflow. They are the steps that are executed by triggers. Each action has a configuration that defines how it should be executed. Here is the available action:
+Actions are the building blocks of a workflow. They are the steps that are executed by triggers. Each action has a configuration that defines how it should be executed. Here are available actions:
+
 
 #### Uniswap Swap Action
 
