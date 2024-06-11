@@ -22,6 +22,16 @@ export class SmartWalletFactory implements Factory {
     this.apiClient = new AccountApiClient(provider.getHttpClient(), provider.getStorage());
   }
 
+  public getContractAddress(chainId: number): Address {
+    const address = config.vaultFactoryAddresses[chainId as Chain];
+    
+    if (!address) {
+      throw new Error(`Vault factory address for chain ${chainId} not found`);
+    }
+    
+    return address;
+  }
+
   public async deploy(id: number, chainId: Chain, version: SmartWalletVersion = 3) {
     const isVaultExists = await this.isVaultWithIdExists(id, chainId);
 
@@ -55,9 +65,7 @@ export class SmartWalletFactory implements Factory {
       .map((promise) => (promise as PromiseFulfilledResult<SmartWallet>).value);
   }
 
-  public async getDefaultOrCreateVault(chainId: Chain): Promise<SmartWallet> {
-    const defaultId = 1;
-
+  public async getDefaultOrCreateVault(chainId: Chain, defaultId = 1): Promise<SmartWallet> {
     const accountAddress = await this.provider.getSigner().getAddress();
 
     const defaultVault = await this.fetchFirstVault(chainId);
@@ -87,6 +95,11 @@ export class SmartWalletFactory implements Factory {
 
     const firstVault = await this.fetchFirstVault(chainId);
     return firstVault!;
+  }
+
+  public async getVaultAddress(chainId: Chain, defaultId = 1): Promise<Address> {
+    const accountAddress = await this.provider.getSigner().getAddress();
+    return this.predictVaultAddress(accountAddress, chainId, defaultId);
   }
 
   public getByAddress(_chainId: Chain, _address: string): Promise<SmartWallet> {
