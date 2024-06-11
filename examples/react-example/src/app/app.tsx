@@ -60,7 +60,7 @@ function App() {
       accountAddress,
       vaultAddress,
       provider: dittoProvider!,
-    };
+    } as const;
 
     const fromToken = { address: from, decimals: fromDecimals } satisfies TokenLight;
     const toToken = { address: to, decimals: toDecimals } satisfies TokenLight;
