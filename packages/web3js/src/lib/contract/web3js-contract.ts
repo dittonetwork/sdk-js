@@ -63,4 +63,16 @@ export class Web3jsContract implements DittoContract {
   private isReadOnlyMethod(method: string): boolean {
     return getMethodFromAbi(method, this.abi).stateMutability === 'view';
   }
+
+  public async getPastEvents(
+    eventName: string,
+    options: { fromBlock?: number; toBlock?: string | number } = {}
+  ) {
+    const { fromBlock = 0, toBlock = 'latest' } = options;
+    const events = await this.nativeContract.getPastEvents(eventName, {
+      fromBlock,
+      toBlock,
+    });
+    return events;
+  }
 }
