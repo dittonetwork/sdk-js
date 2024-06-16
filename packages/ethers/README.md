@@ -23,7 +23,7 @@ yarn add @ditto-network/ethers
 
 ## Usage
 
-Refer to the main documentation in the [`@ditto-network/core`](../core/README.md) package for detailed usage instructions and examples.
+Refer to the main documentation in the [`@ditto-network/core`](https://github.com/dittonetwork/sdk-js/core/README.md) package for detailed usage instructions and examples.
 
 
 ## Building
