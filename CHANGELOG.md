@@ -1,3 +1,20 @@
+## 0.9.10 (2024-06-23)
+
+
+### 🚀 Features
+
+- **core:** add create workflow step to the sandbox ([7fc4a3b](https://github.com/dittonetwork/sdk-js/commit/7fc4a3b))
+- **core:** add docs about actions and triggres ([17642d8](https://github.com/dittonetwork/sdk-js/commit/17642d8))
+- **core:** add docs about all triggers ([f8732d1](https://github.com/dittonetwork/sdk-js/commit/f8732d1))
+- **global:** get predicted Smart Wallet Address ([43e8c90](https://github.com/dittonetwork/sdk-js/commit/43e8c90))
+- **global:** add hooks/use-local-storage ([85deb17](https://github.com/dittonetwork/sdk-js/commit/85deb17))
+- **global:** add method to get next vault id ([ec7862e](https://github.com/dittonetwork/sdk-js/commit/ec7862e))
+- **global:** add getting started section for root README ([62b0dd7](https://github.com/dittonetwork/sdk-js/commit/62b0dd7))
+
+### 🩹 Fixes
+
+- **core:** throw error if no address for chain ([e6e0741](https://github.com/dittonetwork/sdk-js/commit/e6e0741))
+
 ## 0.9.9 (2024-05-31)
 
 This was a version bump only, there were no code changes.

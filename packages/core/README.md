@@ -30,43 +30,105 @@ npm install @ditto-network/core @ditto-network/web3.js web3
 Here’s a quick guide to get you started with the Ditto Network SDK:
 
 
-### Initialize SDK
+## Modules
 
-```javascript
-import { Provider, SmartWalletFactory, BrowserStorage } from '@ditto-network/core';
+- **Provider**
+- **SmartWalletFactory**
+- **WorkflowsFactory**
+- **Triggers**
+- **Actions**
+
+
+### Provider
+
+The `Provider` module is responsible for setting up the connection to the blockchain and managing interactions.
+
+
+#### Initialization
+
+```typescript
+import { Provider as DittoProvider, BrowserStorage } from '@ditto-network/core';
 import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
+import { ethers } from 'ethers';
 
-const provider = new Provider({
+const ethersProvider = new ethers.BrowserProvider(window.ethereum!);
+const signer = await ethersProvider.getSigner();
+const provider = new DittoProvider({
   signer: new EthersSigner(signer),
   storage: new BrowserStorage(),
   contractFactory: new EthersContractFactory(signer),
 });
+```
+
+
+### Smart Wallet (Vault)
+
+The Vault is a modular smart contract wallet designed to securely hold and manage assets, execute deferred tasks, and interact with DeFi protocols.
+
+
+#### Methods
+
+##### getNextVaultId
+
+Retrieves the next available Vault ID for the specified blockchain network. This method is useful for generating a new Vault without conflicts.
+
+```typescript
+const chainId = 1; // Ethereum mainnet
+const nextVaultId = await swFactory.getNextVaultId(chainId);
+console.log(`Next Vault ID: ${nextVaultId}`);
+```
+
+- `chainId`: The ID of the blockchain network.
+
+
+##### getVaultAddress
+
+Predicts the address of the Vault based on the specified chain ID and Vault ID. This method is useful for knowing the Vault address before actually deploying it.
+
+```typescript
+const chainId = 1; // Ethereum mainnet
+const vaultId = 2; // Example Vault ID
+const vaultAddress = await swFactory.getVaultAddress(chainId, vaultId);
+console.log(`Predicted Vault Address: ${vaultAddress}`);
+```
+
+- `chainId`: The ID of the blockchain network.
+- `vaultId`: The ID of the Vault.
+
+
+##### createVault
+
+Creates a new smart wallet (Vault) on the specified blockchain network. This method deploys the Vault contract and returns the deployed Vault instance.
+
+```typescript
+import { SmartWalletFactory } from '@ditto-network/core';
+
 const swFactory = new SmartWalletFactory(provider);
-
-const sw = await swFactory.getDefaultOrCreateVault();
-const vaultAddress = sw.getAddress();
-
-console.log('Vault address:', vaultAddress);
+const chainId = 137; // Polygon
+const nextVaultId = await swFactory.getNextVaultId(chainId);
+const vault = await swFactory.createVault(chainId, nextVaultId);
+const vaultAddress = vault.getAddress();
+console.log(`New Vault Address: ${vaultAddress}`);
 ```
 
-## Examples
+- `chainId`: The ID of the blockchain network.
+- `vaultId`: The ID for the new Vault.
 
-### Node.js
 
-For Node.js examples, see:
+##### getDefaultOrCreate
 
-- [Web3.js example](https://github.com/dittonetwork/sdk-js/blob/master/examples/nodejs-example/web3js.ts)
-- [Ethers.js example](https://github.com/dittonetwork/sdk-js/blob/master/examples/nodejs-example/ethers.ts)
+Retrieves the default Vault for the specified chain ID and account address. If no default Vault exists, it creates a new one.
 
-### React
-
-For React examples, see the sandbox project in [examples/sandbox](https://github.com/dittonetwork/sdk-js/tree/master/examples/sandbox) or [examples/react-example](https://github.com/dittonetwork/sdk-js/tree/master/examples/react-example).
-
-To run the React examples:
-
-```bash
-npm run serve
+```typescript
+const chainId = 1; // Ethereum mainnet
+const accountAddress = '0xYourAccountAddress';
+const vault = await swFactory.getDefaultOrCreate(chainId, accountAddress);
+const vaultAddress = vault.getAddress();
+console.log(`Default or New Vault Address: ${vaultAddress}`);
 ```
+
+- `chainId`: The ID of the blockchain network.
+- `accountAddress`: The account address for which the default Vault is retrieved or created.
 
 
 ## Actions and Triggers
@@ -225,6 +287,27 @@ const timeTrigger = new TimeTrigger({
 });
 ```
 In this example, the trigger is set to execute an action every hour, starting in one hour, and will repeat 10 times.
+
+
+## Examples
+
+### Node.js
+
+For Node.js examples, see:
+
+- [Web3.js example](https://github.com/dittonetwork/sdk-js/blob/master/examples/nodejs-example/web3js.ts)
+- [Ethers.js example](https://github.com/dittonetwork/sdk-js/blob/master/examples/nodejs-example/ethers.ts)
+
+### React
+
+For React examples, see the sandbox project in [examples/sandbox](https://github.com/dittonetwork/sdk-js/tree/master/examples/sandbox) or [examples/react-example](https://github.com/dittonetwork/sdk-js/tree/master/examples/react-example).
+
+To run the React examples:
+
+```bash
+npm run serve
+```
+
 
 ## Documentation
 
