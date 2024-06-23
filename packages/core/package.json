@@ -1,6 +1,7 @@
 {
   "name": "@ditto-network/core",
   "version": "0.9.9",
+  "homepage": "https://dittonetwork.io",
   "dependencies": {
     "@uniswap/sdk-core": "^3.2.6",
     "@uniswap/smart-order-router": "3.16.26",
@@ -9,6 +10,13 @@
     "ethers5": "npm:ethers@5.7.1",
     "fetch-ponyfill": "7.1.0",
     "rambda": "^9.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dittonetwork/sdk-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dittonetwork/sdk-js/issues"
   },
   "type": "commonjs",
   "main": "./src/index.js",

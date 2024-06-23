@@ -1,11 +1,19 @@
 {
   "name": "@ditto-network/web3.js",
   "version": "0.9.9",
+  "homepage": "https://dittonetwork.io",
   "dependencies": {
     "@ditto-network/core": "0.9.9",
     "tslib": "^2.3.0",
     "web3": "4.8.0",
     "web3-types": "1.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dittonetwork/sdk-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dittonetwork/sdk-js/issues"
   },
   "type": "commonjs",
   "main": "./src/index.js",
