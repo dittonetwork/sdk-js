@@ -1,10 +1,18 @@
 {
   "name": "@ditto-network/ethers",
   "version": "0.9.10",
+  "homepage": "https://dittonetwork.io",
   "dependencies": {
     "tslib": "^2.3.0",
     "ethers": "6.11.1",
     "@ditto-network/core": "0.9.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dittonetwork/sdk-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dittonetwork/sdk-js/issues"
   },
   "type": "commonjs",
   "main": "./src/index.js",
