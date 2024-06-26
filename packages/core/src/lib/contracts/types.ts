@@ -27,3 +27,11 @@ export interface DittoContractInterface {
 export class DittoContractNotInitializedError extends Error {}
 
 export class DittoContractMethodNotFoundError extends Error {}
+
+
+  export interface Erc20Token {
+    symbol: string
+    address: Address
+    decimals: number
+    name: string
+  }

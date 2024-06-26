@@ -16,6 +16,8 @@ import {
   WorkflowsFactory,
   BrowserStorage,
   Address,
+  InstantTrigger,
+  MultiSenderAction,
 } from '@ditto-network/core';
 import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
 import useLocalStorage from '../hooks/use-local-storage';
@@ -181,32 +183,18 @@ export function App() {
       const wf = await workflowFactory.create({
         name: 'My first workflow',
         triggers: [
-          new TimeBasedTrigger(
-            {
-              repeatTimes: 2,
-              startAtTimestamp: new Date().getTime() / 1000 + 60,
-              cycle: {
-                frequency: 2,
-                scale: TimeScale.Minutes,
-              },
-            },
-            commonConfig
-          ),
+          new InstantTrigger(),
         ],
         actions: [
-          new UniswapSwapActionCallDataBuilder(
-            {
-              fromToken: tokens.wmatic,
-              toToken: tokens.usdt,
-              fromAmount: parseUnits('100', 6).toString(),
-              slippagePercent: 0.05,
-              providerStrategy: {
-                type: 'browser',
-                provider: (window as any).ethereum!,
-              },
-            },
-            commonConfig
-          ),
+          new MultiSenderAction({
+            items: [
+              {
+                to: account as Address,
+                amount: parseUnits('0.01', 18),
+                asset: tokens.usdt,
+              }
+            ],
+          }, commonConfig)
         ],
         chainId,
       });

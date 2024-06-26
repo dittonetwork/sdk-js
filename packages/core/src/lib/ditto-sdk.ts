@@ -2,7 +2,7 @@ import type { Token, TokenLight } from './blockchain/tokens';
 import { tokens } from './blockchain/tokens';
 import { Provider } from './provider';
 import { BrowserStorage, InMemoryStorage } from './storage';
-import { WorkflowsFactory, PriceTrigger, TimeBasedTrigger, TimeScale } from './workflow';
+import { WorkflowsFactory, PriceTrigger, TimeBasedTrigger, TimeScale, InstantTrigger } from './workflow';
 import { SmartWalletFactory } from './vaults';
 import type { WorkflowExecution } from './workflow';
 import { BaseApiError } from './network/api-client';
@@ -52,6 +52,7 @@ export {
   TimeBasedTrigger,
   DittoContractNotInitializedError,
   DittoContractMethodNotFoundError,
+  InstantTrigger,
 };
 
 export type {
