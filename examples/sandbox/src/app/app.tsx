@@ -150,7 +150,6 @@ export function App() {
   );
   const [rawRecipients, setRecepients] = React.useState<string>('');
   const recepients = rawRecipients ? parseInput(rawRecipients.split('\n')) : [];
-  console.log('recepients', recepients);
 
   const commonConfig = React.useMemo(
     () => ({

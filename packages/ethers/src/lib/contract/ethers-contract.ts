@@ -44,10 +44,7 @@ export class EthersContract implements DittoContract {
     return this.nativeContract[method].estimateGas(...params);
   }
 
-  public async getPastEvents(
-    eventName: string,
-    options: { fromBlock?: number; toBlock?: number }
-  ) {
+  public async getPastEvents(eventName: string, options: { fromBlock?: number; toBlock?: number }) {
     const { fromBlock = 0, toBlock = 'latest' } = options;
     const filter = this.nativeContract.filters[eventName]();
     const events = await this.nativeContract.queryFilter(filter, fromBlock, toBlock);

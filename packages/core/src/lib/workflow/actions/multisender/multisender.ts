@@ -1,19 +1,13 @@
-import { ethers } from 'ethers5';
-import BigNumber from 'bignumber.js';
-import { AlphaRouter, AlphaRouterParams, SwapType } from '@uniswap/smart-order-router';
-import { CurrencyAmount, Percent, Token as UniswapToken, TradeType } from '@uniswap/sdk-core';
 import VaultABI from '../../../blockchain/abi/VaultABI.json';
-import Erc20TokenABI from '../../../blockchain/abi/Erc20TokenABI.json';
-import { TokenLight, tokens } from '../../../blockchain/tokens';
-import { Chain } from '../../../blockchain/chains/types';
+import { tokens } from '../../../blockchain/tokens';
 import {
   CallData,
   CallDataBuilder,
   CallDataBuilderReturnData,
   CommonBuilderOptions,
 } from '../../builders/types';
-import { isNativeToken, isAddressesEqual } from '../../../blockchain/tokens/utils';
-import { DittoContractInterface, Erc20Token } from '../../../contracts/types';
+import { isNativeToken } from '../../../blockchain/tokens/utils';
+import { Erc20Token } from '../../../contracts/types';
 import { Address } from '../../../types';
 
 export type MultiSenderItem = {
@@ -38,9 +32,6 @@ export class MultiSenderAction implements CallDataBuilder {
     const vaultInterface = this.commonCallDataBuilderConfig.provider
       .getContractFactory()
       .getContractInterface(JSON.stringify(VaultABI));
-    const erc20Interface = this.commonCallDataBuilderConfig.provider
-      .getContractFactory()
-      .getContractInterface(JSON.stringify(Erc20TokenABI));
 
     const { chainId } = this.commonCallDataBuilderConfig;
 
@@ -48,12 +39,9 @@ export class MultiSenderAction implements CallDataBuilder {
       if (!item.to || !item.amount) continue;
 
       const asset = item.asset || tokens.native[chainId];
-      const amount = item.amount // new BigNumber(item.amount).shiftedBy(asset.decimals).toFixed(0)
+      const amount = item.amount;
 
-      const isTokenNative = isNativeToken(
-        asset.address,
-        this.commonCallDataBuilderConfig.chainId
-      );
+      const isTokenNative = isNativeToken(asset.address, this.commonCallDataBuilderConfig.chainId);
 
       if (isTokenNative) {
         callData.add({

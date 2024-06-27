@@ -14,7 +14,7 @@ This package is a thin adapter that allows you to use Ethers.js with the Ditto N
 npm install @ditto-network/ethers
 ```
 
-or 
+or
 
 ```bash
 yarn add @ditto-network/ethers
