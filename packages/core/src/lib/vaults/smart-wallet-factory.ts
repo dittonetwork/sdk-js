@@ -158,7 +158,7 @@ export class SmartWalletFactory implements Factory {
     return list[0];
   }
 
-  private async isVaultWithIdExists(id: number, chainId: Chain): Promise<boolean> {
+  public async isVaultWithIdExists(id: number, chainId: Chain): Promise<boolean> {
     let exist = false;
 
     try {
