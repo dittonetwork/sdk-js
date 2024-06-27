@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from '../components/ui';
 import { useSDK } from '@metamask/sdk-react';
 import { ethers, parseUnits } from 'ethers';
 import {
@@ -20,6 +19,8 @@ import {
   Erc20TokenABI as ERC20_ABI,
 } from '@ditto-network/core';
 import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
+
+import { Button, Textarea } from '../components/ui';
 import useLocalStorage from '../hooks/use-local-storage';
 
 const networkNames = {
@@ -30,6 +31,37 @@ const nativeSymbols = {
   [Chain.Polygon]: 'MATIC',
   [Chain.Arbitrum]: 'ETH',
 };
+const exploerUrls = {
+  [Chain.Polygon]: 'https://polygonscan.com/tx/',
+  [Chain.Arbitrum]: 'https://arbiscan.io/tx/',
+};
+
+function parseInput(inputStrings: string[]): [Address, string][] {
+  // Initialize an empty array to store the parsed output
+  const parsedOutput: [Address, string][] = [];
+
+  // Define a regular expression pattern to match the different formats
+  const pattern = /([0-9a-fA-Fx]+)[\s,=]+([\d.]+)/g;
+
+  // Iterate over each input string
+  inputStrings.forEach((inputStr) => {
+    // Find all matches in the input string based on the defined pattern
+    const matches = inputStr.matchAll(pattern);
+
+    // Iterate over each match
+    for (const match of matches) {
+      // Extract address and amount from the match
+      const address = match[1];
+      const amount = match[2];
+
+      // Append the parsed address and amount to the output array
+      parsedOutput.push([address as Address, amount]);
+    }
+  });
+
+  // Return the parsed output as a 2D array
+  return parsedOutput;
+}
 
 const ConnectWalletButton = () => {
   const { sdk, connected, connecting } = useSDK();
@@ -60,6 +92,9 @@ const ConnectWalletButton = () => {
     </div>
   );
 };
+
+const shortenAddress = (address: string) =>
+  address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '';
 
 interface Token {
   address: Address;
@@ -101,7 +136,7 @@ export function App() {
   const [isAuthenticated, setAuth] = React.useState(false);
   const [swAddress, setSWAddress] = React.useState<Address | null>(null);
   const [nextSwAddress, setNextSWAddress] = React.useState<Address | null>(null);
-  const [workflowHash, setWorkflowHash] = React.useState<string>('');
+  const [lastTxHash, setLastTxHash] = React.useState<string>('');
   const [nextVaultId, setNextVaultId] = useLocalStorage<number>('nextVaultId', 1);
   const [balance, setBalance] = React.useState<string | null>(null);
   const [isDeployed, setIsDeployed] = React.useState<boolean>(false);
@@ -113,6 +148,9 @@ export function App() {
   const [networkInfo, setNetworkInfo] = React.useState<{ name: string; chainId: number } | null>(
     null
   );
+  const [rawRecipients, setRecepients] = React.useState<string>('');
+  const recepients = rawRecipients ? parseInput(rawRecipients.split('\n')) : [];
+  console.log('recepients', recepients);
 
   const commonConfig = React.useMemo(
     () => ({
@@ -220,7 +258,7 @@ export function App() {
 
   const handleGetSmartWalletAddressClick = async () => {
     if (!provider || !signer || !chainId || !swFactory) return;
-    const newSWID = nextVaultId + 1
+    const newSWID = nextVaultId + 1;
     try {
       setNextVaultId(newSWID);
       const vaultAddress = await swFactory.getVaultAddress(+chainId, newSWID);
@@ -253,24 +291,15 @@ export function App() {
 
       const wf = await workflowFactory.create({
         name: 'MultiSender Action Example',
-        triggers: [
-          // new InstantTrigger(),
-        ],
+        triggers: [new InstantTrigger()],
         actions: [
           new MultiSenderAction(
             {
-              items: [
-                {
-                  to: '0x5ee2eDC922BcdBBfEFEB4AC8959C1E5dd93ECa05' as Address,
-                  amount: parseUnits('1', tokens.usdt.decimals),
-                  asset: tokens.usdt,
-                },
-                {
-                  to: '0x5ee2eDC922BcdBBfEFEB4AC8959C1E5dd93ECa05' as Address,
-                  amount: parseUnits('1', tokens.usdt.decimals),
-                  asset: tokens.usdt,
-                },
-              ],
+              items: recepients.map(([to, amount]) => ({
+                to,
+                amount: parseUnits(amount, tokens.usdt.decimals),
+                asset: tokens.usdt,
+              })),
             },
             commonConfig
           ),
@@ -280,10 +309,15 @@ export function App() {
 
       const deployedWorkflow = await wf.buildAndDeploy(swAddress, account as Address);
 
-      setWorkflowHash(deployedWorkflow);
+      setLastTxHash(deployedWorkflow);
     } catch (error) {
       console.error('Error creating workflow:', error);
     }
+  };
+
+  const handleRecepientsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    setRecepients(value);
   };
 
   return (
@@ -346,10 +380,12 @@ export function App() {
           <div className="flex flex-col gap-2 mt-6">
             <h2 className="text-2xl font-bold">Step 4: Get Smart Wallet Address and Deploy</h2>
             <p className="text-gray-600">
-              By default, the first smart wallet will be deployed with id=1. Address of Smart Wallet predicted based on the account address and id.
+              By default, the first smart wallet will be deployed with id=1. Address of Smart Wallet
+              predicted based on the account address and id.
             </p>
             <p className="text-gray-600">
-              Smart Wallet Address: {isDeployed ? '✅' : '❌'} {swAddress} {isDeployed ? '(deployed)' : '(not deployed)'}
+              Smart Wallet Address: {isDeployed ? '✅' : '❌'} {swAddress}{' '}
+              {isDeployed ? '(deployed)' : '(not deployed)'}
               <br />
               Balance: {swEthBalance} {nativeSymbols[chainId as Chain]}, {swUsdtBalance} USDT <br />
             </p>
@@ -364,10 +400,12 @@ export function App() {
             </div>
 
             <details className="mt-6">
-              <summary className="text-2xl font-bold cursor-pointer">Step 4.1: Predict Address of Next Smart Wallet</summary>
+              <summary className="text-2xl -ml-[20px] font-bold cursor-pointer">
+                Step 4.1: Predict Address of Next Smart Wallet
+              </summary>
               <div className="flex flex-col gap-2">
                 <p className="text-gray-600">
-                  You can predict the address of the smart wallet before deploying it. <br/>
+                  You can predict the address of the smart wallet before deploying it. <br />
                   Next wallet id: {nextVaultId}
                 </p>
                 <div className="flex gap-4 items-center">
@@ -378,7 +416,8 @@ export function App() {
                 {nextVaultId !== 1 ? (
                   <div className="flex flex-col gap-2">
                     <div className="text-gray-600">
-                      Next Smart Wallet Address: {isNextDeployed ? '✅' : '❌'} {nextSwAddress} {isNextDeployed ? '(deployed)' : '(not deployed)'}
+                      Next Smart Wallet Address: {isNextDeployed ? '✅' : '❌'} {nextSwAddress}{' '}
+                      {isNextDeployed ? '(deployed)' : '(not deployed)'}
                       <br />
                     </div>
                     <div className="flex gap-2">
@@ -392,15 +431,34 @@ export function App() {
             </details>
           </div>
 
-          <div className="flex flex-col gap-2 mt-6">
-            <h2 className="text-2xl font-bold">Step 5: Create Workflow</h2>
-            <p className="text-gray-600">Compose actions and triggers to create a workflow.</p>
-            <Button className="w-min" onClick={handleCreateWorkflow}>
-              Create
-            </Button>
-            <p className="text-gray-600">
-              Workflow hash: {workflowHash ? `✅ ${workflowHash}` : '❌ Not created'}
-            </p>
+          <div className="flex flex-col gap-2 mt-6 mb-12">
+            <h2 className="text-2xl font-bold">Step 5: Try Intant MultiSender Action</h2>
+            <p className="text-gray-600">Disperse USDT to multiple addresses.</p>
+            <Textarea
+              rows={3}
+              placeholder={`0x123... 1.0\n0x456..., 2.0\n0x789...=3.0`}
+              value={rawRecipients}
+              onChange={handleRecepientsChange}
+            />
+            <div className="flex gap-4 items-center">
+              <Button className="w-min" onClick={handleCreateWorkflow}>
+                Create
+              </Button>
+              <p className="text-gray-600">
+                {lastTxHash ? (
+                  <a
+                    className="underline"
+                    href={`${exploerUrls[chainId as Chain]}${lastTxHash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View on explorer {shortenAddress(lastTxHash)}
+                  </a>
+                ) : (
+                  'It will immidiately distribute USDT to the addresses you provided.'
+                )}
+              </p>
+            </div>
           </div>
         </div>
       </div>
