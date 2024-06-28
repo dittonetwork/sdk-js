@@ -1,6 +1,6 @@
 {
   "name": "@ditto-network/core",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "homepage": "https://dittonetwork.io",
   "dependencies": {
     "@uniswap/sdk-core": "^3.2.6",

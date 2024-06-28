@@ -1,11 +1,11 @@
 {
   "name": "@ditto-network/ethers",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "homepage": "https://dittonetwork.io",
   "dependencies": {
     "tslib": "^2.3.0",
     "ethers": "6.11.1",
-    "@ditto-network/core": "0.9.11"
+    "@ditto-network/core": "0.9.12"
   },
   "repository": {
     "type": "git",

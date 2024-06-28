@@ -1,3 +1,19 @@
+## 0.9.12 (2024-06-28)
+
+
+### 🚀 Features
+
+- **core:** add MultiSenderAction ([d7d997e](https://github.com/dittonetwork/sdk-js/commit/d7d997e))
+- **examples:** load balances in sandbox ([4b86ed4](https://github.com/dittonetwork/sdk-js/commit/4b86ed4))
+
+### 🩹 Fixes
+
+- **global:** codestyle ([a573966](https://github.com/dittonetwork/sdk-js/commit/a573966))
+
+### 💅 Refactors
+
+- **global:** change theme to ditto ([20cfd8f](https://github.com/dittonetwork/sdk-js/commit/20cfd8f))
+
 ## 0.9.11 (2024-06-24)
 
 This was a version bump only, there were no code changes.
