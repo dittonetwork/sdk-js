@@ -1,9 +1,6 @@
 # Architecture
 
-This document describes the high-level architecture of Ditto Network JS SDK.
-
-> [!WARNING]  
-> HERE IS THE VERSION OF THE ARCHITECTURE THAT WAS DESIGNED. HOWEVER, THE ACTUAL IMPLEMENTATION ARE DIFFERENT. SO WE'LL JUST SAVE IT FOR A WHILE AND SYNCHRONIZE IT WITH THE REAL IMPLEMENTATION LATER.
+This document describes the high-level architecture of the Ditto Network JS SDK.
 
 
 ## Workflow Configuration Specification
@@ -63,7 +60,7 @@ JSON serializable format
 A trigger object defines the conditions under which the workflow is executed.
 
 - **type**: (String) The type of trigger. This should correspond to a predefined trigger type in the application.
-- **options**: (Object) An optional set of parameters specific to the trigger type.
+- **options**?: (Object) An optional set of parameters specific to the trigger type.
 
 ```json
 {
@@ -86,8 +83,7 @@ A trigger object defines the conditions under which the workflow is executed.
 An action object defines the operations that are performed when the workflow is triggered.
 
 - **type**: (String) The type of action. This should correspond to a predefined action type in the application.
-- **options**: (Object) An optional set of parameters specific to the action type.
-
+- **options**?: (Object) An optional set of parameters specific to the action type.
 
 ```json
 {
@@ -115,7 +111,7 @@ An action object defines the operations that are performed when the workflow is 
 - **type**: Specifies a multi-send action by the application.
 - **options**:
   - **items**: An array of objects representing the assets to be sent, each containing:
-    - **asset**: An object representing the ERC20 token, or `null` for native tokens.
+    - **asset**?: An optional object representing the ERC20 token.
       - **address**: The address of the ERC20 token.
       - **decimals**: The number of decimals for the ERC20 token.
     - **amount**: The amount of the asset to send.
@@ -128,17 +124,16 @@ This format is designed to be extensible. Additional triggers and actions can be
 
 ```ts
 const wf = workflowFactory
-  // Registers an action with the workflow using its type and the corresponding options
-  .registerAction('Application.MultiSender', MultiSenderAction) // => new MultiSenderAction(options)
-  // Registers a trigger with the workflow using its type and the corresponding class.
-  .registerTrigger('Application.PriceBased', PriceBasedTrigger) // => new PriceBasedTrigger(options, commonConfig)
-
+  // Registers an action with the workflow using the action class directly
+  .registerAction(MultiSenderAction) // => new MultiSenderAction(options)
+  // Registers a trigger with the workflow using the trigger class directly
+  .registerTrigger(PriceBasedTrigger) // => new PriceBasedTrigger(options, commonConfig)
 ```
 
 
 ### Using Configuration
 
-Below is a complete example of a workflow configuratio:
+Below is a complete example of a workflow configuration:
 
 ```ts
 const workflowFactory = new WorkflowsFactory(provider);
@@ -181,7 +176,8 @@ const config = {
 };
 
 const wf = workflowFactory
-  .registerAction('Application.MultiSender', MultiSenderAction)
+  .registerAction(MultiSenderAction)
+  .registerTrigger(ScheduledTrigger)
   // Creates a workflow from the given configuration object.
   .createFromConfig(config);
 
@@ -231,6 +227,43 @@ const wf = await workflowFactory.create({
 
 const deployedWorkflow = await wf.buildAndDeploy(swAddress, accountAddress);
 ```
+
+
+### Implementing Actions
+
+Actions should implement the `AbstractAction` class with a static `id` and a `build` method.
+
+```ts
+abstract class AbstractAction {
+  static id: string;
+
+  abstract build(): Promise<CallDataBuilderReturnData>;
+}
+```
+
+Each action class should define a unique static `id` to identify the action type and implement the `build` method to return the necessary data for the action.
+
+```ts
+class MultiSenderAction extends AbstractAction {
+  static id = 'Application.MultiSender';
+
+  constructor(options) {
+    super();
+    this.options = options;
+  }
+
+  async build(): Promise<CallDataBuilderReturnData> {
+    // Implementation for building the multi-send action call data
+  }
+}
+```
+
+This ensures that all actions adhere to a common interface, making it easier to register and manage different types of actions within the workflow system.
+
+---
+
+> [!WARNING]  
+> HERE IS THE VERSION OF THE ARCHITECTURE THAT WAS DESIGNED. HOWEVER, THE ACTUAL IMPLEMENTATION ARE DIFFERENT. SO WE'LL JUST SAVE IT FOR A WHILE AND SYNCHRONIZE IT WITH THE REAL IMPLEMENTATION LATER.
 
 
 ## Authenticate
