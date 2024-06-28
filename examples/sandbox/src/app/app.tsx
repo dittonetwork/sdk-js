@@ -83,7 +83,9 @@ const ConnectWalletButton = () => {
   return (
     <div className="relative">
       {connected ? (
-        <Button onClick={disconnect}>Disconnect</Button>
+        <Button variant="outline" onClick={disconnect}>
+          Disconnect
+        </Button>
       ) : (
         <Button disabled={connecting} onClick={connect}>
           Connect
@@ -322,7 +324,10 @@ export function App() {
   return (
     <div className="w-full h-screen max-w-screen-xl mx-auto">
       <div className="flex flex-col py-4 px-10 h-screen max-w-[800px] mx-auto">
-        <h1 className="text-4xl font-bold">Getting started with Ditto Network</h1>
+        <h1 className="flex items-center gap-4 text-4xl font-bold">
+          <img className="icon" src="/logo.svg" alt="Ditto Logo" />
+          Getting started with Ditto Network
+        </h1>
 
         {/* Step 1: Connect Wallet */}
         <div className="flex flex-col gap-4 mt-6">
@@ -351,7 +356,7 @@ export function App() {
             <h2 className="text-2xl font-bold">Step 2: Initialize Provider</h2>
             <p className="text-gray-600">Initialize the provider to start using the SDK</p>
             <div className="flex flex-col gap-2">
-              <Button className="w-min" onClick={initProvider}>
+              <Button variant="outline" className="w-min" onClick={initProvider}>
                 Init provider
               </Button>
               <p className="text-gray-600">
@@ -367,7 +372,7 @@ export function App() {
             <h2 className="text-2xl font-bold">Step 3: Authenticate</h2>
             <p className="text-gray-600">API Authentication (for history) - sign a message</p>
             <div className="flex flex-col gap-2">
-              <Button className="w-min" onClick={authenticate}>
+              <Button variant="outline" className="w-min" onClick={authenticate}>
                 Sign message
               </Button>
               <p className="text-gray-600">
@@ -440,7 +445,11 @@ export function App() {
               onChange={handleRecepientsChange}
             />
             <div className="flex gap-4 items-center">
-              <Button className="w-min" onClick={handleCreateWorkflow}>
+              <Button
+                className="w-min"
+                onClick={handleCreateWorkflow}
+                disabled={!account || !isDeployed}
+              >
                 Create
               </Button>
               <p className="text-gray-600">
@@ -453,8 +462,13 @@ export function App() {
                   >
                     View on explorer {shortenAddress(lastTxHash)}
                   </a>
+                ) : null}
+                {!isDeployed ? (
+                  <p className="text-gray-600">❗️ You need to deploy the smart wallet first.</p>
                 ) : (
-                  'It will immidiately distribute USDT to the addresses you provided.'
+                  <p className="text-gray-600">
+                    It will immidiately distribute USDT to the addresses you provided.
+                  </p>
                 )}
               </p>
             </div>
