@@ -1,10 +1,8 @@
 import React from 'react';
-import { Button } from '../components/ui';
 import { useSDK } from '@metamask/sdk-react';
 import { ethers, parseUnits } from 'ethers';
 import {
   Chain,
-  CommonBuilderOptions,
   InMemoryStorage,
   PriceTrigger,
   Provider as DittoProvider,
@@ -16,14 +14,54 @@ import {
   WorkflowsFactory,
   BrowserStorage,
   Address,
+  InstantTrigger,
+  MultiSenderAction,
+  Erc20TokenABI as ERC20_ABI,
 } from '@ditto-network/core';
 import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
+
+import { Button, Textarea } from '../components/ui';
 import useLocalStorage from '../hooks/use-local-storage';
 
 const networkNames = {
   [Chain.Polygon]: 'Polygon Mainnet',
   [Chain.Arbitrum]: 'Arbitrum Mainnet',
 };
+const nativeSymbols = {
+  [Chain.Polygon]: 'MATIC',
+  [Chain.Arbitrum]: 'ETH',
+};
+const exploerUrls = {
+  [Chain.Polygon]: 'https://polygonscan.com/tx/',
+  [Chain.Arbitrum]: 'https://arbiscan.io/tx/',
+};
+
+function parseInput(inputStrings: string[]): [Address, string][] {
+  // Initialize an empty array to store the parsed output
+  const parsedOutput: [Address, string][] = [];
+
+  // Define a regular expression pattern to match the different formats
+  const pattern = /([0-9a-fA-Fx]+)[\s,=]+([\d.]+)/g;
+
+  // Iterate over each input string
+  inputStrings.forEach((inputStr) => {
+    // Find all matches in the input string based on the defined pattern
+    const matches = inputStr.matchAll(pattern);
+
+    // Iterate over each match
+    for (const match of matches) {
+      // Extract address and amount from the match
+      const address = match[1];
+      const amount = match[2];
+
+      // Append the parsed address and amount to the output array
+      parsedOutput.push([address as Address, amount]);
+    }
+  });
+
+  // Return the parsed output as a 2D array
+  return parsedOutput;
+}
 
 const ConnectWalletButton = () => {
   const { sdk, connected, connecting } = useSDK();
@@ -45,7 +83,9 @@ const ConnectWalletButton = () => {
   return (
     <div className="relative">
       {connected ? (
-        <Button onClick={disconnect}>Disconnect</Button>
+        <Button variant="outline" onClick={disconnect}>
+          Disconnect
+        </Button>
       ) : (
         <Button disabled={connecting} onClick={connect}>
           Connect
@@ -54,6 +94,9 @@ const ConnectWalletButton = () => {
     </div>
   );
 };
+
+const shortenAddress = (address: string) =>
+  address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '';
 
 interface Token {
   address: Address;
@@ -78,38 +121,83 @@ const tokensMap: Record<Chain, Record<string, Token>> = {
       decimals: 6,
       symbol: 'USDT',
       chain: Chain.Polygon,
-    }
+    },
   },
-  [Chain.Arbitrum]: {
-
-  }
-}
+  [Chain.Arbitrum]: {},
+};
 
 export function App() {
   const { account, chainId: _chainId } = useSDK();
   const chainId = Number(_chainId) as Chain | undefined;
   const tokens = chainId ? tokensMap[chainId] : {};
-  console.log('tokens', chainId, tokens)
+  console.log('tokens', chainId, tokens);
 
   const [signer, setSigner] = React.useState<ethers.Signer | null>(null);
   const [provider, setProvider] = React.useState<DittoProvider | null>(null);
   const [swFactory, setSWFactory] = React.useState<SmartWalletFactory | null>(null);
   const [isAuthenticated, setAuth] = React.useState(false);
   const [swAddress, setSWAddress] = React.useState<Address | null>(null);
-  const [workflowHash, setWorkflowHash] = React.useState<string>('');
+  const [nextSwAddress, setNextSWAddress] = React.useState<Address | null>(null);
+  const [lastTxHash, setLastTxHash] = React.useState<string>('');
   const [nextVaultId, setNextVaultId] = useLocalStorage<number>('nextVaultId', 1);
+  const [balance, setBalance] = React.useState<string | null>(null);
+  const [isDeployed, setIsDeployed] = React.useState<boolean>(false);
+  const [isNextDeployed, setIsNextDeployed] = React.useState<boolean>(false);
+  const [usdtBalance, setUsdtBalance] = React.useState<string | null>(null);
+  const [ethBalance, setEthBalance] = React.useState<string | null>(null);
+  const [swEthBalance, setSwEthBalance] = React.useState<string | null>(null);
+  const [swUsdtBalance, setSwUsdtBalance] = React.useState<string | null>(null);
+  const [networkInfo, setNetworkInfo] = React.useState<{ name: string; chainId: number } | null>(
+    null
+  );
+  const [rawRecipients, setRecepients] = React.useState<string>('');
+  const recepients = rawRecipients ? parseInput(rawRecipients.split('\n')) : [];
 
-  const commonConfig = React.useMemo(() => ({  
-    chainId: chainId!,
-    recipient: swAddress as Address,
-    accountAddress: account as Address,
-    vaultAddress: swAddress as Address,
-    provider: provider!,
-  }), [chainId ,account, swAddress, provider]);
+  const commonConfig = React.useMemo(
+    () => ({
+      chainId: chainId!,
+      recipient: swAddress as Address,
+      accountAddress: account as Address,
+      vaultAddress: swAddress as Address,
+      provider: provider!,
+    }),
+    [chainId, account, swAddress, provider]
+  );
 
   React.useEffect(() => {
     if (chainId) initProvider();
   }, [chainId]);
+
+  const fetchSmartWalletBalances = async (swAddress: string) => {
+    try {
+      const ethersProvider = new ethers.BrowserProvider(window.ethereum!);
+      const ethBalance = await ethersProvider.getBalance(swAddress);
+      setSwEthBalance(ethers.formatEther(ethBalance));
+
+      const usdtToken = new ethers.Contract(tokens.usdt.address, ERC20_ABI, ethersProvider);
+      const usdtBalance = await usdtToken.balanceOf(swAddress);
+      setSwUsdtBalance(ethers.formatUnits(usdtBalance, tokens.usdt.decimals));
+    } catch (error) {
+      console.error('Error fetching smart wallet balances:', error);
+    }
+  };
+
+  const fetchBalances = async (
+    address: string,
+    provider: ethers.Provider,
+    signer: ethers.Signer
+  ) => {
+    try {
+      const ethBalance = await provider.getBalance(address);
+      setEthBalance(ethers.formatEther(ethBalance));
+
+      const usdtToken = new ethers.Contract(tokens.usdt.address, ERC20_ABI, signer);
+      const usdtBalance = await usdtToken.balanceOf(address);
+      setUsdtBalance(ethers.formatUnits(usdtBalance, tokens.usdt.decimals));
+    } catch (error) {
+      console.error('Error fetching balances:', error);
+    }
+  };
 
   const initProvider = async () => {
     try {
@@ -121,22 +209,43 @@ export function App() {
         contractFactory: new EthersContractFactory(signer),
       });
       const swFactory = new SmartWalletFactory(provider);
-      const nextVaultId = chainId ? await swFactory.getNextVaultId(+chainId) : 1;
-      const vaultAddress = chainId ? await swFactory.getVaultAddress(+chainId, nextVaultId) : '';
       const needAuth = await provider.needAuthentication();
 
       setAuth(!needAuth);
       setSigner(signer);
       setProvider(provider);
       setSWFactory(swFactory);
-      if (vaultAddress) setSWAddress(vaultAddress);
+
+      // Fetch balance
+      if (account) fetchBalances(account, ethersProvider, signer);
+
+      const [isDeployed, nextVaultId, vaultAddress] = chainId
+        ? await Promise.all([
+            swFactory.isVaultWithIdExists(1, +chainId),
+            swFactory.getNextVaultId(+chainId),
+            swFactory.getVaultAddress(+chainId),
+          ])
+        : [false, 1, '', ''];
+      const nextVaultAddress = chainId
+        ? await swFactory.getVaultAddress(+chainId, nextVaultId)
+        : '';
+
+      setIsDeployed(isDeployed);
+
+      if (vaultAddress) {
+        setSWAddress(vaultAddress as Address);
+        fetchSmartWalletBalances(vaultAddress);
+      }
+      if (nextVaultAddress) setNextSWAddress(nextVaultAddress);
+
       setNextVaultId(nextVaultId);
     } catch (error) {
       console.error('Error initializing provider:', error);
     }
   };
 
-  const handleSignSDKClick = async () => {
+  // handleSignSDKClick
+  const authenticate = async () => {
     if (!provider) return;
 
     try {
@@ -150,20 +259,23 @@ export function App() {
 
   const handleGetSmartWalletAddressClick = async () => {
     if (!provider || !signer || !chainId || !swFactory) return;
-
+    const newSWID = nextVaultId + 1;
     try {
-      const vaultAddress = await swFactory.getVaultAddress(+chainId, nextVaultId);
-      setSWAddress(vaultAddress);
+      setNextVaultId(newSWID);
+      const vaultAddress = await swFactory.getVaultAddress(+chainId, newSWID);
+      const isNextDeployed = await swFactory.isVaultWithIdExists(newSWID, +chainId);
+      setNextSWAddress(vaultAddress);
+      setIsNextDeployed(isNextDeployed);
     } catch (error) {
       console.error('Error getting smart wallet address:', error);
     }
   };
 
-  const handleDeploySmartWalletClick = async () => {
+  const deploySmartWallet = async (swId = 1) => {
     if (!provider || !signer || !chainId || !swFactory) return;
 
     try {
-      const vault = await swFactory.createVault(+chainId, nextVaultId);
+      const vault = await swFactory.createVault(+chainId, swId);
       const vaultAddress = vault.getAddress()!;
       setSWAddress(vaultAddress);
       setNextVaultId(nextVaultId + 1); // Increment vault ID and save to local storage
@@ -179,31 +291,16 @@ export function App() {
       const workflowFactory = new WorkflowsFactory(provider);
 
       const wf = await workflowFactory.create({
-        name: 'My first workflow',
-        triggers: [
-          new TimeBasedTrigger(
-            {
-              repeatTimes: 2,
-              startAtTimestamp: new Date().getTime() / 1000 + 60,
-              cycle: {
-                frequency: 2,
-                scale: TimeScale.Minutes,
-              },
-            },
-            commonConfig
-          ),
-        ],
+        name: 'MultiSender Action Example',
+        triggers: [new InstantTrigger()],
         actions: [
-          new UniswapSwapActionCallDataBuilder(
+          new MultiSenderAction(
             {
-              fromToken: tokens.wmatic,
-              toToken: tokens.usdt,
-              fromAmount: parseUnits('100', 6).toString(),
-              slippagePercent: 0.05,
-              providerStrategy: {
-                type: 'browser',
-                provider: (window as any).ethereum!,
-              },
+              items: recepients.map(([to, amount]) => ({
+                to,
+                amount: parseUnits(amount, tokens.usdt.decimals),
+                asset: tokens.usdt,
+              })),
             },
             commonConfig
           ),
@@ -213,16 +310,24 @@ export function App() {
 
       const deployedWorkflow = await wf.buildAndDeploy(swAddress, account as Address);
 
-      setWorkflowHash(deployedWorkflow);
+      setLastTxHash(deployedWorkflow);
     } catch (error) {
       console.error('Error creating workflow:', error);
     }
   };
 
+  const handleRecepientsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    setRecepients(value);
+  };
+
   return (
     <div className="w-full h-screen max-w-screen-xl mx-auto">
-      <div className="flex flex-col py-4 px-10 h-screen">
-        <h1 className="text-4xl font-bold">Getting started with Ditto Network</h1>
+      <div className="flex flex-col py-4 px-10 h-screen max-w-[800px] mx-auto">
+        <h1 className="flex items-center gap-4 text-4xl font-bold">
+          <img className="icon" src="/logo.svg" alt="Ditto Logo" />
+          Getting started with Ditto Network
+        </h1>
 
         {/* Step 1: Connect Wallet */}
         <div className="flex flex-col gap-4 mt-6">
@@ -237,8 +342,9 @@ export function App() {
                 Network:{' '}
                 {chainId
                   ? networkNames[Number(chainId) as Chain] || Number(chainId)
-                  : '❌ Not initialized'}
+                  : '❌ Not initialized'}{' '}
                 <br />
+                Balance: {ethBalance} {nativeSymbols[chainId as Chain]}, {usdtBalance} USDT <br />
               </p>
             </div>
           </div>
@@ -250,7 +356,7 @@ export function App() {
             <h2 className="text-2xl font-bold">Step 2: Initialize Provider</h2>
             <p className="text-gray-600">Initialize the provider to start using the SDK</p>
             <div className="flex flex-col gap-2">
-              <Button className="w-min" onClick={initProvider}>
+              <Button variant="outline" className="w-min" onClick={initProvider}>
                 Init provider
               </Button>
               <p className="text-gray-600">
@@ -266,7 +372,7 @@ export function App() {
             <h2 className="text-2xl font-bold">Step 3: Authenticate</h2>
             <p className="text-gray-600">API Authentication (for history) - sign a message</p>
             <div className="flex flex-col gap-2">
-              <Button className="w-min" onClick={handleSignSDKClick}>
+              <Button variant="outline" className="w-min" onClick={authenticate}>
                 Sign message
               </Button>
               <p className="text-gray-600">
@@ -278,32 +384,94 @@ export function App() {
           <div className="flex flex-col gap-2 mt-6">
             <h2 className="text-2xl font-bold">Step 4: Get Smart Wallet Address and Deploy</h2>
             <p className="text-gray-600">
-              You can predict the address of the smart wallet before deploying it.
+              By default, the first smart wallet will be deployed with id=1. Address of Smart Wallet
+              predicted based on the account address and id.
             </p>
-            <div className="flex gap-2">
-              <Button className="w-min" onClick={handleGetSmartWalletAddressClick}>
-                Get Address
-              </Button>
-              <Button className="w-min" onClick={handleDeploySmartWalletClick}>
-                Deploy
+            <p className="text-gray-600">
+              Smart Wallet Address: {isDeployed ? '✅' : '❌'} {swAddress}{' '}
+              {isDeployed ? '(deployed)' : '(not deployed)'}
+              <br />
+              Balance: {swEthBalance} {nativeSymbols[chainId as Chain]}, {swUsdtBalance} USDT <br />
+            </p>
+            <div className="flex gap-4 items-center">
+              <Button
+                className="w-min"
+                onClick={() => deploySmartWallet(/* default */)}
+                disabled={isDeployed}
+              >
+                {isDeployed ? 'Deployed' : 'Deploy'}
               </Button>
             </div>
-            <p className="text-gray-600">
-              Smart Wallet Address:{' '}
-              {swAddress ? `✅ ${swAddress}` : '❌ Not created'}<br/>
-              Next wallet id: {nextVaultId}
-            </p>
+
+            <details className="mt-6">
+              <summary className="text-2xl -ml-[20px] font-bold cursor-pointer">
+                Step 4.1: Predict Address of Next Smart Wallet
+              </summary>
+              <div className="flex flex-col gap-2">
+                <p className="text-gray-600">
+                  You can predict the address of the smart wallet before deploying it. <br />
+                  Next wallet id: {nextVaultId}
+                </p>
+                <div className="flex gap-4 items-center">
+                  <Button className="w-min" onClick={handleGetSmartWalletAddressClick}>
+                    Get Next Address
+                  </Button>
+                </div>
+                {nextVaultId !== 1 ? (
+                  <div className="flex flex-col gap-2">
+                    <div className="text-gray-600">
+                      Next Smart Wallet Address: {isNextDeployed ? '✅' : '❌'} {nextSwAddress}{' '}
+                      {isNextDeployed ? '(deployed)' : '(not deployed)'}
+                      <br />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button className="w-min" onClick={() => deploySmartWallet(nextVaultId)}>
+                        Deploy
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </details>
           </div>
 
-          <div className="flex flex-col gap-2 mt-6">
-            <h2 className="text-2xl font-bold">Step 5: Create Workflow</h2>
-            <p className="text-gray-600">Compose actions and triggers to create a workflow.</p>
-            <Button className="w-min" onClick={handleCreateWorkflow}>
-              Create
-            </Button>
-            <p className="text-gray-600">
-              Workflow hash: {workflowHash ? `✅ ${workflowHash}` : '❌ Not created'}
-            </p>
+          <div className="flex flex-col gap-2 mt-6 mb-12">
+            <h2 className="text-2xl font-bold">Step 5: Try Intant MultiSender Action</h2>
+            <p className="text-gray-600">Disperse USDT to multiple addresses.</p>
+            <Textarea
+              rows={3}
+              placeholder={`0x123... 1.0\n0x456..., 2.0\n0x789...=3.0`}
+              value={rawRecipients}
+              onChange={handleRecepientsChange}
+            />
+            <div className="flex gap-4 items-center">
+              <Button
+                className="w-min"
+                onClick={handleCreateWorkflow}
+                disabled={!account || !isDeployed}
+              >
+                Create
+              </Button>
+              <p className="text-gray-600">
+                {lastTxHash ? (
+                  <a
+                    className="underline"
+                    href={`${exploerUrls[chainId as Chain]}${lastTxHash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View on explorer {shortenAddress(lastTxHash)}
+                  </a>
+                ) : null}
+                {!isDeployed ? (
+                  <p className="text-gray-600">❗️ You need to deploy the smart wallet first.</p>
+                ) : (
+                  <p className="text-gray-600">
+                    It will immidiately distribute USDT to the addresses you provided.
+                  </p>
+                )}
+              </p>
+            </div>
           </div>
         </div>
       </div>

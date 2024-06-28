@@ -24,11 +24,11 @@ export class SmartWalletFactory implements Factory {
 
   public getContractAddress(chainId: number): Address {
     const address = config.vaultFactoryAddresses[chainId as Chain];
-    
+
     if (!address) {
       throw new Error(`Vault factory address for chain ${chainId} not found`);
     }
-    
+
     return address;
   }
 
@@ -106,7 +106,11 @@ export class SmartWalletFactory implements Factory {
     throw new Error('Method not implemented.');
   }
 
-  public async createVault(chainId: Chain, vaultId: number, version: SmartWalletVersion = 3): Promise<SmartWallet> {
+  public async createVault(
+    chainId: Chain,
+    vaultId: number,
+    version: SmartWalletVersion = 3
+  ): Promise<SmartWallet> {
     const accountAddress = await this.provider.getSigner().getAddress();
 
     // Check if the vault already exists
@@ -158,7 +162,7 @@ export class SmartWalletFactory implements Factory {
     return list[0];
   }
 
-  private async isVaultWithIdExists(id: number, chainId: Chain): Promise<boolean> {
+  public async isVaultWithIdExists(id: number, chainId: Chain): Promise<boolean> {
     let exist = false;
 
     try {
@@ -177,9 +181,9 @@ export class SmartWalletFactory implements Factory {
 
     const events = await this.getContract(chainId).getPastEvents('VaultCreated', {
       fromBlock: 0,
-      toBlock: 'latest'
+      toBlock: 'latest',
     });
-    const relatedEvents = events.filter(event => event.args[0] === accountAddress);
+    const relatedEvents = events.filter((event) => event.args[0] === accountAddress);
 
     let highestVaultId = 0;
     relatedEvents.forEach((event) => {

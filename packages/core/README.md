@@ -15,6 +15,8 @@ A JavaScript SDK for building workflows on the Ditto Network, enabling a Smart A
     - [Instant Trigger](#instant-trigger)
     - [Price-Based Trigger](#price-based-trigger)
     - [Time-Based Trigger](#time-based-trigger)
+- [MultiSender Action](#multisender-action)
+- [Workflow Creation](#workflow-creation)
 - [Documentation](#documentation)
 
 
@@ -68,14 +70,14 @@ The Vault is a modular smart contract wallet designed to securely hold and manag
 
 #### Methods
 
-##### getNextVaultId
+##### getLastVaultId
 
 Retrieves the next available Vault ID for the specified blockchain network. This method is useful for generating a new Vault without conflicts.
 
 ```typescript
 const chainId = 1; // Ethereum mainnet
-const nextVaultId = await swFactory.getNextVaultId(chainId);
-console.log(`Next Vault ID: ${nextVaultId}`);
+const lastVaultId = await swFactory.getLastVaultId(chainId);
+console.log(`Last Vault ID: ${lastVaultId}`);
 ```
 
 - `chainId`: The ID of the blockchain network.
@@ -105,8 +107,8 @@ import { SmartWalletFactory } from '@ditto-network/core';
 
 const swFactory = new SmartWalletFactory(provider);
 const chainId = 137; // Polygon
-const nextVaultId = await swFactory.getNextVaultId(chainId);
-const vault = await swFactory.createVault(chainId, nextVaultId);
+const lastVaultId = await swFactory.getLastVaultId(chainId);
+const vault = await swFactory.createVault(chainId, nextVaultId + 1);
 const vaultAddress = vault.getAddress();
 console.log(`New Vault Address: ${vaultAddress}`);
 ```
@@ -289,6 +291,62 @@ const timeTrigger = new TimeTrigger({
 In this example, the trigger is set to execute an action every hour, starting in one hour, and will repeat 10 times.
 
 
+## MultiSender Action
+
+The MultiSender Action allows you to send tokens to multiple recipients in a single transaction.
+
+**Configuration for MultiSender Action:**
+```typescript
+type MultiSenderActionConfig = {
+  items: { to: string, amount: string, asset: { address: string, decimals: number } }[];
+};
+```
+
+- **items**: Array of objects, each representing a recipient with the address, amount, and asset.
+
+**Example**
+```typescript
+const multiSenderActionConfig = {
+  items: [
+    { to: '0xRecipientAddress1', amount: '1000000000000000000', asset: { address: '0x...', decimals: 18 } }, // 1 token in wei
+    { to: '0xRecipientAddress2', amount: '2000000', asset: { address: '0x...', decimals: 6 } }, // 2 tokens in smallest unit
+  ],
+};
+const multiSenderAction = new MultiSenderAction(multiSenderActionConfig, commonConfig);
+```
+
+## Workflow Creation
+
+Creating workflows involves defining triggers and actions, and deploying them on the blockchain.
+
+**Example**
+```typescript
+const workflowFactory = new WorkflowsFactory(provider);
+
+  const wf = await workflowFactory.create({
+    name: 'MultiSender Action Example',
+    triggers: [new InstantTrigger()], // or [] for no triggers === instant workflow execution
+    actions: [
+      new MultiSenderAction(
+        {
+          items: recepients.map(([to, amount]) => ({
+            to,
+            amount: parseUnits(amount, tokens.usdt.decimals),
+            asset: tokens.usdt,
+          })),
+        },
+        commonConfig
+      ),
+    ],
+    chainId,
+  });
+
+  const tx = await wf.buildAndDeploy(swAddress, account as Address);
+```
+
+In this example, tokens are sent to multiple recipients with the specified amounts.
+
+
 ## Examples
 
 ### Node.js
@@ -307,7 +365,6 @@ To run the React examples:
 ```bash
 npm run serve
 ```
-
 
 ## Documentation
 

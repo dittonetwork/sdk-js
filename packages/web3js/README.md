@@ -15,7 +15,7 @@ This package is a thin adapter that allows you to use Web3.js with the Ditto Net
 npm install @ditto-network/web3.js
 ```
 
-or 
+or
 
 ```bash
 yarn add @ditto-network/web3.js

@@ -16,7 +16,10 @@ export interface DittoContract extends DittoContractInterface {
   estimateGas(method: string, params: unknown[], additionalTxParams?: JSONObject): Promise<bigint>;
   encodeFunctionData(method: string, params: unknown[]): string;
   selector(method: string): Maybe<string>;
-  getPastEvents(eventName: string, options: { fromBlock?: number; toBlock?: string | number }): Promise<any[]>;
+  getPastEvents(
+    eventName: string,
+    options: { fromBlock?: number; toBlock?: string | number }
+  ): Promise<any[]>;
 }
 
 export interface DittoContractInterface {
@@ -27,3 +30,10 @@ export interface DittoContractInterface {
 export class DittoContractNotInitializedError extends Error {}
 
 export class DittoContractMethodNotFoundError extends Error {}
+
+export interface Erc20Token {
+  symbol: string;
+  address: Address;
+  decimals: number;
+  name: string;
+}
