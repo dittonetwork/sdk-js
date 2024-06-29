@@ -363,6 +363,8 @@ Creating a custom action allows you to extend the functionality of your workflow
 The following example demonstrates how to create a custom action that sends tokens to a recipient.
 
 ```typescript
+import { CallDataBuilder } from '@ditto-network/core';
+
 // 1. Define the configuration for the SendTokens action
 // This type specifies the parameters required to send tokens
 type SendTokensConfig = {
