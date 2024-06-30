@@ -1,6 +1,266 @@
 # Architecture
 
-This document describes the high-level architecture of Ditto Network JS SDK.
+This document describes the high-level architecture of the Ditto Network JS SDK.
+
+
+## Workflow Configuration Specification
+
+JSON serializable format
+
+- **issuer**: (String) The entity responsible for the workflow.
+- **name**: (String) A brief and descriptive name for the workflow.
+- **hint**: (String) A short description or hint about what the workflow does.
+- **triggers**: (Array) A list of trigger objects that define when the workflow should be executed.
+- **actions**: (Array) A list of action objects that define what operations the workflow performs.
+
+```json
+{
+  "issuer": "Ditto",
+  "name": "Send assets to multiple addresses",
+  "hint": "Send your assets to multiple addresses in one transaction",
+  "triggers": [
+    {
+      "type": "Core.Scheduled",
+      "options": {
+        "frequency": "daily",
+        "time": "08:00"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "type": "Application.MultiSender",
+      "options": {
+        "items": [
+          {
+            "asset": {
+              "address": "0xTokenAddress",
+              "decimals": 18
+            },
+            "amount": "100",
+            "to": "0xRecipientAddress"
+          },
+          {
+            "asset": null,
+            "amount": "0.1",
+            "to": "0xAnotherRecipientAddress"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+
+### Trigger and Action Objects
+
+#### Trigger
+
+A trigger object defines the conditions under which the workflow is executed.
+
+- **type**: (String) The type of trigger. This should correspond to a predefined trigger type in the application.
+- **options**?: (Object) An optional set of parameters specific to the trigger type.
+
+```json
+{
+  "type": "Core.Scheduled",
+  "options": {
+    "frequency": "daily",
+    "time": "08:00"
+  }
+}
+```
+
+- **type**: Specifies a scheduled trigger.
+- **options**:
+  - **frequency**: The frequency with which the trigger should activate (e.g., "daily", "weekly").
+  - **time**: The specific time of day the trigger should activate.
+
+
+#### Action
+
+An action object defines the operations that are performed when the workflow is triggered.
+
+- **type**: (String) The type of action. This should correspond to a predefined action type in the application.
+- **options**?: (Object) An optional set of parameters specific to the action type.
+
+```json
+{
+  "type": "Application.MultiSender",
+  "options": {
+    "items": [
+      {
+        "asset": {
+          "address": "0xTokenAddress",
+          "decimals": 18
+        },
+        "amount": "100",
+        "to": "0xRecipientAddress"
+      },
+      {
+        "asset": null,
+        "amount": "0.1",
+        "to": "0xAnotherRecipientAddress"
+      }
+    ]
+  }
+}
+```
+
+- **type**: Specifies a multi-send action by the application.
+- **options**:
+  - **items**: An array of objects representing the assets to be sent, each containing:
+    - **asset**?: An optional object representing the ERC20 token.
+      - **address**: The address of the ERC20 token.
+      - **decimals**: The number of decimals for the ERC20 token.
+    - **amount**: The amount of the asset to send.
+    - **to**: The recipient address.
+
+
+### Extending Configuration
+
+This format is designed to be extensible. Additional triggers and actions can be defined by specifying new types and corresponding options. This approach allows for a highly customizable and adaptable workflow configuration system.
+
+```ts
+const wf = workflowFactory
+  // Registers an action with the workflow using the action class directly
+  .registerAction(MultiSenderAction) // => new MultiSenderAction(options)
+  // Registers a trigger with the workflow using the trigger class directly
+  .registerTrigger(PriceBasedTrigger) // => new PriceBasedTrigger(options, commonConfig)
+```
+
+
+### Using Configuration
+
+Below is a complete example of a workflow configuration:
+
+```ts
+const workflowFactory = new WorkflowsFactory(provider);
+
+const config = {
+  name: 'Send assets to multiple addresses',
+  issuer: 'Ditto',
+  hint: 'Send your assets to multiple addresses in one transaction',
+  triggers: [
+    {
+      type: 'Core.Scheduled',
+      options: {
+        frequency: 'daily',
+        time: '08:00'
+      }
+    }
+  ],
+  actions: [
+    {
+      type: 'Application.MultiSender',
+      options: {
+        items: [
+          {
+            asset: {
+              address: '0xTokenAddress',
+              decimals: 18
+            },
+            amount: '100',
+            to: '0xRecipientAddress'
+          },
+          {
+            asset: null,
+            amount: '0.1',
+            to: '0xAnotherRecipientAddress'
+          }
+        ]
+      }
+    }
+  ],
+};
+
+const wf = workflowFactory
+  .registerAction(MultiSenderAction)
+  .registerTrigger(ScheduledTrigger)
+  // Creates a workflow from the given configuration object.
+  .createFromConfig(config);
+
+const deployedWorkflow = await wf.buildAndDeploy(swAddress, accountAddress);
+```
+
+This setup is equivalent to the following:
+
+```ts
+const workflowFactory = new WorkflowsFactory(provider);
+
+const wf = await workflowFactory.create({
+  name: 'My first workflow',
+  triggers: [
+    new ScheduledTrigger(
+      {
+        frequency: 'daily',
+        time: '08:00'
+      },
+      commonConfig
+    ),
+  ],
+  actions: [
+    new MultiSenderActionCallDataBuilder(
+      {
+        items: [
+          {
+            asset: {
+              address: '0xTokenAddress',
+              decimals: 18
+            },
+            amount: '100',
+            to: '0xRecipientAddress'
+          },
+          {
+            asset: null,
+            amount: '0.1',
+            to: '0xAnotherRecipientAddress'
+          }
+        ]
+      },
+      commonConfig
+    ),
+  ],
+  chainId,
+});
+
+const deployedWorkflow = await wf.buildAndDeploy(swAddress, accountAddress);
+```
+
+
+### Implementing Actions
+
+Actions should implement the `AbstractAction` class with a static `id` and a `build` method.
+
+```ts
+abstract class AbstractAction {
+  static id: string;
+
+  abstract build(): Promise<CallDataBuilderReturnData>;
+}
+```
+
+Each action class should define a unique static `id` to identify the action type and implement the `build` method to return the necessary data for the action.
+
+```ts
+class MultiSenderAction extends AbstractAction {
+  static id = 'Application.MultiSender';
+
+  constructor(options) {
+    super();
+    this.options = options;
+  }
+
+  async build(): Promise<CallDataBuilderReturnData> {
+    // Implementation for building the multi-send action call data
+  }
+}
+```
+
+This ensures that all actions adhere to a common interface, making it easier to register and manage different types of actions within the workflow system.
+
+---
 
 > [!WARNING]  
 > HERE IS THE VERSION OF THE ARCHITECTURE THAT WAS DESIGNED. HOWEVER, THE ACTUAL IMPLEMENTATION ARE DIFFERENT. SO WE'LL JUST SAVE IT FOR A WHILE AND SYNCHRONIZE IT WITH THE REAL IMPLEMENTATION LATER.
