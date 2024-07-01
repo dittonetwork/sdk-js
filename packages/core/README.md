@@ -347,6 +347,90 @@ const workflowFactory = new WorkflowsFactory(provider);
 In this example, tokens are sent to multiple recipients with the specified amounts.
 
 
+## Implementing Custom Actions
+
+Creating a custom action allows you to extend the functionality of your workflow beyond predefined actions like MultiSenderAction. You can define custom actions to interact with smart contracts or execute specific logic required for your application.
+
+### Steps to Implement a Custom Action
+
+1. **Define the Configuration**: Specify the parameters required for your action.
+2. **Implement the Action Class**: Create a class that implements the `CallDataBuilder` interface.
+3. **Build Call Data**: Encode the function calls to interact with the blockchain.
+
+
+### Example SendTokens Action
+
+The following example demonstrates how to create a custom action that sends tokens to a recipient.
+
+```typescript
+import { CallDataBuilder } from '@ditto-network/core';
+
+// 1. Define the configuration for the SendTokens action
+// This type specifies the parameters required to send tokens
+type SendTokensConfig = {
+  to: string; // The recipient's address
+  token: Erc20Token; // The ERC20 token to be sent
+  amount: string; // The amount of tokens to send, specified as a string
+};
+
+// 2. Implement the CallDataBuilder interface for the SendTokens action
+// This class will build the call data necessary to perform the token transfer
+export class SendTokens implements CallDataBuilder {
+  // Constructor to initialize the SendTokens class with configuration and common builder options
+  constructor(
+    protected readonly config: SendTokensConfig,
+    protected readonly commonCallDataBuilderConfig: CommonBuilderOptions
+  ) {}
+
+  // The build method is required by the CallDataBuilder interface
+  // It constructs the call data for the token transfer
+  public async build(): Promise<CallDataBuilderReturnData> {
+    // Initialize a Set to hold the call data
+    const callData = new Set<CallData>();
+
+    // Get the contract interface for the Vault contract from the provider
+    const vaultInterface = this.commonCallDataBuilderConfig.provider
+      .getContractFactory()
+      .getContractInterface(JSON.stringify(VaultABI));
+
+    // Extract the chain ID from the common builder options
+    const { chainId } = this.commonCallDataBuilderConfig;
+
+    // Add the call data for withdrawing ERC20 tokens
+    callData.add({
+      to: this.commonCallDataBuilderConfig.vaultAddress, // The address of the Vault contract
+      callData: vaultInterface.encodeFunctionData('withdrawERC20', [
+        this.config.token.address, // The address of the ERC20 token
+        this.config.to, // The recipient's address
+        this.config.amount, // The amount of tokens to send
+      ]),
+    });
+
+    // Return the call data and value (value is set to the token amount converted to BigInt)
+    return { callData, value: BigInt(this.config.amount) };
+  }
+}
+
+// 3. Use the Custom Action in a Workflow
+const wf = await workflowFactory.create({
+  name: 'Custom Action Example',
+  triggers: [new InstantTrigger()],
+  actions: [ 
+    new SendTokens({
+      to: '0x', // recipient address
+      token: { address: '0x', decimals: 18 }, // token address and decimals
+      amount: '1000000000000000000', // 1 token in wei
+    }, commonConfig)
+  ],
+  chainId,
+});
+
+const tx = await wf.buildAndDeploy(swAddress, account as Address);
+```
+
+Implementing custom actions allows you to tailor workflows to your specific requirements, making it possible to automate a wide range of blockchain interactions. By following the steps to define the configuration, implement the action class, and build call data, you can extend the capabilities of your workflows beyond predefined actions.
+
+
 ## Examples
 
 ### Node.js
