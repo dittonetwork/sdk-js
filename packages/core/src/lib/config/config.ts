@@ -1,29 +1,27 @@
 // we use this file for environment related configurations
 // all production related things are in config.prod.ts
 
-import { Chain } from '../blockchain/chains/types';
 import { DittoConfig } from './types';
+import { Chain } from '../ditto-sdk';
 
 export const config: DittoConfig = {
-  apiBaseUrl: 'https://authentication-backend.dev.dittonetwork.io',
+  apiBaseUrl: 'https://backend.dittonetwork.io',
 
   vaultFactoryAddresses: {
-    [Chain.Polygon]: '0xF03C8CaB74b5721eB81210592C9B06f662e9951E',
-    [Chain.Arbitrum]: '0xF03C8CaB74b5721eB81210592C9B06f662e9951E',
+    [Chain.Polygon]: '0xaB5F025297E40bd5ECf340d1709008eFF230C6cA',
+    [Chain.Arbitrum]: '0xaB5F025297E40bd5ECf340d1709008eFF230C6cA',
   },
 
   vaultImplementations: {
     [Chain.Polygon]: [
-      '0x0209A93968BFB0f3c3BbeaE72afAdfFAD0885c98',
-      '0x56d3d560Dd74f2150e213875D590648c534a3352',
-      '0xE587A6f96fb57b52EF90E638ca16430fC9D8db76',
-      '0xA587d512C12558AE377628d87b60106707D68c8e',
+      '0xa4918Eb4ce5Cb72dde220963AB643c02c09374cf',
+      '0xD85Cab06561E2252Eb81dcA86a31a1d3aeb73543',
+      '0x6f53Cb6eCfB6d53AE2827DA81cfac9B26C725462',
     ],
     [Chain.Arbitrum]: [
-      '0x77c2c3eA05BA3D1C049CE95b42BD9ddeC31494f0',
-      '0x31dBC473343073F9a3cC2998dC1EcA22ce60B3A6',
-      '0x3B631ba46C7E0D058F5f34699c8912Cb01b87d2e',
-      '0x36D736D294F36380cF92EB9A1F476f94200ca43E',
+      '0x0ebd83871160FeBc3736d4Ecfa50ee474DBF2d76',
+      '0x9B5056cB0378b461924DF358746BB0F7A57c0524',
+      '0x6c07D39042b2480a512675fdcc10A20756ba2d7B',
     ],
   },
 };

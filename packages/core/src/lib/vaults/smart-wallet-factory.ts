@@ -176,7 +176,7 @@ export class SmartWalletFactory implements Factory {
 
   // TODO: Get the next available vault ID for the account from the contract
   // when supported by the contract
-  public async getNextVaultId(chainId: Chain): Promise<number> {
+  public async getLastVaultId(chainId: Chain): Promise<number> {
     const accountAddress = await this.provider.getSigner().getAddress();
 
     const events = await this.getContract(chainId).getPastEvents('VaultCreated', {
@@ -193,6 +193,6 @@ export class SmartWalletFactory implements Factory {
       }
     });
 
-    return highestVaultId + 1;
+    return highestVaultId;
   }
 }

@@ -33,8 +33,8 @@ const nativeSymbols = {
   [Chain.Arbitrum]: 'ETH',
 };
 const exploerUrls = {
-  [Chain.Polygon]: 'https://polygonscan.com/tx/',
-  [Chain.Arbitrum]: 'https://arbiscan.io/tx/',
+  [Chain.Polygon]: 'https://polygonscan.com',
+  [Chain.Arbitrum]: 'https://arbiscan.io',
 };
 
 function parseInput(inputStrings: string[]): [Address, string][] {
@@ -85,11 +85,11 @@ const ConnectWalletButton = () => {
     <div className="relative">
       {connected ? (
         <Button variant="outline" onClick={disconnect}>
-          Disconnect
+          Disconnect Wallet
         </Button>
       ) : (
         <Button disabled={connecting} onClick={connect}>
-          Connect
+          Connect Wallet
         </Button>
       )}
     </div>
@@ -141,7 +141,6 @@ export function App() {
   const [nextSwAddress, setNextSWAddress] = React.useState<Address | null>(null);
   const [lastTxHash, setLastTxHash] = React.useState<string>('');
   const [nextVaultId, setNextVaultId] = useLocalStorage<number>('nextVaultId', 1);
-  const [balance, setBalance] = React.useState<string | null>(null);
   const [isDeployed, setIsDeployed] = React.useState<boolean>(false);
   const [isNextDeployed, setIsNextDeployed] = React.useState<boolean>(false);
   const [usdtBalance, setUsdtBalance] = React.useState<string | null>(null);
@@ -220,15 +219,15 @@ export function App() {
       // Fetch balance
       if (account) fetchBalances(account, ethersProvider, signer);
 
-      const [isDeployed, nextVaultId, vaultAddress] = chainId
+      const [isDeployed, lastVaultId] = chainId
         ? await Promise.all([
             swFactory.isVaultWithIdExists(1, +chainId),
-            swFactory.getNextVaultId(+chainId),
-            swFactory.getVaultAddress(+chainId),
+            swFactory.getLastVaultId(+chainId),
           ])
-        : [false, 1, '', ''];
+        : [false, 1, ''];
+      const vaultAddress = chainId ? await swFactory.getVaultAddress(+chainId, 1) : '';
       const nextVaultAddress = chainId
-        ? await swFactory.getVaultAddress(+chainId, nextVaultId)
+        ? await swFactory.getVaultAddress(+chainId, lastVaultId + 1)
         : '';
 
       setIsDeployed(isDeployed);
@@ -322,46 +321,61 @@ export function App() {
     setRecepients(value);
   };
 
+  const swAddressLink = `${exploerUrls[chainId as Chain]}/address/${swAddress}`;
+
   return (
     <div className="w-full h-screen max-w-screen-xl mx-auto">
       <div className="flex flex-col py-4 px-10 h-screen max-w-[800px] mx-auto">
         <h1 className="flex items-center gap-4 text-4xl font-bold">
           <img className="icon" src="/logo.svg" alt="Ditto Logo" />
-          Getting started with Ditto Network
+          Getting started with Ditto SDK
         </h1>
 
         {/* Step 1: Connect Wallet */}
         <div className="flex flex-col gap-4 mt-6">
           <div className="flex flex-col gap-2">
-            <h2 className="text-2xl font-bold">Step 1: Connect Wallet</h2>
-            <p className="text-gray-600">To get the signer</p>
+            <h2 className="text-2xl font-bold">Step 1: Connect Wallet & Initialize SDK</h2>
+            <p className="text-gray-600">
+              <ol className="list-disc list-inside">
+                {/* <li>Connect your wallet — To get the signer</li> */}
+              </ol>
+            </p>
             <div className="flex flex-col gap-2">
-              <ConnectWalletButton />
+              <div className="flex gap-2">
+                <ConnectWalletButton />
+                <Button variant="outline" className="w-min" onClick={initProvider}>
+                  Init provider
+                </Button>
+                <Button variant="outline" className="w-min" onClick={authenticate}>
+                  Auth API
+                </Button>
+              </div>
               <p className="text-gray-600">
-                Wallet: {account ? '✅ ' + account : '❌ Not initialized'}
-                <br />
                 Network:{' '}
                 {chainId
                   ? networkNames[Number(chainId) as Chain] || Number(chainId)
                   : '❌ Not initialized'}{' '}
                 <br />
+                Wallet: {account ? '✅' : '❌'}{' '}
+                <a
+                  className="link"
+                  href={`${exploerUrls[chainId as Chain]}/address/${account}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {account}
+                </a>
+                <br />
                 Balance: {ethBalance} {nativeSymbols[chainId as Chain]}, {usdtBalance} USDT <br />
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Step 2: Initialize Provider */}
-        <div className="flex flex-col gap-4 mt-6">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-2xl font-bold">Step 2: Initialize Provider</h2>
-            <p className="text-gray-600">Initialize the provider to start using the SDK</p>
-            <div className="flex flex-col gap-2">
-              <Button variant="outline" className="w-min" onClick={initProvider}>
-                Init provider
-              </Button>
-              <p className="text-gray-600">
-                Provider: {provider ? '✅ Initialized' : '❌ Not initialized'}
+                Provider:{' '}
+                {provider
+                  ? '✅ Initialized'
+                  : '❌ Initialize the provider to start using the SDK'}{' '}
+                <br />
+                Login status:{' '}
+                {isAuthenticated
+                  ? '✅ API Authentication (for history)'
+                  : '❌ API Authentication (for history) - sign a message'}
               </p>
             </div>
           </div>
@@ -369,27 +383,17 @@ export function App() {
 
         {/* Step 3: Authenticate */}
         <div className="flex flex-col gap-4 mt-6">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-2xl font-bold">Step 3: Authenticate</h2>
-            <p className="text-gray-600">API Authentication (for history) - sign a message</p>
-            <div className="flex flex-col gap-2">
-              <Button variant="outline" className="w-min" onClick={authenticate}>
-                Sign message
-              </Button>
-              <p className="text-gray-600">
-                Login status: {isAuthenticated ? '✅ Logged in' : '❌ Not logged in'}
-              </p>
-            </div>
-          </div>
-
           <div className="flex flex-col gap-2 mt-6">
-            <h2 className="text-2xl font-bold">Step 4: Get Smart Wallet Address and Deploy</h2>
+            <h2 className="text-2xl font-bold">Step 3: Get Smart Wallet Address and Deploy</h2>
             <p className="text-gray-600">
               By default, the first smart wallet will be deployed with id=1. Address of Smart Wallet
               predicted based on the account address and id.
             </p>
             <p className="text-gray-600">
-              Smart Wallet Address: {isDeployed ? '✅' : '❌'} {swAddress}{' '}
+              Smart Wallet Address: {isDeployed ? '✅' : '❌'}{' '}
+              <a className="link" href={swAddressLink} target="_blank" rel="noreferrer">
+                {swAddress}
+              </a>{' '}
               {isDeployed ? '(deployed)' : '(not deployed)'}
               <br />
               Balance: {swEthBalance} {nativeSymbols[chainId as Chain]}, {swUsdtBalance} USDT <br />
@@ -406,7 +410,7 @@ export function App() {
 
             <details className="mt-6">
               <summary className="text-2xl -ml-[20px] font-bold cursor-pointer">
-                Step 4.1: Predict Address of Next Smart Wallet
+                Step 4: Predict Address of Next Smart Wallet
               </summary>
               <div className="flex flex-col gap-2">
                 <p className="text-gray-600">
@@ -456,15 +460,14 @@ export function App() {
               <p className="text-gray-600">
                 {lastTxHash ? (
                   <a
-                    className="underline"
-                    href={`${exploerUrls[chainId as Chain]}${lastTxHash}`}
+                    className="link"
+                    href={`${exploerUrls[chainId as Chain]}/tx/${lastTxHash}`}
                     target="_blank"
                     rel="noreferrer"
                   >
                     View on explorer {shortenAddress(lastTxHash)}
                   </a>
-                ) : null}
-                {!isDeployed ? (
+                ) : !isDeployed ? (
                   <p className="text-gray-600">❗️ You need to deploy the smart wallet first.</p>
                 ) : (
                   <p className="text-gray-600">
