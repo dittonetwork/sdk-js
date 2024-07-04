@@ -18,8 +18,10 @@ import {
   MultiSenderAction,
   Erc20TokenABI as ERC20_ABI,
   CallDataBuilder,
+  CustomContractCall,
 } from '@ditto-network/core';
 import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
+import disperseAbi from '../lib/disperse-abi';
 
 import { Button, Textarea } from '../components/ui';
 import useLocalStorage from '../hooks/use-local-storage';
@@ -294,15 +296,32 @@ export function App() {
         name: 'MultiSender Action Example',
         triggers: [new InstantTrigger()],
         actions: [
-          new MultiSenderAction(
+          // new MultiSenderAction(
+          //   {
+          //     items: recepients.map(([to, amount]) => ({
+          //       to,
+          //       amount: parseUnits(amount, tokens.usdt.decimals),
+          //       asset: tokens.usdt,
+          //     })),
+          //   },
+          //   commonConfig
+          // ),
+          new CustomContractCall(
             {
-              items: recepients.map(([to, amount]) => ({
-                to,
-                amount: parseUnits(amount, tokens.usdt.decimals),
-                asset: tokens.usdt,
-              })),
+              items: [
+                {
+                  contract: '0xD152f549545093347A162Dce210e7293f1452150',
+                  abi: disperseAbi,
+                  method: 'disperse',
+                  args: [
+                    recepients.map(([to]) => to),
+                    recepients.map(([, amount]) => parseUnits(amount, tokens.usdt.decimals)),
+                  ],
+                },
+              ],
+              value: recepients.reduce((acc, [, amount]) => acc + parseUnits(amount, tokens.usdt.decimals), BigInt(0)),
             },
-            commonConfig
+            commonConfig,
           ),
         ],
         chainId,
