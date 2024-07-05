@@ -130,10 +130,9 @@ const tokensMap: Record<Chain, Record<string, Token>> = {
 };
 
 export function App() {
-  const { account, chainId: _chainId } = useSDK();
+  const { account, chainId: _chainId, connected } = useSDK();
   const chainId = Number(_chainId) as Chain | undefined;
   const tokens = chainId ? tokensMap[chainId] : {};
-  console.log('tokens', chainId, tokens);
 
   const [signer, setSigner] = React.useState<ethers.Signer | null>(null);
   const [provider, setProvider] = React.useState<DittoProvider | null>(null);
@@ -319,9 +318,12 @@ export function App() {
                   ],
                 },
               ],
-              value: recepients.reduce((acc, [, amount]) => acc + parseUnits(amount, tokens.usdt.decimals), BigInt(0)),
+              value: recepients.reduce(
+                (acc, [, amount]) => acc + parseUnits(amount, tokens.usdt.decimals),
+                BigInt(0)
+              ),
             },
-            commonConfig,
+            commonConfig
           ),
         ],
         chainId,
@@ -354,18 +356,23 @@ export function App() {
         <div className="flex flex-col gap-4 mt-6">
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl font-bold">Step 1: Connect Wallet & Initialize SDK</h2>
-            <p className="text-gray-600">
-              <ol className="list-disc list-inside">
-                {/* <li>Connect your wallet — To get the signer</li> */}
-              </ol>
-            </p>
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <ConnectWalletButton />
-                <Button variant="outline" className="w-min" onClick={initProvider}>
+                <Button
+                  variant="outline"
+                  className="w-min"
+                  disabled={!connected}
+                  onClick={initProvider}
+                >
                   Init provider
                 </Button>
-                <Button variant="outline" className="w-min" onClick={authenticate}>
+                <Button
+                  variant="outline"
+                  className="w-min"
+                  disabled={!connected}
+                  onClick={authenticate}
+                >
                   Auth API
                 </Button>
               </div>
@@ -376,16 +383,28 @@ export function App() {
                   : '❌ Not initialized'}{' '}
                 <br />
                 Wallet: {account ? '✅' : '❌'}{' '}
-                <a
-                  className="link"
-                  href={`${exploerUrls[chainId as Chain]}/address/${account}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {account}
-                </a>
+                {account ? (
+                  <a
+                    className="link"
+                    href={`${exploerUrls[chainId as Chain]}/address/${account}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {account}
+                  </a>
+                ) : (
+                  'Not connected'
+                )}
                 <br />
-                Balance: {ethBalance} {nativeSymbols[chainId as Chain]}, {usdtBalance} USDT <br />
+                Balance:{' '}
+                {connected ? (
+                  <>
+                    {ethBalance} {nativeSymbols[chainId as Chain]}, {usdtBalance} USDT
+                  </>
+                ) : (
+                  '-'
+                )}{' '}
+                <br />
                 Provider:{' '}
                 {provider
                   ? '✅ Initialized'
@@ -410,18 +429,32 @@ export function App() {
             </p>
             <p className="text-gray-600">
               Smart Wallet Address: {isDeployed ? '✅' : '❌'}{' '}
-              <a className="link" href={swAddressLink} target="_blank" rel="noreferrer">
-                {swAddress}
-              </a>{' '}
-              {isDeployed ? '(deployed)' : '(not deployed)'}
+              {swAddress ? (
+                <>
+                  <a className="link" href={swAddressLink} target="_blank" rel="noreferrer">
+                    {swAddress}
+                  </a>{' '}
+                  {isDeployed ? '(deployed)' : '(not deployed)'}
+                </>
+              ) : (
+                'Not connected'
+              )}
               <br />
-              Balance: {swEthBalance} {nativeSymbols[chainId as Chain]}, {swUsdtBalance} USDT <br />
+              Balance:{' '}
+              {connected ? (
+                <>
+                  {swEthBalance} {nativeSymbols[chainId as Chain]}, {swUsdtBalance} USDT
+                </>
+              ) : (
+                '-'
+              )}{' '}
+              <br />
             </p>
             <div className="flex gap-4 items-center">
               <Button
                 className="w-min"
                 onClick={() => deploySmartWallet(/* default */)}
-                disabled={isDeployed}
+                disabled={!connected || isDeployed}
               >
                 {isDeployed ? 'Deployed' : 'Deploy'}
               </Button>
@@ -487,11 +520,11 @@ export function App() {
                     View on explorer {shortenAddress(lastTxHash)}
                   </a>
                 ) : !isDeployed ? (
-                  <p className="text-gray-600">❗️ You need to deploy the smart wallet first.</p>
+                  <span className="text-gray-600">❗️ You need to deploy the smart wallet first.</span>
                 ) : (
-                  <p className="text-gray-600">
+                  <span className="text-gray-600">
                     It will immidiately distribute USDT to the addresses you provided.
-                  </p>
+                  </span>
                 )}
               </p>
             </div>
