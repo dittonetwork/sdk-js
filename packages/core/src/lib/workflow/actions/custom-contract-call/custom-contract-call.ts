@@ -12,6 +12,7 @@ export type CallItem = {
   method: string;
   abi: any;
   args: any[];
+  value?: string | number | bigint; // native amount to send with the call
 };
 
 type ActionConfig = {
@@ -20,10 +21,16 @@ type ActionConfig = {
 };
 
 export class CustomContractCall implements CallDataBuilder {
+  private vaultInterface: any;
+
   constructor(
     protected readonly config: ActionConfig,
     protected readonly commonCallDataBuilderConfig: CommonBuilderOptions
-  ) {}
+  ) {
+    this.vaultInterface = this.commonCallDataBuilderConfig.provider
+      .getContractFactory()
+      .getContractInterface(JSON.stringify(VaultABI));
+  }
 
   public async build(): Promise<CallDataBuilderReturnData> {
     const callData = new Set<CallData>();
@@ -31,58 +38,22 @@ export class CustomContractCall implements CallDataBuilder {
     for (const item of this.config.items) {
       if (!item.contract || !item.method || !item.abi) continue;
 
-    const contractInterface = this.commonCallDataBuilderConfig.provider
-      .getContractFactory()
-      .getContractInterface(JSON.stringify(item.abi));
+      const contractInterface = this.commonCallDataBuilderConfig.provider
+        .getContractFactory()
+        .getContractInterface(JSON.stringify(item.abi));
+
+      const functionCallData = contractInterface.encodeFunctionData(item.method, item.args);
 
       callData.add({
         to: item.contract,
-        callData: contractInterface.encodeFunctionData(item.method, item.args),
+        callData: this.vaultInterface.encodeFunctionData("execute", [
+          item.contract,
+          item.value ? String(item.value) : "0",
+          functionCallData,
+        ]),
       });
     }
 
     return { callData, value: this.config.value || BigInt(0) };
   }
 }
-
-
-
-
-  // public encodeExecuteFunctionCallRaw(
-  //   pointer: string,
-  //   to: string,
-  //   callData: string,
-  //   nativeAmount?: string | number
-  // ): CallData {
-  //   return {
-  //     pointer: pointer,
-  //     callData: this.vaultInterface.encodeFunctionData("execute", [
-  //       to,
-  //       nativeAmount ?? "0",
-  //       callData
-  //     ]),
-  //     value: nativeAmount?.toString()
-  //   }
-  // }
-
-  // public encodeExecuteFunctionCall(
-  //   pointer: string,
-  //   callParams: {
-  //     functionName: string,
-  //     data: any[],
-  //     to: string,
-  //     nativeAmount?: string | number,
-  //     viewData?: string
-  //   }
-  // ): CallData {
-  //   const functionCall = this.encodeFunctionData(pointer, callParams.functionName, callParams.data, callParams.viewData)
-
-  //   return {
-  //     pointer,
-  //     callData: this.vaultInterface.encodeFunctionData("execute", [
-  //       callParams.to,
-  //       callParams.nativeAmount ?? "0",
-  //       functionCall.callData
-  //     ])
-  //   }
-  // }
