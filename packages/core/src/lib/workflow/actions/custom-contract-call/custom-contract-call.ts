@@ -7,17 +7,12 @@ import {
 } from '../../builders/types';
 import { Address } from '../../../types';
 
-export type CallItem = {
+type ActionConfig = {
   contract: Address;
   method: string;
   abi: any;
   args: any[];
-  value?: string | number | bigint; // native amount to send with the call
-};
-
-type ActionConfig = {
-  items: CallItem[];
-  value?: bigint;
+  value?: bigint; // native amount to send with the call
 };
 
 export class CustomContractCall implements CallDataBuilder {
@@ -35,25 +30,25 @@ export class CustomContractCall implements CallDataBuilder {
   public async build(): Promise<CallDataBuilderReturnData> {
     const callData = new Set<CallData>();
 
-    for (const item of this.config.items) {
-      if (!item.contract || !item.method || !item.abi) continue;
-
-      const contractInterface = this.commonCallDataBuilderConfig.provider
-        .getContractFactory()
-        .getContractInterface(JSON.stringify(item.abi));
-
-      const functionCallData = contractInterface.encodeFunctionData(item.method, item.args);
-
-      callData.add({
-        to: item.contract,
-        callData: this.vaultInterface.encodeFunctionData("execute", [
-          item.contract,
-          item.value ? String(item.value) : "0",
-          functionCallData,
-        ]),
-      });
+    if (!this.config.contract || !this.config.method || !this.config.abi) {
+      throw new Error("Invalid configuration");
     }
 
-    return { callData, value: this.config.value || BigInt(0) };
+    const contractInterface = this.commonCallDataBuilderConfig.provider
+      .getContractFactory()
+      .getContractInterface(JSON.stringify(this.config.abi));
+
+    const functionCallData = contractInterface.encodeFunctionData(this.config.method, this.config.args);
+
+    callData.add({
+      to: this.commonCallDataBuilderConfig.vaultAddress,
+      callData: this.vaultInterface.encodeFunctionData("execute", [
+        this.config.contract,
+        this.config.value ? String(this.config.value) : "0",
+        functionCallData,
+      ]),
+    });
+
+    return { callData, value: BigInt(0) };
   }
 }

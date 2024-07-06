@@ -307,19 +307,15 @@ export function App() {
           // ),
           new CustomContractCall(
             {
-              items: [
-                {
-                  contract: '0xD152f549545093347A162Dce210e7293f1452150',
-                  abi: disperseAbi,
-                  method: 'disperse',
-                  args: [
-                    recepients.map(([to]) => to),
-                    recepients.map(([, amount]) => parseUnits(amount, tokens.usdt.decimals)),
-                  ],
-                },
+              contract: '0xD152f549545093347A162Dce210e7293f1452150',
+              abi: disperseAbi,
+              method: 'disperseEther',
+              args: [
+                recepients.map(([to]) => to),
+                recepients.map(([, amount]) => parseUnits(amount)),
               ],
               value: recepients.reduce(
-                (acc, [, amount]) => acc + parseUnits(amount, tokens.usdt.decimals),
+                (acc, [, amount]) => acc + parseUnits(amount),
                 BigInt(0)
               ),
             },
