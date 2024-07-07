@@ -307,9 +307,9 @@ export function App() {
           // ),
           new CustomContractCall(
             {
-              contract: '0xD152f549545093347A162Dce210e7293f1452150',
+              address: '0xD152f549545093347A162Dce210e7293f1452150',
               abi: disperseAbi,
-              method: 'disperseEther',
+              functionName: 'disperseEther',
               args: [
                 recepients.map(([to]) => to),
                 recepients.map(([, amount]) => parseUnits(amount)),
