@@ -11,12 +11,15 @@ A JavaScript SDK for building workflows on the Ditto Network, enabling a Smart A
   - [React](#react)
 - [Actions and Triggers](#actions-and-triggers)
   - [Actions](#actions)
+    - [Uniswap Swap Action](#uniswap-swap-action)
+    - [MultiSender Action](#multisender-action)
+    - [Custom Contract Call Action](#custom-contract-call-action)
   - [Triggers](#triggers)
     - [Instant Trigger](#instant-trigger)
     - [Price-Based Trigger](#price-based-trigger)
     - [Time-Based Trigger](#time-based-trigger)
-- [MultiSender Action](#multisender-action)
 - [Workflow Creation](#workflow-creation)
+- [Implementing Custom Actions](#implementing-custom-actions)
 - [Documentation](#documentation)
 
 
@@ -197,6 +200,85 @@ new UniswapSwapActionCallDataBuilder(
 In this example, 1 token of `fromToken` is swapped to `toToken` with 0.05% slippage using the NodeJS provider strategy.
 
 
+#### MultiSender Action
+
+The MultiSender Action allows you to send tokens to multiple recipients in a single transaction.
+
+**Configuration for MultiSender Action:**
+```typescript
+type MultiSenderActionConfig = {
+  items: { to: string, amount: string, asset: { address: string, decimals: number } }[];
+};
+```
+
+- **items**: Array of objects, each representing a recipient with the address, amount, and asset.
+
+**Example**
+```typescript
+const multiSenderActionConfig = {
+  items: [
+    { to: '0xRecipientAddress1', amount: '1000000000000000000', asset: { address: '0x...', decimals: 18 } }, // 1 token in wei
+    { to: '0xRecipientAddress2', amount: '2000000', asset: { address: '0x...', decimals: 6 } }, // 2 tokens in smallest unit
+  ],
+};
+const multiSenderAction = new MultiSenderAction(multiSenderActionConfig, commonConfig);
+```
+
+
+#### Custom Contract Call Action
+
+The `CustomContractCall` action allows you to interact with any smart contract by specifying the contract address, ABI, function name, and arguments. This action is useful for executing custom logic or interacting with contracts not directly supported by the SDK.
+
+**Configuration for Custom Contract Call Action:**
+```typescript
+type ActionConfig = {
+  address: Address;
+  functionName: string;
+  abi: any;
+  args: any[];
+  value?: bigint; // native amount to send with the call
+};
+```
+
+- **address**: The address of the target contract.
+- **functionName**: The name of the function to be called on the contract.
+- **abi**: The ABI of the target contract.
+- **args**: An array of arguments to be passed to the function.
+- **value**: (Optional) The native amount to send with the call, default is `0`.
+
+
+**Example usage**
+
+Here is an example of a workflow that uses the `CustomContractCall` action to disperse Ether to multiple recipients:
+
+```typescript
+import disperseAbi from './path/to/disperseAbi.json';
+import { parseUnits } from 'ethers';
+
+const recepients = [
+  ['0x...', '0.1'], // 0.1 MATIC
+  ['0x...', '0.2'], // 0.2 MATIC
+];
+
+new CustomContractCall(
+  {
+    address: '0xD152f549545093347A162Dce210e7293f1452150',
+    abi: disperseAbi,
+    functionName: 'disperseEther',
+    args: [
+      recepients.map(([to]) => to),
+      recepients.map(([, amount]) => parseUnits(amount)),
+    ],
+    value: recepients.reduce(
+      (acc, [, amount]) => acc + parseUnits(amount),
+      BigInt(0)
+    ),
+  },
+  commonConfig
+);
+```
+
+
 ### Triggers
 
 Triggers define the conditions under which actions are executed. Here are the available triggers:
@@ -290,30 +372,6 @@ const timeTrigger = new TimeTrigger({
 ```
 In this example, the trigger is set to execute an action every hour, starting in one hour, and will repeat 10 times.
 
-
-## MultiSender Action
-
-The MultiSender Action allows you to send tokens to multiple recipients in a single transaction.
-
-**Configuration for MultiSender Action:**
-```typescript
-type MultiSenderActionConfig = {
-  items: { to: string, amount: string, asset: { address: string, decimals: number } }[];
-};
-```
-
-- **items**: Array of objects, each representing a recipient with the address, amount, and asset.
-
-**Example**
-```typescript
-const multiSenderActionConfig = {
-  items: [
-    { to: '0xRecipientAddress1', amount: '1000000000000000000', asset: { address: '0x...', decimals: 18 } }, // 1 token in wei
-    { to: '0xRecipientAddress2', amount: '2000000', asset: { address: '0x...', decimals: 6 } }, // 2 tokens in smallest unit
-  ],
-};
-const multiSenderAction = new MultiSenderAction(multiSenderActionConfig, commonConfig);
-```
 
 ## Workflow Creation
 
