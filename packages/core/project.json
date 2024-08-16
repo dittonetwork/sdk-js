@@ -20,7 +20,7 @@
     },
     "nx-release-publish": {
       "options": {
-        "packageRoot": "{projectRoot}"
+        "packageRoot": "dist/{projectRoot}"
       }
     },
     "typecheck": {
