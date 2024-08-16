@@ -1,3 +1,10 @@
+## 0.9.14 (2024-08-16)
+
+
+### 🩹 Fixes
+
+- make uniswap deps optional ([31df18f](https://github.com/dittonetwork/sdk-js/commit/31df18f))
+
 ## 0.9.13 (2024-08-16)
 
 

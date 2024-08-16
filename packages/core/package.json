@@ -1,6 +1,6 @@
 {
   "name": "@ditto-network/core",
-  "version": "0.9.13",
+  "version": "0.9.14",
   "homepage": "https://dittonetwork.io",
   "dependencies": {
     "ethers": "6.11.1",
