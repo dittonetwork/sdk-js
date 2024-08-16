@@ -1,3 +1,17 @@
+## 0.9.13 (2024-08-16)
+
+
+### 🚀 Features
+
+- **core:** draft custom contract call ([1ed947f](https://github.com/dittonetwork/sdk-js/commit/1ed947f))
+
+### 🩹 Fixes
+
+- dist folder for publish ([e8fa5a0](https://github.com/dittonetwork/sdk-js/commit/e8fa5a0))
+- **core:** ensure CallDataBuilder exported ([5cd2acd](https://github.com/dittonetwork/sdk-js/commit/5cd2acd))
+- **core:** encode execute function for custom call ([dabcbaf](https://github.com/dittonetwork/sdk-js/commit/dabcbaf))
+- **core:** make interface similar to viem writeContract ([5978473](https://github.com/dittonetwork/sdk-js/commit/5978473))
+
 ## 0.9.12 (2024-06-28)
 
 

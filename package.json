@@ -1,6 +1,6 @@
 {
   "name": "ditto-network",
-  "version": "0.9.12",
+  "version": "0.9.13",
   "license": "MIT",
   "scripts": {
     "commit": "cz",
