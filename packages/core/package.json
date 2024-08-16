@@ -3,13 +3,15 @@
   "version": "0.9.13",
   "homepage": "https://dittonetwork.io",
   "dependencies": {
-    "@uniswap/sdk-core": "^3.2.6",
-    "@uniswap/smart-order-router": "3.16.26",
-    "@uniswap/v3-sdk": "^3.10.0",
     "ethers": "6.11.1",
     "ethers5": "npm:ethers@5.7.1",
     "fetch-ponyfill": "7.1.0",
     "rambda": "^9.2.0"
+  },
+  "peerDependencies": {
+    "@uniswap/sdk-core": "^3.2.6",
+    "@uniswap/smart-order-router": "3.16.26",
+    "@uniswap/v3-sdk": "^3.10.0"
   },
   "repository": {
     "type": "git",

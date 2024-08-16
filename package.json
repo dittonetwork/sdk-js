@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "commit": "cz",
+    "build": "nx run-many --target=build --all",
     "release": "nx release --skip-publish",
     "local-registry": "nx run ditto-network:local-registry",
     "prepare": "husky"
