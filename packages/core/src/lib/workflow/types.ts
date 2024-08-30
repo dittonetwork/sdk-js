@@ -15,6 +15,8 @@ export interface WorkflowInitOptions {
   triggers: CallDataBuilder[];
   actions: CallDataBuilder[];
   chainId: Chain;
+  maxGasPrice?: number;
+  maxGasLimit?: number;
 }
 
 export interface DittoWorkflow {

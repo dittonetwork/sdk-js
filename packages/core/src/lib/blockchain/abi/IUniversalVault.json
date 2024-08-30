@@ -1341,6 +1341,16 @@
         "internalType": "uint88",
         "name": "count",
         "type": "uint88"
+      },
+      {
+        "name": "maxGasLimit",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "maxGasPrice",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "name": "addWorkflowAndGelatoTask",

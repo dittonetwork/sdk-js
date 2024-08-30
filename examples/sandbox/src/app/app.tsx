@@ -314,10 +314,7 @@ export function App() {
                 recepients.map(([to]) => to),
                 recepients.map(([, amount]) => parseUnits(amount)),
               ],
-              value: recepients.reduce(
-                (acc, [, amount]) => acc + parseUnits(amount),
-                BigInt(0)
-              ),
+              value: recepients.reduce((acc, [, amount]) => acc + parseUnits(amount), BigInt(0)),
             },
             commonConfig
           ),
@@ -516,7 +513,9 @@ export function App() {
                     View on explorer {shortenAddress(lastTxHash)}
                   </a>
                 ) : !isDeployed ? (
-                  <span className="text-gray-600">❗️ You need to deploy the smart wallet first.</span>
+                  <span className="text-gray-600">
+                    ❗️ You need to deploy the smart wallet first.
+                  </span>
                 ) : (
                   <span className="text-gray-600">
                     It will immidiately distribute USDT to the addresses you provided.
