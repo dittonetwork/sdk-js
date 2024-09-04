@@ -9,13 +9,20 @@ import { isInstantTrigger } from './triggers/utils/is-instant-trigger';
 import { isAddressesEqual } from '../blockchain/tokens/utils/is-addresses-equal';
 import { Address, TxHash } from '../types';
 
+const SUPPORTED_CHAINS_GELATO = [56, 43114, 42161, 8217, 42220];
+
 export class Workflow implements DittoWorkflow {
   constructor(
     private readonly options: WorkflowInitOptions,
     private readonly provider: DittoProvider
   ) {}
 
+  private shouldRunOnGelato(): boolean {
+    return SUPPORTED_CHAINS_GELATO.includes(this.options.chainId);
+  }
+
   public async buildAndDeploy(vaultAddress: Address, accountAddress: Address): Promise<TxHash> {
+    const { maxGasPrice = 100, maxGasLimit = 1_000_000 } = this.options;
     const callData = new Set<CallData>();
     const vaultInterface = this.provider
       .getContractFactory()
@@ -60,12 +67,21 @@ export class Workflow implements DittoWorkflow {
     ]);
 
     const repeatCount = this.getRepeatCount();
-    const encodedAddWorkflowCall = vaultInterface.encodeFunctionData('addWorkflowAndGelatoTask', [
-      triggersCallDataChunk,
-      actionsCallDataChunk,
-      vaultAddress,
-      repeatCount,
-    ]);
+    const encodedAddWorkflowCall = this.shouldRunOnGelato()
+      ? vaultInterface.encodeFunctionData('addWorkflowAndGelatoTask', [
+          triggersCallDataChunk,
+          actionsCallDataChunk,
+          vaultAddress,
+          repeatCount,
+        ])
+      : vaultInterface.encodeFunctionData('addWorkflow', [
+          triggersCallDataChunk,
+          actionsCallDataChunk,
+          vaultAddress,
+          repeatCount,
+          maxGasLimit,
+          maxGasPrice,
+        ]);
 
     const instant =
       this.options.triggers.length === 0 ||
