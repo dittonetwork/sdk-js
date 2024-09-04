@@ -11,6 +11,8 @@ import { Address, TxHash } from '../types';
 
 const SUPPORTED_CHAINS_GELATO = [56, 43114, 42161, 8217, 42220];
 
+const DEP_ADDRESS = "0xAC25714dc88A615D2f22f638264A0df5a9EbD70b";
+
 export class Workflow implements DittoWorkflow {
   constructor(
     private readonly options: WorkflowInitOptions,
@@ -22,7 +24,7 @@ export class Workflow implements DittoWorkflow {
   }
 
   public async buildAndDeploy(vaultAddress: Address, accountAddress: Address): Promise<TxHash> {
-    const { maxGasPrice = 100, maxGasLimit = 1_000_000 } = this.options;
+    const { maxGasPrice = 500e9, maxGasLimit = 10e5 } = this.options;
     const callData = new Set<CallData>();
     const vaultInterface = this.provider
       .getContractFactory()
@@ -77,7 +79,7 @@ export class Workflow implements DittoWorkflow {
       : vaultInterface.encodeFunctionData('addWorkflow', [
           triggersCallDataChunk,
           actionsCallDataChunk,
-          vaultAddress,
+          DEP_ADDRESS,
           repeatCount,
           maxGasLimit,
           maxGasPrice,
