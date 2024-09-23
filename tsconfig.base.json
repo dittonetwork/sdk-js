@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ditto-network/automation-kit": ["packages/automation-kit/src/index.ts"],
       "@ditto-network/core": ["packages/core/src/index.ts"],
       "@ditto-network/ethers": ["packages/ethers/src/index.ts"],
       "@ditto-network/web3.js": ["packages/web3js/src/index.ts"]

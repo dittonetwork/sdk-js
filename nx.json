@@ -4,6 +4,15 @@
     "@nx/js:tsc": {
       "dependsOn": ["^build"],
       "inputs": ["default", "^default"]
+    },
+    "@nx/rollup:rollup": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["default", "^default"]
+    },
+    "@nx/vite:test": {
+      "cache": true,
+      "inputs": ["default", "^default"]
     }
   },
   "release": {
