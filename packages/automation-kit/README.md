@@ -50,7 +50,67 @@ The `web3-adapter-core` serves as the abstraction layer for interacting with sma
 1. **Building transactions** (`contractCall`), interacting with contracts, signing, and sending transactions.
 2. Abstracts the complexities of interacting with the blockchain, whether it's via **ethers.js**, **web3.js**, or **viem**.
 
+- **`use`** — Initializes the Web3Adapter with a specific library.
 - **`contractCall`**
 - **`sendTransaction`**
 - **`signTransaction`**
 - **`estimateGas`**
+
+---
+
+
+### How **automation-kit** and **web3-adapter-core** Work Together:
+
+1. **automation-kit** contains the logic for interacting with smart contracts, including ABI and methods such as `predictVaultAddress`, `deploy`, `deposit`, etc.
+2. **web3-adapter-core** abstracts the blockchain interaction. All calls that require network communication, such as transaction building and sending, will be done through **web3-adapter-core** methods (`contractCall`, `sendTransaction`, etc.).
+3. **automation-kit** passes the necessary data (contract addresses, ABI, method parameters) to **web3-adapter-core**, which then interacts with the blockchain to complete the transaction.
+
+
+#### Example `web3-adapter-core` API usage in `automation-kit`:
+
+```typescript
+import { sendTransaction, contractCall } from 'web3-adapter-core';
+import { VaultFactoryABI } from './abis/VaultFactoryABI.json';
+
+// Method to predict the vault address
+async function predictVaultAddress(creator: string, vaultId: number) {
+    const result = await contractCall({
+        address: '0xVaultFactoryAddress',
+        abi: VaultFactoryABI,
+        method: 'predictDeterministicVaultAddress',
+        args: [creator, vaultId],
+        type: 'view'
+    });
+    return result;
+}
+```
+
+
+### User Setup Example:
+
+1. **Initialize Web3Adapter**: Users will initialize **web3-adapter-core** using a configuration method like `init` or `use`. This setup allows users to choose which network library to use (e.g., ethers.js or web3.js).
+
+```typescript
+import { Web3Adapter } from 'web3-adapter-core';
+import { EthersAdapter } from 'web3-adapter-ethers';  // or web3.js
+
+// Initialize Web3Adapter with Ethers.js as the underlying adapter
+Web3Adapter.use(new EthersAdapter({
+    providerUrl: 'https://mainnet.infura.io/v3/...', 
+    privateKey: '0xYourPrivateKey',
+}));
+```
+
+2. **Import and Use Functions from Automation-kit**: Once the Web3Adapter is initialized, users can then import functions from `automation-kit` and execute contract methods. The actual blockchain interactions will be handled by **web3-adapter-core**.
+
+```typescript
+import { predictVaultAddress, deposit } from 'automation-kit';
+
+// Example: Predict vault address using SmartWalletFactory
+const vaultAddress = await predictVaultAddress('0xCreatorAddress', 1);
+console.log('Predicted vault address:', vaultAddress);
+
+// Example: Deposit funds into a SmartWallet
+const txHash = await deposit('1000000000000000000'); // deposit 1 ETH
+console.log('Transaction hash:', txHash);
+```
