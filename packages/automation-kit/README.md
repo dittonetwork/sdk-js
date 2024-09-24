@@ -114,3 +114,18 @@ console.log('Predicted vault address:', vaultAddress);
 const txHash = await deposit('1000000000000000000'); // deposit 1 ETH
 console.log('Transaction hash:', txHash);
 ```
+
+
+### Result package structure:
+
+- **`@ditto-network/automation-kit`**: Set of high-level functions for working with smart contracts. Modules: `SmartWalletFactory`, `SmartWallet`, and `WorkflowFactory`
+
+- **`@ditto-network/web3-adapter-core`**: The core package, containing no external library dependencies. This package defines the core functionality and interfaces for interacting with the blockchain (e.g., `contractCall`, `sendTransaction`).
+
+- **`@ditto-network/web3-adapter-ethers`**: Adapter for **ethers.js**. Provides integration with **ethers.js** for interacting with the blockchain.
+
+- **`@ditto-network/web3-adapter-web3js`**: Adapter for **web3.js**. Offers the necessary functionality for working with **web3.js**.
+
+- **`@ditto-network/web3-adapter-viem`**: Adapter for **Viem**. Integrates **Viem** for blockchain interactions.
+
+Each adapter will specify its dependency on the respective blockchain library using **peerDependencies**, allowing users to install their own versions of the required libraries.
