@@ -19,12 +19,15 @@ Run `nx test automation-kit` to execute the unit tests via [Vitest](https://vite
 
 The `automation-kit` provides a set of high-level functions to interact with smart contracts, designed for seamless creation and management of Ditto automation workflows.
 
+It abstracts blockchain interactions like transaction building, signing, and sending via a single adapter (e.g., ethers.js, web3.js, or viem) under the hood, ensuring that all smart contract calls consistently use the same adapter.
+
+---
 
 ### `automation-kit` API
 
 #### SmartWalletFactory (`VaultFactoryABI.json`)
 
-- **`predictVaultAddress`**  
+- **`predictVaultAddress`**
 - **`deploy`**
 - **`getVersionAndIdByAddress`**
 
@@ -44,88 +47,113 @@ The `automation-kit` provides a set of high-level functions to interact with sma
 ---
 
 
-### `web3-adapter-core` API
-
-The `web3-adapter-core` serves as the abstraction layer for interacting with smart contracts. It will handle tasks such as:
-1. **Building transactions** (`contractCall`), interacting with contracts, signing, and sending transactions.
-2. Abstracts the complexities of interacting with the blockchain, whether it's via **ethers.js**, **web3.js**, or **viem**.
-
-- **`use`** — Initializes the Web3Adapter with a specific library.
-- **`contractCall`**
-- **`sendTransaction`**
-- **`signTransaction`**
-- **`estimateGas`**
-
----
-
-
-### How **automation-kit** and **web3-adapter-core** Work Together:
-
-1. **automation-kit** contains the logic for interacting with smart contracts, including ABI and methods such as `predictVaultAddress`, `deploy`, `deposit`, etc.
-2. **web3-adapter-core** abstracts the blockchain interaction. All calls that require network communication, such as transaction building and sending, will be done through **web3-adapter-core** methods (`contractCall`, `sendTransaction`, etc.).
-3. **automation-kit** passes the necessary data (contract addresses, ABI, method parameters) to **web3-adapter-core**, which then interacts with the blockchain to complete the transaction.
-
-
-#### Example `web3-adapter-core` API usage in `automation-kit`:
+### Example Code of Automation-Kit
 
 ```typescript
-import { sendTransaction, contractCall } from 'web3-adapter-core';
+import { contractCall } from './web3-adapter';
 import { VaultFactoryABI } from './abis/VaultFactoryABI.json';
 
-// Method to predict the vault address
+// Predict the vault address
 async function predictVaultAddress(creator: string, vaultId: number) {
-    const result = await contractCall({
-        address: '0xVaultFactoryAddress',
-        abi: VaultFactoryABI,
-        method: 'predictDeterministicVaultAddress',
-        args: [creator, vaultId],
-        type: 'view'
-    });
-    return result;
+  const result = await contractCall({
+    address: '0xVaultFactoryAddress',
+    abi: VaultFactoryABI,
+    method: 'predictDeterministicVaultAddress',
+    args: [creator, vaultId],
+    type: 'view',
+  });
+  return result;
 }
 ```
 
 
-### User Setup Example:
+### Example of Automation-Kit Usage
 
-1. **Initialize Web3Adapter**: Users will initialize **web3-adapter-core** using a configuration method like `init` or `use`. This setup allows users to choose which network library to use (e.g., ethers.js or web3.js).
+1. **Initialize Automation-Kit**: Users initialize the Automation Kit through a setup `createAutomationKit` method. This method will allow users to choose a library (e.g., ethers.js or web3.js).
 
 ```typescript
-import { Web3Adapter } from 'web3-adapter-core';
-import { EthersAdapter } from 'web3-adapter-ethers';  // or web3.js
+import { createAutomationKit, MultiSenderAction } from '@ditto-network/automation-kit';    // Core action
+import { EthersAdapter } from '@ditto-network/automation-kit-ethers';
+import { UniswapSwapAction } from 'ditto-automation-uniswap-action';  // External action
 
-// Initialize Web3Adapter with Ethers.js as the underlying adapter
-Web3Adapter.use(new EthersAdapter({
-    providerUrl: 'https://mainnet.infura.io/v3/...', 
-    privateKey: '0xYourPrivateKey',
-}));
+
+// Initialize Automation-kit
+const automationKit = createAutomationKit({
+  adapter: new EthersAdapter(),
+  // register actions
+  actions: [MultiSenderAction, UniswapSwapAction],
+  triggers: [InstantTrigger, TimeTrigger], // InstantTrigger should be included by default
+});
 ```
 
-2. **Import and Use Functions from Automation-kit**: Once the Web3Adapter is initialized, users can then import functions from `automation-kit` and execute contract methods. The actual blockchain interactions will be handled by **web3-adapter-core**.
+2. **Import and Use Functions from Automation-kit**: Once the Automation Kit initialized (`createAutomationKit`), users can import functions from `automation-kit` and interact with contracts. Blockchain interactions like building, signing, and sending transactions will be handled by the adapter.
 
 ```typescript
-import { predictVaultAddress, deposit } from 'automation-kit';
+import { predictVaultAddress, deposit } from '@ditto-network/automation-kit';
 
-// Example: Predict vault address using SmartWalletFactory
+// Predict vault address using SmartWalletFactory
 const vaultAddress = await predictVaultAddress('0xCreatorAddress', 1);
 console.log('Predicted vault address:', vaultAddress);
 
-// Example: Deposit funds into a SmartWallet
-const txHash = await deposit('1000000000000000000'); // deposit 1 ETH
+// Deposit funds into a SmartWallet
+const txHash = await deposit('0xCreatorAddress', '1000000000000000000'); // deposit 1 ETH
 console.log('Transaction hash:', txHash);
 ```
 
+---
 
-### Result package structure:
+### Example of Creating a Workflow
 
-- **`@ditto-network/automation-kit`**: Set of high-level functions for working with smart contracts. Modules: `SmartWalletFactory`, `SmartWallet`, and `WorkflowFactory`
+```typescript
+import { createWorkflow } from '@ditto-network/automation-kit';
 
-- **`@ditto-network/web3-adapter-core`**: The core package, containing no external library dependencies. This package defines the core functionality and interfaces for interacting with the blockchain (e.g., `contractCall`, `sendTransaction`).
+// Build and deploy a workflow
+const workflowId = await createWorkflow({
+  name: 'MultiSender Action Example',
+  triggers: [
+    {
+      type: 'Core.TimeTrigger',
+      options: {
+        startAtTimestamp: Math.floor(Date.now() / 1000) + 3600, // Start in 1 hour
+        repeatTimes: 1,
+        cycle: {
+          frequency: 0,
+          scale: 0,
+        },
+      },
+    },
+  ], // or [] for no triggers === instant workflow execution
+  actions: [
+    {
+      type: 'Core.MultiSenderAction',
+      options: {
+        items: [
+          {
+            asset: {
+              address: '0xTokenAddress',
+              decimals: 18,
+            },
+            amount: '100',
+            to: '0xRecipientAddress',
+          },
+          {
+            asset: null,
+            amount: '0.1',
+            to: '0xAnotherRecipientAddress',
+          },
+        ],
+      },
+    },
+  ],
+});
+console.log('Workflow created with ID:', workflowId);
+```
 
-- **`@ditto-network/web3-adapter-ethers`**: Adapter for **ethers.js**. Provides integration with **ethers.js** for interacting with the blockchain.
+### Resulting Package Structure
 
-- **`@ditto-network/web3-adapter-web3js`**: Adapter for **web3.js**. Offers the necessary functionality for working with **web3.js**.
+- **`@ditto-network/automation-kit`**: A set of high-level functions for interacting with smart contracts. Modules include `SmartWalletFactory`, `SmartWallet`, and `WorkflowFactory`.
+- **`@ditto-network/automation-kit-ethers`**: Adapter for **ethers.js**, providing integration for blockchain interaction.
+- **`@ditto-network/automation-kit-web3js`**: Adapter for **web3.js**, offering the required functionality for working with **web3.js**.
+- **`@ditto-network/automation-kit-viem`**: Adapter for **Viem**, integrating it for blockchain interactions.
 
-- **`@ditto-network/web3-adapter-viem`**: Adapter for **Viem**. Integrates **Viem** for blockchain interactions.
-
-Each adapter will specify its dependency on the respective blockchain library using **peerDependencies**, allowing users to install their own versions of the required libraries.
+Each adapter uses **peerDependencies** for its respective blockchain library, allowing users to install and manage their preferred versions.
