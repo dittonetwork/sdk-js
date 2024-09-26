@@ -1,9 +1,18 @@
 {
 	"$schema": "https://unpkg.com/@changesets/config@2.0.0/schema.json",
-	"changelog": "@changesets/cli/changelog",
+	"changelog": [
+		"@changesets/cli/changelog",
+		{ "repo": "ditto-network/sdk-js" }
+	],
 	"commit": false,
-	"fixed": [],
-	"linked": [],
+	"baseBranch": "master",
+	"linked": [
+		[
+			"@ditto-network/automation-kit",
+			"@ditto-network/automation-kit-core",
+			"@ditto-network/automation-kit-providers-viem"
+		]
+	],
 	"access": "public",
 	"updateInternalDependencies": "patch"
 }
