@@ -25,10 +25,10 @@ importers:
     devDependencies:
       '@ditto/eslint-config':
         specifier: workspace:*
-        version: link:../eslint-config
+        version: link:../internal/eslint-config
       '@ditto/tsconfig':
         specifier: workspace:*
-        version: link:../tsconfig
+        version: link:../internal/tsconfig
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -39,7 +39,7 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
-  packages/eslint-config:
+  packages/internal/eslint-config:
     devDependencies:
       '@next/eslint-plugin-next':
         specifier: ^14.1.4
@@ -66,7 +66,7 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
-  packages/tsconfig: {}
+  packages/internal/tsconfig: {}
 
 packages:
 
@@ -1384,6 +1384,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   globals@11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
