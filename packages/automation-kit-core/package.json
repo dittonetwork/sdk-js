@@ -1,0 +1,27 @@
+{
+	"name": "@ditto-network/automation-kit-core",
+	"version": "0.0.0",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"sideEffects": false,
+	"license": "MIT",
+	"files": [
+		"dist/**"
+	],
+	"scripts": {
+		"build": "tsup src/index.ts",
+		"dev": "tsup src/index.ts --watch",
+		"test": "vitest",
+		"clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+	},
+	"devDependencies": {
+		"@repo/tsconfig": "workspace:*"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {
+		"viem": "^2.21.15"
+	}
+}
