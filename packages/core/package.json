@@ -1,5 +1,5 @@
 {
-  "name": "@acme/utils",
+  "name": "@ditto/automation-kit-core",
   "version": "0.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -10,23 +10,19 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
     "lint": "eslint \"src/**/*.ts*\"",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
-    "@acme/tsconfig": "workspace:*",
-    "@types/react": "^18.2.61",
-    "@types/react-dom": "^18.2.19",
+    "@ditto/tsconfig": "workspace:*",
+    "@ditto/eslint-config": "workspace:*",
     "eslint": "^8.57.0",
-    "@acme/eslint-config": "workspace:*",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3"
   },
-  "dependencies": {
-    "react": "^18.2.0"
-  },
+  "dependencies": {},
   "publishConfig": {
     "access": "public"
   }
