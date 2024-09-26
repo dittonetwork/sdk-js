@@ -1,14 +1,12 @@
 {
-	"name": "@ditto-network/automation-kit",
+	"name": "@ditto-network/automation-kit-providers-viem",
 	"version": "0.0.1",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
 	"sideEffects": false,
 	"license": "MIT",
-	"files": [
-		"dist/**"
-	],
+	"files": ["dist/**"],
 	"scripts": {
 		"build": "tsup src/index.ts",
 		"dev": "tsup src/index.ts --watch",
@@ -21,5 +19,8 @@
 	},
 	"publishConfig": {
 		"access": "public"
+	},
+	"peerDependencies": {
+		"viem": "^2.21.15"
 	}
 }
