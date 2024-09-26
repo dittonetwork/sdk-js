@@ -1,30 +1,27 @@
 {
-  "name": "@ditto/automation-kit",
-  "version": "0.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "sideEffects": false,
-  "license": "MIT",
-  "files": [
-    "dist/**"
-  ],
-  "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
-    "lint": "eslint \"src/**/*.ts*\"",
-    "test": "vitest",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
-  },
-  "devDependencies": {
-    "@ditto/tsconfig": "workspace:*",
-    "@ditto/eslint-config": "workspace:*",
-    "eslint": "^8.57.0",
-    "tsup": "^8.0.2",
-    "typescript": "^5.3.3"
-  },
-  "dependencies": {},
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@ditto/automation-kit",
+	"version": "0.0.0",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"sideEffects": false,
+	"license": "MIT",
+	"files": ["dist/**"],
+	"scripts": {
+		"build": "tsup src/index.ts --format esm,cjs --dts",
+		"dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+		"test": "vitest",
+		"clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+	},
+	"devDependencies": {
+		"@ditto/tsconfig": "workspace:*",
+		"@ditto/eslint-config": "workspace:*",
+		"eslint": "^8.57.0",
+		"tsup": "^8.0.2",
+		"typescript": "^5.3.3"
+	},
+	"dependencies": {},
+	"publishConfig": {
+		"access": "public"
+	}
 }

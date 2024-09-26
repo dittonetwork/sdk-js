@@ -1,5 +1,5 @@
 {
-  "extends": "@ditto/tsconfig/node14.json",
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules"]
+	"extends": "@ditto/tsconfig/node14.json",
+	"include": ["."],
+	"exclude": ["dist", "build", "node_modules"]
 }
