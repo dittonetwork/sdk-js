@@ -33,7 +33,7 @@ importers:
 
   packages/automation-kit:
     devDependencies:
-      '@ditto/tsconfig':
+      '@repo/tsconfig':
         specifier: workspace:*
         version: link:../internal/tsconfig
       '@repo/core':
@@ -42,7 +42,7 @@ importers:
 
   packages/internal/core:
     devDependencies:
-      '@ditto/tsconfig':
+      '@repo/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
 

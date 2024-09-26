@@ -8,13 +8,13 @@
 	"license": "MIT",
 	"files": ["dist/**"],
 	"scripts": {
-		"build": "tsup src/index.ts --format esm,cjs --dts",
-		"dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+		"build": "tsup src/index.ts",
+		"dev": "tsup src/index.ts --watch",
 		"test": "vitest",
 		"clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
 	},
 	"devDependencies": {
-		"@ditto/tsconfig": "workspace:*",
+		"@repo/tsconfig": "workspace:*",
 		"@repo/core": "workspace:*"
 	},
 	"publishConfig": {
