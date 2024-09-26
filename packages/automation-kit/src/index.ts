@@ -1,1 +1,1 @@
-export * from './lib/automation-kit';
+export * from './createAutomationKit';
