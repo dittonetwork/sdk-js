@@ -43,6 +43,10 @@ importers:
         version: link:../internal/tsconfig
 
   packages/automation-kit-core:
+    dependencies:
+      '@ditto-network/automation-kit':
+        specifier: workspace:*
+        version: link:../automation-kit
     devDependencies:
       '@repo/tsconfig':
         specifier: workspace:*
