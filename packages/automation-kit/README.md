@@ -80,9 +80,6 @@ import { UniswapSwapAction } from 'ditto-automation-uniswap-action';  // Externa
 // Initialize Automation-kit
 const automationKit = createAutomationKit({
   adapter: new EthersAdapter(),
-  // register actions
-  actions: [MultiSenderAction, UniswapSwapAction],
-  triggers: [InstantTrigger, TimeTrigger], // InstantTrigger should be included by default
 });
 ```
 
@@ -110,41 +107,8 @@ import { createWorkflow } from '@ditto-network/automation-kit';
 // Build and deploy a workflow
 const workflowId = await createWorkflow({
   name: 'MultiSender Action Example',
-  triggers: [
-    {
-      type: 'Core.TimeTrigger',
-      options: {
-        startAtTimestamp: Math.floor(Date.now() / 1000) + 3600, // Start in 1 hour
-        repeatTimes: 1,
-        cycle: {
-          frequency: 0,
-          scale: 0,
-        },
-      },
-    },
-  ], // or [] for no triggers === instant workflow execution
-  actions: [
-    {
-      type: 'Core.MultiSenderAction',
-      options: {
-        items: [
-          {
-            asset: {
-              address: '0xTokenAddress',
-              decimals: 18,
-            },
-            amount: '100',
-            to: '0xRecipientAddress',
-          },
-          {
-            asset: null,
-            amount: '0.1',
-            to: '0xAnotherRecipientAddress',
-          },
-        ],
-      },
-    },
-  ],
+  triggers: [createTimebasedTrigger({...})], // or [] for no triggers === instant workflow execution
+  actions: [createMultiSenderAction({...})],
 });
 console.log('Workflow created with ID:', workflowId);
 ```
