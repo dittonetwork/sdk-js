@@ -3,6 +3,7 @@
 	"scripts": {
 		"build": "turbo build",
 		"dev": "turbo dev",
+		"test": "turbo test",
 		"clean": "turbo clean && rm -rf node_modules",
 		"changeset": "changeset",
 		"version-packages": "changeset version",
@@ -13,12 +14,17 @@
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.2",
 		"@changesets/cli": "^2.27.1",
+		"tsup": "^8.0.2",
 		"turbo": "^2.1.2",
+		"typescript": "^5.3.3",
 		"vitest": "^2.1.1"
 	},
 	"packageManager": "pnpm@8.15.6",
 	"engines": {
 		"node": ">=18"
 	},
-	"name": "with-changesets"
+	"name": "with-changesets",
+	"dependencies": {
+		"@types/node": "^22.7.2"
+	}
 }
