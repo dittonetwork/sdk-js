@@ -12,4 +12,6 @@ export abstract class AbstractAdapter {
   abstract readContract(params: ContractCallParams): Promise<any>;
   abstract writeContract(params: ContractCallParams): Promise<any>;
   abstract simulateContract(params: ContractCallParams): Promise<any>;
+  abstract encodeFunctionCall(abi: any, method: string, args: any[]): string;
+  abstract estimateGas(params: ContractCallParams): Promise<any>;
 }

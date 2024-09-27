@@ -42,4 +42,14 @@ export class Web3Adapter extends AbstractAdapter {
       from: this.account
     });
   }
+
+  encodeFunctionCall(abi: any, method: string, args: any[]): string {
+    const contract = new this.web3.eth.Contract(abi);
+    return contract.methods[method](...args).encodeABI();
+  }
+
+  async estimateGas({ address, abi, method, args }: ContractCallParams){
+    const contract = new this.web3.eth.Contract(abi, address);
+    return contract.methods[method](...args).estimateGas({ from: this.account });
+  }
 }

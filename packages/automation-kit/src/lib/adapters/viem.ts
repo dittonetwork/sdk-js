@@ -1,4 +1,4 @@
-import { Account, createPublicClient, createWalletClient, http } from 'viem';
+import { Account, createPublicClient, createWalletClient, http, encodeFunctionData } from 'viem';
 import { polygon } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts'
 import { AbstractAdapter, ContractCallParams } from './abstract';
@@ -67,5 +67,24 @@ export class ViemAdapter extends AbstractAdapter {
       chain: polygon,
     });
     return result;
+  }
+
+  encodeFunctionCall(abi: any, method: string, args: any[]): string {
+    const functionData = encodeFunctionData({
+      abi,
+      functionName: method,
+      args,
+    });
+    return functionData;
+  }
+
+  async estimateGas({ address, abi, method, args }: ContractCallParams) {
+    const data = this.encodeFunctionCall(abi, method, args) as `0x${string}`;
+    return this.publicClient.estimateGas({
+      data,
+      account: this.account.address,
+      to: address as `0x${string}`,
+      value: BigInt(0),
+    });
   }
 }

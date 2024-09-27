@@ -36,4 +36,14 @@ export class EthersAdapter extends AbstractAdapter {
     const contract = new ethers.Contract(address, abi, this.signer);
     return contract[method].staticCall(...args);
   }
+
+  encodeFunctionCall(abi: any, method: string, args: any[]): string {
+    const contractInterface = new ethers.Interface(abi);
+    return contractInterface.encodeFunctionData(method, args);
+  }
+
+  async estimateGas({ address, abi, method, args }: ContractCallParams) {
+    const contract = new ethers.Contract(address, abi, this.signer);
+    return contract[method].estimateGas(...args);
+  }
 }
