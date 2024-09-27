@@ -17,23 +17,15 @@ export class AutomationKit {
 
   async init(customChainConfig?: ChainConfig) {
     const chainId = await this.adapter.getChainId();
-
     this.config = customChainConfig || chainConfigs[chainId];
-
-    if (!this.config) {
-      throw new Error(`Unsupported chain with chainId ${chainId}`);
-    }
+    if (!this.config) throw new Error(`Unsupported chain with chainId ${chainId}`);
   }
 
   async getContract(contractKey: keyof ChainConfig['contracts']) {
-    if (!this.config) {
-      await this.init();
-    }
-
+    if (!this.config) await this.init();
     const contract = this.config.contracts?.[contractKey];
-    if (!contract) {
+    if (!contract)
       throw new Error(`Contract ${contractKey} is not defined for chain ${this.config.name}`);
-    }
     return contract;
   }
 
@@ -49,7 +41,7 @@ export class AutomationKit {
     });
   }
 
-  async getVersions(): Promise<string> {
+  async getLatestVersion(): Promise<string> {
     const contract = await this.getContract('vaultFactory');
     const versions = await this.adapter.readContract({
       address: contract.address,
@@ -59,6 +51,20 @@ export class AutomationKit {
       type: 'view',
     });
     return String(versions);
+  }
+
+  // TODO: remove simulate option, it's only for testing
+  async deploySmartWallet(vaultId: number, simulate = false) {
+    const contract = await this.getContract('vaultFactory');
+    const version = await this.getLatestVersion();
+    const method = simulate ? 'simulateContract' : 'writeContract';
+    return this.adapter[method]({
+      address: contract.address,
+      abi: contract.abi,
+      method: 'deploy',
+      args: [version, vaultId],
+      type: 'write',
+    });
   }
 }
 
@@ -72,6 +78,10 @@ export async function predictVaultAddress(vaultId: number) {
   return kit.predictVaultAddress(vaultId);
 }
 
-export async function getVersions() {
-  return kit.getVersions();
+export async function getLatestVersion() {
+  return kit.getLatestVersion();
+}
+
+export async function deploySmartWallet(vaultId: number, simulate = false) {
+  return kit.deploySmartWallet(vaultId, simulate);
 }

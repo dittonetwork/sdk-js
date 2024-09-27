@@ -35,4 +35,11 @@ export class Web3Adapter extends AbstractAdapter {
     });
     return transaction;
   }
+
+  async simulateContract({ address, abi, method, args }: ContractCallParams): Promise<any> {
+    const contract = new this.web3.eth.Contract(abi, address);
+    return contract.methods[method](...args).call({
+      from: this.account
+    });
+  }
 }

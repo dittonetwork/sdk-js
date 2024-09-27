@@ -31,4 +31,9 @@ export class EthersAdapter extends AbstractAdapter {
     const tx = await contract[method](...args);
     return tx.wait();
   }
+  
+  async simulateContract({ address, abi, method, args }: ContractCallParams) {
+    const contract = new ethers.Contract(address, abi, this.signer);
+    return contract[method].staticCall(...args);
+  }
 }

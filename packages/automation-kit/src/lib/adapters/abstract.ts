@@ -11,4 +11,5 @@ export abstract class AbstractAdapter {
   abstract getChainId(): Promise<string>;
   abstract readContract(params: ContractCallParams): Promise<any>;
   abstract writeContract(params: ContractCallParams): Promise<any>;
+  abstract simulateContract(params: ContractCallParams): Promise<any>;
 }

@@ -4,14 +4,14 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { AbstractAdapter, ContractCallParams } from './abstract';
 
 export class ViemAdapter extends AbstractAdapter {
-  private client: ReturnType<typeof createPublicClient>;
+  private publicClient: ReturnType<typeof createPublicClient>;
   private walletClient: ReturnType<typeof createWalletClient>;
   private account: Account;
 
   constructor(providerUrl: string, privateKey: string) {
     super();
     let pk = privateKey as `0x${string}`;
-    this.client = createPublicClient({
+    this.publicClient = createPublicClient({
       chain: polygon,
       transport: http(providerUrl),
     });
@@ -31,12 +31,12 @@ export class ViemAdapter extends AbstractAdapter {
   }
 
   async getChainId(): Promise<string> {
-    const chainId = await this.client.getChainId();
+    const chainId = await this.publicClient.getChainId();
     return chainId.toString();
   }
 
   async readContract({ address, abi, method, args }: ContractCallParams): Promise<any> {
-    const result = await this.client.readContract({
+    const result = await this.publicClient.readContract({
       address: address as `0x${string}`,
       abi: abi,
       functionName: method as string,
@@ -53,6 +53,18 @@ export class ViemAdapter extends AbstractAdapter {
       functionName: method as string,
       args: args,
       account: this.account,
+    });
+    return result;
+  }
+
+  async simulateContract({ address, abi, method, args }: ContractCallParams): Promise<any> {
+    const {result} = await this.publicClient.simulateContract({
+      address: address as `0x${string}`,
+      abi: abi,
+      functionName: method as string,
+      args: args,
+      account: this.account,
+      chain: polygon,
     });
     return result;
   }
