@@ -20,13 +20,13 @@ export class Web3Adapter extends AbstractAdapter {
     return String(await this.web3.eth.net.getId());
   }
 
-  async contractCall({ address, abi, method, args }: ContractCallParams): Promise<any> {
+  async readContract({ address, abi, method, args }: ContractCallParams): Promise<any> {
     const contract = new this.web3.eth.Contract(abi, address);
     const result = await contract.methods[method](...args).call();
     return result;
   }
 
-  async sendTransaction({ address, abi, method, args }: ContractCallParams): Promise<any> {
+  async writeContract({ address, abi, method, args }: ContractCallParams): Promise<any> {
     const contract = new this.web3.eth.Contract(abi, address);
     const gasEstimate = await contract.methods[method](...args).estimateGas({ from: this.account });
     const transaction = await contract.methods[method](...args).send({

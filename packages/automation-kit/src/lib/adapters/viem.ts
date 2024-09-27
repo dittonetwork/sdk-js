@@ -35,7 +35,7 @@ export class ViemAdapter extends AbstractAdapter {
     return chainId.toString();
   }
 
-  async contractCall({ address, abi, method, args }: ContractCallParams): Promise<any> {
+  async readContract({ address, abi, method, args }: ContractCallParams): Promise<any> {
     const result = await this.client.readContract({
       address: address as `0x${string}`,
       abi: abi,
@@ -45,7 +45,7 @@ export class ViemAdapter extends AbstractAdapter {
     return result;
   }
 
-  async sendTransaction({ address, abi, method, args }: ContractCallParams): Promise<any> {
+  async writeContract({ address, abi, method, args }: ContractCallParams): Promise<any> {
     const result = await this.walletClient.writeContract({
       address: address as `0x${string}`,
       chain: polygon,

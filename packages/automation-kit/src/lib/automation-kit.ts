@@ -3,14 +3,6 @@ import { AbstractAdapter } from './adapters';
 
 let kit: AutomationKit;
 
-export interface ContractCallParams {
-  address: string;
-  abi: any;
-  method: string;
-  args: any[];
-  type?: 'view' | 'write';
-}
-
 export interface AutomationKitOptions {
   adapter: AbstractAdapter;
 }
@@ -48,13 +40,25 @@ export class AutomationKit {
   async predictVaultAddress(vaultId: number) {
     const creator = await this.adapter.getAddress();
     const contract = await this.getContract('vaultFactory');
-    return this.adapter.contractCall({
+    return this.adapter.readContract({
       address: contract.address,
       abi: contract.abi,
       method: 'predictDeterministicVaultAddress',
       args: [creator, vaultId],
       type: 'view',
     });
+  }
+
+  async getVersions(): Promise<string> {
+    const contract = await this.getContract('vaultFactory');
+    const versions = await this.adapter.readContract({
+      address: contract.address,
+      abi: contract.abi,
+      method: 'versions',
+      args: [],
+      type: 'view',
+    });
+    return String(versions);
   }
 }
 
@@ -66,4 +70,8 @@ export async function createAutomationKit(options: AutomationKitOptions) {
 
 export async function predictVaultAddress(vaultId: number) {
   return kit.predictVaultAddress(vaultId);
+}
+
+export async function getVersions() {
+  return kit.getVersions();
 }
