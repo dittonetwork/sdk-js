@@ -1,4 +1,4 @@
-import { ChainConfig, chainConfigs } from '../config'; 
+import { ChainConfig, chainConfigs } from '../config';
 import { AbstractAdapter } from './adapters';
 
 let kit: AutomationKit;
@@ -22,7 +22,7 @@ export class AutomationKit {
   constructor(options: AutomationKitOptions) {
     this.adapter = options.adapter;
   }
-  
+
   async init(customChainConfig?: ChainConfig) {
     const chainId = await this.adapter.getChainId();
 
@@ -45,7 +45,8 @@ export class AutomationKit {
     return contract;
   }
 
-  async predictVaultAddress(creator: string, vaultId: number) {
+  async predictVaultAddress(vaultId: number) {
+    const creator = await this.adapter.getAddress();
     const contract = await this.getContract('vaultFactory');
     return this.adapter.contractCall({
       address: contract.address,
@@ -61,4 +62,8 @@ export async function createAutomationKit(options: AutomationKitOptions) {
   kit = new AutomationKit(options);
   await kit.init();
   return kit;
+}
+
+export async function predictVaultAddress(vaultId: number) {
+  return kit.predictVaultAddress(vaultId);
 }

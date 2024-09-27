@@ -7,6 +7,7 @@ export interface ContractCallParams {
 }
 
 export abstract class AbstractAdapter {
+  abstract getAddress(): Promise<string>;
   abstract getChainId(): Promise<string>;
   abstract contractCall(params: ContractCallParams): Promise<any>;
   abstract sendTransaction(params: ContractCallParams): Promise<any>;

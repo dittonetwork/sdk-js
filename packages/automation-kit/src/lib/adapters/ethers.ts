@@ -13,6 +13,10 @@ export class EthersAdapter extends AbstractAdapter {
     this.signer = new ethers.Wallet(privateKey, this.provider);
   }
 
+  async getAddress() {
+    return this.signer.getAddress();
+  }
+
   async getChainId() {
     return String((await this.provider.getNetwork())?.chainId);
   }

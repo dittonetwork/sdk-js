@@ -26,6 +26,10 @@ export class ViemAdapter extends AbstractAdapter {
     this.account = account;
   }
 
+  async getAddress() {
+    return this.account.address;
+  }
+
   async getChainId(): Promise<string> {
     const chainId = await this.client.getChainId();
     return chainId.toString();

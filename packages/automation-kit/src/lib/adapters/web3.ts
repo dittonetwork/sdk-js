@@ -12,6 +12,10 @@ export class Web3Adapter extends AbstractAdapter {
     this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey).address;
   }
 
+  async getAddress() {
+    return this.account;
+  }
+
   async getChainId() {
     return String(await this.web3.eth.net.getId());
   }
