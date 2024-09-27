@@ -1,4 +1,5 @@
 import { ChainConfig, chainConfigs } from '../config';
+import { ActionFn, ActionResult, TriggerFn, TriggerResult } from './types';
 import { AbstractAdapter } from './adapters';
 
 let kit: AutomationKit;
@@ -69,11 +70,23 @@ export class AutomationKit {
     });
   }
 
-  async createWorkflow(workflowConfig: {
-    name: string;
-    triggers: any[];
-    actions: any[];
-  }, simulate = false) {
+  async createWorkflow(
+    options: {
+      name: string;
+      triggers: TriggerResult[];
+      actions: ActionResult[];
+    },
+    simulate = false
+  ) {
+    const actionsCallData = await Promise.all(
+      options.actions.map((action) => action(this.adapter))
+    );
+    const triggersCallData = await Promise.all(
+      options.triggers.map((trigger) => trigger(this.adapter))
+    );
+    const value = [...actionsCallData, ...triggersCallData].reduce((acc, item) => {
+      return acc + BigInt(item.value);
+    }, BigInt(0));
     // ...
   }
 }
