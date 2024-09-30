@@ -13,7 +13,7 @@ const adapters = [
 
 const vaultId = 1;
 
-adapters.forEach((adapter) => {
+for (const adapter of adapters) {
   const name = adapter.constructor.name;
   describe(`AutomationKit with ${name}`, () => {
     beforeEach(async () => {
@@ -39,4 +39,4 @@ adapters.forEach((adapter) => {
       expect(success).toBe('0xEbD37837c93b930F89Cf25740A21cEB6895AccCF');
     });
   });
-});
+}
