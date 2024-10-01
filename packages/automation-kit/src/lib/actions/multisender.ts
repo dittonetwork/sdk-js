@@ -1,5 +1,5 @@
 import VaultABI from '../../abis/VaultABI.json';
-import { ActionResult } from '../types';
+import type { ActionResult } from '../types';
 
 export interface Erc20Token {
   symbol: string;
@@ -20,7 +20,7 @@ type MultiSenderOptions = {
 };
 
 export function multisender(options: MultiSenderOptions): ActionResult {
-  return async function(adapter) {
+  return async (adapter) => {
     const { items, vaultAddress } = options;
     const callData = new Set<{ to: `0x${string}`; callData: string }>();
 
