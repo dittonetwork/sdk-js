@@ -15,6 +15,17 @@ Run `nx test automation-kit` to execute the unit tests via [Vitest](https://vite
 ---
 
 
+## TODO
+
+- finish `createWorkflow` method
+- add timebased trigger
+- add pricebased trigger
+- add custom contract call action
+- extract client/provider creation logic from adapters
+- import `ethers`, `web3`, and `viem` dynamically in adapters
+- remove `simulate` option from methods and find solution to test write requests
+
+
 ## Automation-kit Architecture
 
 The `automation-kit` provides a set of high-level functions to interact with smart contracts, designed for seamless creation and management of Ditto automation workflows.

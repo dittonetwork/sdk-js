@@ -1,0 +1,3563 @@
+[
+  {
+    "inputs": [],
+    "name": "AaveChecker_AlreadyInitialized",
+    "type": "error",
+    "signature": "0x06180300"
+  },
+  {
+    "inputs": [],
+    "name": "AaveChecker_IncorrectHealthFators",
+    "type": "error",
+    "signature": "0xf4769d6e"
+  },
+  {
+    "inputs": [],
+    "name": "AaveChecker_NotInitialized",
+    "type": "error",
+    "signature": "0xf495637d"
+  },
+  {
+    "inputs": [],
+    "name": "AaveLogicLib_InitiatorNotValid",
+    "type": "error",
+    "signature": "0x959a2129"
+  },
+  {
+    "inputs": [],
+    "name": "AccessControlLib_AlreadyInitialized",
+    "type": "error",
+    "signature": "0xff42d332"
+  },
+  {
+    "inputs": [],
+    "name": "DeltaNeutralStrategy_AaveCheckerNotInitialized",
+    "type": "error",
+    "signature": "0x01da7f06"
+  },
+  {
+    "inputs": [],
+    "name": "DeltaNeutralStrategy_AlreadyInitialized",
+    "type": "error",
+    "signature": "0xbbe36c96"
+  },
+  {
+    "inputs": [],
+    "name": "DeltaNeutralStrategy_DepositZero",
+    "type": "error",
+    "signature": "0x1074a4ef"
+  },
+  {
+    "inputs": [],
+    "name": "DeltaNeutralStrategy_HealthFactorOutOfRange",
+    "type": "error",
+    "signature": "0xdc7b7702"
+  },
+  {
+    "inputs": [],
+    "name": "DeltaNeutralStrategy_InvalidNFTTokens",
+    "type": "error",
+    "signature": "0x8014aee0"
+  },
+  {
+    "inputs": [],
+    "name": "DeltaNeutralStrategy_NotInitialized",
+    "type": "error",
+    "signature": "0x1d1b9dcc"
+  },
+  {
+    "inputs": [],
+    "name": "DeltaNeutralStrategy_Token0IsNotWNative",
+    "type": "error",
+    "signature": "0x086de48f"
+  },
+  {
+    "inputs": [],
+    "name": "DexChecker_AlreadyInitialized",
+    "type": "error",
+    "signature": "0xecdc4972"
+  },
+  {
+    "inputs": [],
+    "name": "DexChecker_NotInitialized",
+    "type": "error",
+    "signature": "0xc241f1e7"
+  },
+  {
+    "inputs": [],
+    "name": "DexLogicLib_NotEnoughTokenBalances",
+    "type": "error",
+    "signature": "0xc0db6985"
+  },
+  {
+    "inputs": [],
+    "name": "DexLogicLib_ZeroNumberOfTokensCannotBeAdded",
+    "type": "error",
+    "signature": "0x59bde9a9"
+  },
+  {
+    "inputs": [],
+    "name": "DexLogicLogic_WrongLengthOfPoolFeesArray",
+    "type": "error",
+    "signature": "0x63d14517"
+  },
+  {
+    "inputs": [],
+    "name": "DexLogicLogic_WrongLengthOfTokensArray",
+    "type": "error",
+    "signature": "0xeca16a3f"
+  },
+  {
+    "inputs": [],
+    "name": "EntryPoint_AlreadyActive",
+    "type": "error",
+    "signature": "0xc012a22a"
+  },
+  {
+    "inputs": [],
+    "name": "EntryPoint_AlreadyInactive",
+    "type": "error",
+    "signature": "0x01eab604"
+  },
+  {
+    "inputs": [],
+    "name": "EntryPoint_TriggerVerificationFailed",
+    "type": "error",
+    "signature": "0x5240722a"
+  },
+  {
+    "inputs": [],
+    "name": "EntryPoint_VaultIsInactive",
+    "type": "error",
+    "signature": "0x418bc974"
+  },
+  {
+    "inputs": [],
+    "name": "EntryPoint_WorkflowDoesNotExist",
+    "type": "error",
+    "signature": "0x6de58b74"
+  },
+  {
+    "inputs": [],
+    "name": "EntryPoint_WorkflowIsInactive",
+    "type": "error",
+    "signature": "0xc6761830"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "ExecutionLogic_ExecuteCallReverted",
+    "type": "error",
+    "signature": "0x4c0fc2b5"
+  },
+  {
+    "inputs": [],
+    "name": "ExecutionLogic_ExecuteTargetCannotBeAddressThis",
+    "type": "error",
+    "signature": "0x5afafd59"
+  },
+  {
+    "inputs": [],
+    "name": "Gelato_CannotCancelTaskWhichNotExists",
+    "type": "error",
+    "signature": "0xa00640a7"
+  },
+  {
+    "inputs": [],
+    "name": "Gelato_MsgSenderIsNotDedicated",
+    "type": "error",
+    "signature": "0xdf3a8230"
+  },
+  {
+    "inputs": [],
+    "name": "Gelato_TaskAlreadyStarted",
+    "type": "error",
+    "signature": "0xf0307b10"
+  },
+  {
+    "inputs": [],
+    "name": "LayerZeroLogic_OnlyDittoBridgeReceiverCanCallThisMethod",
+    "type": "error",
+    "signature": "0x588befad"
+  },
+  {
+    "inputs": [],
+    "name": "LayerZeroLogic_VaultCannotUseCrossChainLogic",
+    "type": "error",
+    "signature": "0xff2e95b2"
+  },
+  {
+    "inputs": [],
+    "name": "MEVCheck_DeviationOfPriceTooHigh",
+    "type": "error",
+    "signature": "0x47f05b3f"
+  },
+  {
+    "inputs": [],
+    "name": "NativeWrapper_InsufficientBalance",
+    "type": "error",
+    "signature": "0x0e1bc67e"
+  },
+  {
+    "inputs": [],
+    "name": "PriceChecker_AlreadyInitialized",
+    "type": "error",
+    "signature": "0x89af9aa6"
+  },
+  {
+    "inputs": [],
+    "name": "PriceChecker_NotInitialized",
+    "type": "error",
+    "signature": "0xd85cdb4b"
+  },
+  {
+    "inputs": [],
+    "name": "PriceDifferenceChecker_AlreadyInitialized",
+    "type": "error",
+    "signature": "0x00de6637"
+  },
+  {
+    "inputs": [],
+    "name": "PriceDifferenceChecker_InvalidPercentageDeviation",
+    "type": "error",
+    "signature": "0x214f67f1"
+  },
+  {
+    "inputs": [],
+    "name": "PriceDifferenceChecker_NotInitialized",
+    "type": "error",
+    "signature": "0xee19ac31"
+  },
+  {
+    "inputs": [],
+    "name": "SSTORE2_DeploymentFailed",
+    "type": "error",
+    "signature": "0x9770f054"
+  },
+  {
+    "inputs": [],
+    "name": "StargateLogic_MultisenderParamsDoNotMatchInLength",
+    "type": "error",
+    "signature": "0xc2d9835e"
+  },
+  {
+    "inputs": [],
+    "name": "StargateLogic_NotEnoughBalanceForFee",
+    "type": "error",
+    "signature": "0x9df96167"
+  },
+  {
+    "inputs": [],
+    "name": "StargateLogic_OnlyDittoBridgeReceiverCanCallThisMethod",
+    "type": "error",
+    "signature": "0xf6d7f318"
+  },
+  {
+    "inputs": [],
+    "name": "StargateLogic_VaultCannotUseCrossChainLogic",
+    "type": "error",
+    "signature": "0xea401720"
+  },
+  {
+    "inputs": [],
+    "name": "TimeChecker_AlreadyInitialized",
+    "type": "error",
+    "signature": "0xd5b96f1e"
+  },
+  {
+    "inputs": [],
+    "name": "TimeChecker_NotInitialized",
+    "type": "error",
+    "signature": "0x1f56bb63"
+  },
+  {
+    "inputs": [],
+    "name": "TransferHelper_SafeApproveError",
+    "type": "error",
+    "signature": "0xc9bec68c"
+  },
+  {
+    "inputs": [],
+    "name": "TransferHelper_SafeGetBalanceError",
+    "type": "error",
+    "signature": "0xbc1ebe1c"
+  },
+  {
+    "inputs": [],
+    "name": "TransferHelper_SafeTransferError",
+    "type": "error",
+    "signature": "0x35c3281c"
+  },
+  {
+    "inputs": [],
+    "name": "TransferHelper_SafeTransferFromError",
+    "type": "error",
+    "signature": "0xc0db52df"
+  },
+  {
+    "inputs": [],
+    "name": "TransferHelper_SafeTransferNativeError",
+    "type": "error",
+    "signature": "0xfba07381"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "UnauthorizedAccount",
+    "type": "error",
+    "signature": "0x32b2baa3"
+  },
+  {
+    "inputs": [],
+    "name": "Vault_FunctionDoesNotExist",
+    "type": "error",
+    "signature": "0x7482a0aa"
+  },
+  {
+    "inputs": [],
+    "name": "Vault_InvalidConstructorData",
+    "type": "error",
+    "signature": "0x8606b5f6"
+  },
+  {
+    "inputs": [],
+    "name": "VersionUpgradeLogic_CannotUpdateToCurrentVersion",
+    "type": "error",
+    "signature": "0x8b94137d"
+  },
+  {
+    "inputs": [],
+    "name": "VersionUpgradeLogic_VersionDoesNotExist",
+    "type": "error",
+    "signature": "0x4d8d9d66"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "AaveBorrow",
+    "type": "event",
+    "signature": "0x769ac6bce10437f633c9920c6a5c7af46a6194ce92f4b28108851aa974b10c1e"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "AaveCheckerInitialized",
+    "type": "event",
+    "signature": "0x08c5253934c1ab61bba7ff056688326b14f9265eccede5d265f78b4e10f72a03"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint128",
+        "name": "lowerHFBoundary",
+        "type": "uint128"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint128",
+        "name": "upperHFBoundary",
+        "type": "uint128"
+      }
+    ],
+    "name": "AaveCheckerSetNewHF",
+    "type": "event",
+    "signature": "0x22605b4479abef94b8a30c866a51cfad19efa3235120a4c8ab498713df0111ef"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "supplyToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "debtToken",
+        "type": "address"
+      }
+    ],
+    "name": "AaveEmergencyRepay",
+    "type": "event",
+    "signature": "0xd906258c523621491c561c7cd51efab6e0c1e6dd5b76516e38c4e11074da058f"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "AaveFlashLoan",
+    "type": "event",
+    "signature": "0x5e53e3fc7632a94a662ba82b80756a620dc367219fc7a8ae6335a510222cb782"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "AaveRepay",
+    "type": "event",
+    "signature": "0x29b4ee595a09d3fbdf0091d7a34222ba0499e92393f66ccbdefce63b9966617d"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "AaveSupply",
+    "type": "event",
+    "signature": "0x90a09f7b4c070e8c781bae178d119218beb4e77c444fedd07732bc1c9446f46c"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "AaveWithdraw",
+    "type": "event",
+    "signature": "0xa6228ebfcbd71e0cd9dbde30a858013017cb04b0c319d4010219143d08ea34fd"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "flag",
+        "type": "bool"
+      }
+    ],
+    "name": "CrossChainLogicInactiveFlagSet",
+    "type": "event",
+    "signature": "0x47235d9ada9bf1a4b18bfac15bfcd11457222dd8cde92280b798dc9c7b81e223"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "DeltaNeutralStrategyDeposit",
+    "type": "event",
+    "signature": "0x59695fb244d9f678499085cf27e20a1e36f6e9253013309ba934b5a079c6ffbc"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "DeltaNeutralStrategyInitialize",
+    "type": "event",
+    "signature": "0x0dc3df73c33a7a0dc2824f2a4212bf66fd8345a090153b6ff4a94522596a9124"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newTargetHealthFactor",
+        "type": "uint256"
+      }
+    ],
+    "name": "DeltaNeutralStrategyNewHealthFactor",
+    "type": "event",
+    "signature": "0x0a9cf1ec018c22730afb63df708ecb7955d5eabea80e00c7bf8052a758b6df7b"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "DeltaNeutralStrategyRebalance",
+    "type": "event",
+    "signature": "0xd675a9a62ed5fdb1d482f9cb7121cc1f52c59cf7fd74347ff3a6c60dda858f3d"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "DeltaNeutralStrategyWithdraw",
+    "type": "event",
+    "signature": "0x15f71501c16e8ce24d851636201df28a6cbe86611b0ce7e6bdd78f63f0387662"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "depositor",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "DepositERC20",
+    "type": "event",
+    "signature": "0x2dfd2dfb41de1102485c9a50c6005dae2cdad90016d81a39c7691e941799151a"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "depositor",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "DepositNative",
+    "type": "event",
+    "signature": "0x1d7216e1bbc8feb9e6575a2a6166c01e5393e33a975c4f31f9612fd226b56887"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "DexCheckerInitialized",
+    "type": "event",
+    "signature": "0xf38b0008fda01d0c4294fa8e273ebc15e66d53d2b4809dea5a38cae9254821ff"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount0",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount1",
+        "type": "uint256"
+      }
+    ],
+    "name": "DexCollectFees",
+    "type": "event",
+    "signature": "0xc49bed72890e3ffc3fbfe4b0400c8407950b8fe8aa2ac3f7fe7614762bdff911"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "tokenIn",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "tokenOut",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      }
+    ],
+    "name": "DexSwap",
+    "type": "event",
+    "signature": "0x294161bcd67c728269c0ed4ecbb4deeb896ee4ebf1cfbd083fad383f79c2a2fa"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "DittoExecute",
+    "type": "event",
+    "signature": "0xe074aa15630de97bcc0888d5357ab3f9ddcbec4482a48b38831be8c04b00ddf0"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "dittoFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "DittoFeeTransfer",
+    "type": "event",
+    "signature": "0x18a72676d3788e2d067fe4898e5881f937dfc5713752a8169253d6fda268e42f"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "EntryPointAddWorkflow",
+    "type": "event",
+    "signature": "0x25e3dab14fc29073399520d6556af23c33c529afc8b768833a32b59686c7bc16"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "executor",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "EntryPointRun",
+    "type": "event",
+    "signature": "0xf0ed04d2d7a67146f65c6af5aef48e7693abebd85fcb1a9b414c59ad6461a83c"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "EntryPointRunGelato",
+    "type": "event",
+    "signature": "0x04e2181d487908506e8440c143b4df389cfd27133db1807f2ba52d58d230b0d4"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "EntryPointVaultStatusActivated",
+    "type": "event",
+    "signature": "0xcce5823fa292078c6faecf2d5a336d98ec24f3241f348422ea9e5d725d8d666c"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "EntryPointVaultStatusDeactivated",
+    "type": "event",
+    "signature": "0xcc1caf7238246bba93244efdebf1aed395f3ce7933ee3daa4f3adeaa1c4a705d"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "EntryPointWorkflowStatusActivated",
+    "type": "event",
+    "signature": "0x400f88371b3096ebf08442dc22a632cf3c47ff9e160f2e6f5c5399f26fc9e812"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "EntryPointWorkflowStatusDeactivated",
+    "type": "event",
+    "signature": "0xf7b623594cf801e26aeb307ebcf4c320597a99bda609d1674cf375352552d037"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "GelatoTaskCancelled",
+    "type": "event",
+    "signature": "0xad057d6bdfacb5a12a29c809ed3af76acea9d2dd8078debc5c474ddfdced4ced"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "GelatoTaskCreated",
+    "type": "event",
+    "signature": "0x46a09242b49c6e1539af3584c5a90412fb28fc5173a1e97b6adf00755e276132"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      }
+    ],
+    "name": "ImplementationChanged",
+    "type": "event",
+    "signature": "0x2989b377844ae55f0ca303ad21490d8519f8cf871ad6b5ba3dbec736bb54c63f"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "oldOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event",
+    "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "PriceCheckerInitialized",
+    "type": "event",
+    "signature": "0x23c8f3ca0e02ec9ac78f580a1c678ba469639ca5a977550450d253b249506629"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newTarget",
+        "type": "uint256"
+      }
+    ],
+    "name": "PriceCheckerSetNewTarget",
+    "type": "event",
+    "signature": "0x77d5b49afc25b478460c3ea62245e437e1563d9d4d6400de97512eafb9f4c563"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token0",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token1",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint24",
+        "name": "fee",
+        "type": "uint24"
+      }
+    ],
+    "name": "PriceCheckerSetNewTokensAndFee",
+    "type": "event",
+    "signature": "0xd3c09af61649bbba72be9d7040756578ba04767e1e8fb0fe509bffc2f59b0e6b"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "PriceDifferenceCheckerInitialized",
+    "type": "event",
+    "signature": "0x53ba2de7a81c7537a42b9beece1be6448ac285ca045c66ced528edb9a6fd53e9"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint24",
+        "name": "newPercentage",
+        "type": "uint24"
+      }
+    ],
+    "name": "PriceDifferenceCheckerSetNewDeviationThreshold",
+    "type": "event",
+    "signature": "0x126f6436bd22bc6ec4c9028a4ffe844e97ac83654ba929843167ff3e3b83efa9"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token0",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token1",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint24",
+        "name": "fee",
+        "type": "uint24"
+      }
+    ],
+    "name": "PriceDifferenceCheckerSetNewTokensAndFee",
+    "type": "event",
+    "signature": "0xfe877d376a845dee7774e978310098fc1711a91e525dfd5120e490069e5b4876"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleGranted",
+    "type": "event",
+    "signature": "0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleRevoked",
+    "type": "event",
+    "signature": "0xf6391f5c32d9c69d2a47ea670b442974b53935d1edc7fd64eb21e047a839171b"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "TimeCheckerInitialized",
+    "type": "event",
+    "signature": "0xcb0be8f34c2e943bb809cd02240690dbfdf595b6840621cd03e4a3dfe88bb4ad"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newPeriod",
+        "type": "uint256"
+      }
+    ],
+    "name": "TimeCheckerSetNewPeriod",
+    "type": "event",
+    "signature": "0xe7fe68f1c630a6bfe03e5c4dfa4bdf50bf56bb4f672457b517d27175dddb9928"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "TransferHelperTransfer",
+    "type": "event",
+    "signature": "0x4b60f57eb75f4fb5a84e8812aa084c033e52c5c2ef2cbb16fc1b172c268e5900"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      }
+    ],
+    "name": "UniswapAddLiquidity",
+    "type": "event",
+    "signature": "0x22587cea25358faa98226e06af319c0fb7a6166be31bf729dd81e98e13b3d906"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      }
+    ],
+    "name": "UniswapAutoCompound",
+    "type": "event",
+    "signature": "0x39fccf8b373f731b896ea96691a8dd53f994234b3327f336b0e4311aeac9974a"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oldNftId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newNftId",
+        "type": "uint256"
+      }
+    ],
+    "name": "UniswapChangeTickRange",
+    "type": "event",
+    "signature": "0x9005c1429445576d35384b20ec0e5af177387a8b896167055636b468c292053c"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      }
+    ],
+    "name": "UniswapMintNft",
+    "type": "event",
+    "signature": "0x4d8af376a471e0dab7309b01d2f437c8525020d43c2da85f2471da9e2ed33de7"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      }
+    ],
+    "name": "UniswapWithdraw",
+    "type": "event",
+    "signature": "0x0fa9def34682e595ba03786bbf0bf8e4f49abe14fff8820384cefba49fd96ab6"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawERC20",
+    "type": "event",
+    "signature": "0x33c35f9541201e342d5e7467016e65a0a06182eb12a5f17103f71cec95b6cb29"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawNative",
+    "type": "event",
+    "signature": "0xde93db11f7aedf7cb3be22dc4d80e7790ab4b59a30aae83e86ac8326245542c5"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint128",
+        "name": "lowerHFBoundary",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint128",
+        "name": "upperHFBoundary",
+        "type": "uint128"
+      },
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "aaveCheckerInitialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "callbacks",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "activateVault",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "activateWorkflow",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "viewData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "storageRef",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "initData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct IEntryPointLogic.Checker[]",
+        "name": "checkers",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "storageRef",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "initData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct IEntryPointLogic.Action[]",
+        "name": "actions",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "address",
+        "name": "executor",
+        "type": "address"
+      },
+      {
+        "internalType": "uint88",
+        "name": "count",
+        "type": "uint88"
+      }
+    ],
+    "name": "addWorkflow",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "viewData",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "storageRef",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "initData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct IEntryPointLogic.Checker[]",
+        "name": "checkers",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "storageRef",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "initData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct IEntryPointLogic.Action[]",
+        "name": "actions",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "address",
+        "name": "executor",
+        "type": "address"
+      },
+      {
+        "internalType": "uint88",
+        "name": "count",
+        "type": "uint88"
+      },
+      {
+        "name": "maxGasLimit",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "maxGasPrice",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "name": "addWorkflowAndGelatoTask",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "borrowToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "borrowAaveAction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "canExecWorkflowCheck",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "cancelTask",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "checkHF",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "checkTime",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "checkTimeView",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "createTask",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "creatorAndId",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "crossChainLogicIsActive",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isActive",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "callbacks",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "deactivateVault",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "deactivateWorkflow",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dedicatedMessageSender",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountToDeposit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "deposit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "depositor",
+        "type": "address"
+      }
+    ],
+    "name": "depositERC20",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountToDeposit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "depositETH",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "depositNative",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "supplyToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "borrowToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint24",
+        "name": "poolFee",
+        "type": "uint24"
+      }
+    ],
+    "name": "emergencyRepayAave",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "execute",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "asset",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "premium",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "initiator",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "params",
+        "type": "bytes"
+      }
+    ],
+    "name": "executeOperation",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getHFBoundaries",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "lowerHFBoundary",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "upperHFBoundary",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getImplementationAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "implementationAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getLocalAaveCheckerStorage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "lowerHFBoundary",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "upperHFBoundary",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "initialized",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getLocalTimeCheckerStorage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "lastActionTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timePeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "initialized",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNextWorkflowKey",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTaskId",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTotalSupplyTokenBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getVaultProxyAdminAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "getWorkflow",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+              },
+              {
+                "internalType": "bytes",
+                "name": "viewData",
+                "type": "bytes"
+              },
+              {
+                "internalType": "bytes",
+                "name": "storageRef",
+                "type": "bytes"
+              },
+              {
+                "internalType": "bytes",
+                "name": "initData",
+                "type": "bytes"
+              }
+            ],
+            "internalType": "struct IEntryPointLogic.Checker[]",
+            "name": "checkers",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+              },
+              {
+                "internalType": "bytes",
+                "name": "storageRef",
+                "type": "bytes"
+              },
+              {
+                "internalType": "bytes",
+                "name": "initData",
+                "type": "bytes"
+              }
+            ],
+            "internalType": "struct IEntryPointLogic.Action[]",
+            "name": "actions",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "address",
+            "name": "executor",
+            "type": "address"
+          },
+          {
+            "internalType": "uint88",
+            "name": "counter",
+            "type": "uint88"
+          },
+          {
+            "internalType": "bool",
+            "name": "inactive",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IEntryPointLogic.Workflow",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "hasRole",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "healthFactorsAndNft",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "targetHF",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentHF",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "uniswapV3NftId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "uniswapV3NftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "targetHealthFactor_e18",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "supplyTokenAave",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "debtTokenAave",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointerToAaveChecker",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "vaultId",
+        "type": "uint16"
+      }
+    ],
+    "name": "initializeCreatorAndId",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "targetHealthFactor_e18",
+            "type": "uint256"
+          },
+          {
+            "internalType": "int24",
+            "name": "minTick",
+            "type": "int24"
+          },
+          {
+            "internalType": "int24",
+            "name": "maxTick",
+            "type": "int24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "poolFee",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint256",
+            "name": "supplyTokenAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "debtTokenAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "supplyToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "debtToken",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "pointerToAaveChecker",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct IDeltaNeutralStrategyLogic.InitializeWithMintParams",
+        "name": "p",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "initializeWithMint",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isActive",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "active",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "data",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "layerZeroMulticall",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "data",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "multicall",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IUniswapV3Pool",
+        "name": "uniswapPool",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "targetRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "priceCheckerUniswapInitialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IUniswapV3Pool",
+        "name": "uniswapPool",
+        "type": "address"
+      },
+      {
+        "internalType": "uint24",
+        "name": "percentageDeviation_E3",
+        "type": "uint24"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "priceDifferenceCheckerUniswapInitialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "rebalance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "borrowToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "repayAaveAction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "run",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "workflowKey",
+        "type": "uint256"
+      }
+    ],
+    "name": "runGelato",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "vaultVersion",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint16",
+        "name": "dstChainId",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "dstGasForCall",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "dstNativeAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "dstNativeAddr",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "zroPaymentAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "payInZRO",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct ILayerZeroLogic.LayerZeroTxParams",
+        "name": "lzTxParams",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bytes",
+        "name": "payload",
+        "type": "bytes"
+      }
+    ],
+    "name": "sendLayerZeroMessage",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "vaultVersion",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint16",
+        "name": "dstChainId",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "srcPoolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dstPoolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "bridgeAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountOutMinSg",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "dstGasForCall",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "dstNativeAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "dstNativeAddr",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct IStargateComposer.lzTxObj",
+        "name": "lzTxParams",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bytes",
+        "name": "payload",
+        "type": "bytes"
+      }
+    ],
+    "name": "sendStargateMessage",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "newValue",
+        "type": "bool"
+      }
+    ],
+    "name": "setCrossChainLogicInactiveStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint128",
+        "name": "lowerHFBoundary",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint128",
+        "name": "upperHFBoundary",
+        "type": "uint128"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "setHFBoundaries",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "newNftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "setNewNftId",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "newTargetHF",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "setNewTargetHF",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint64",
+        "name": "timePeriod",
+        "type": "uint64"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "setTimePeriod",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "bridgedAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "data",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "stargateMulticall",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "bridgeAmount",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "dstChainId",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint256",
+            "name": "srcPoolId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "dstPoolId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "slippageE18",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address[]",
+            "name": "recipients",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "tokenShares",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct IStargateLogic.MultisenderParams",
+        "name": "mParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "stargateMultisender",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "supplyToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "supplyAaveAction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "data",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "taxedMulticall",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint64",
+        "name": "lastActionTime",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "timePeriod",
+        "type": "uint64"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "timeCheckerInitialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token0Amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token1Amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "useFullTokenBalancesFromVault",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "swap",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapAddLiquidity",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapAutoCompound",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint24",
+        "name": "percentageDeviation_E3",
+        "type": "uint24"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapChangePercentageDeviationE3",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "targetRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapChangeTargetRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int24",
+        "name": "newLowerTick",
+        "type": "int24"
+      },
+      {
+        "internalType": "int24",
+        "name": "newUpperTick",
+        "type": "int24"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapChangeTickRange",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IUniswapV3Pool",
+        "name": "uniswapPool",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapChangeTokensAndFeePriceChecker",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IUniswapV3Pool",
+        "name": "uniswapPool",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapChangeTokensAndFeePriceDiffChecker",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapCheckFeesExistence",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapCheckGTETargetRate",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapCheckGTTargetRate",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapCheckInTickRange",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapCheckLTETargetRate",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapCheckLTTargetRate",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapCheckOutOfTickRange",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapCheckPriceDifference",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "success",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapCheckPriceDifferenceView",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "success",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapCollectFees",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapDexCheckerInitialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapGetLocalDexCheckerStorage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapGetLocalPriceCheckerStorage",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "token0",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "token1",
+        "type": "address"
+      },
+      {
+        "internalType": "uint24",
+        "name": "fee",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint256",
+        "name": "targetRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "initialized",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "uniswapGetLocalPriceDifferenceCheckerStorage",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "token0",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "token1",
+        "type": "address"
+      },
+      {
+        "internalType": "uint24",
+        "name": "fee",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "percentageDeviation_E3",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastCheckPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "initialized",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IUniswapV3Pool",
+        "name": "uniswapPool",
+        "type": "address"
+      },
+      {
+        "internalType": "int24",
+        "name": "newLowerTick",
+        "type": "int24"
+      },
+      {
+        "internalType": "int24",
+        "name": "newUpperTick",
+        "type": "int24"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token0Amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token1Amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "useFullTokenBalancesFromVault",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "swap",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapMintNft",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "tokens",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint24[]",
+        "name": "poolFees",
+        "type": "uint24[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "useFullBalanceOfTokenInFromVault",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "unwrapInTheEnd",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapSwapExactInput",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenIn",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenOut",
+        "type": "address"
+      },
+      {
+        "internalType": "uint24",
+        "name": "poolFee",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapSwapExactOutputSingle",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      },
+      {
+        "internalType": "contract IUniswapV3Pool",
+        "name": "uniswapPool",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token0Amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token1Amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "targetRE18",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapSwapToTargetR",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint128",
+        "name": "liquidity",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapWithdrawPositionByLiquidity",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint128",
+        "name": "sharesE18",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniswapWithdrawPositionByShares",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "unwrapNative",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "vaultVersion",
+        "type": "uint256"
+      }
+    ],
+    "name": "upgradeVersion",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "shareE18",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deviationThresholdE18",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pointer",
+        "type": "bytes32"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "supplyToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawAaveAction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawERC20",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawNative",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      }
+    ],
+    "name": "withdrawTotalERC20",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      }
+    ],
+    "name": "withdrawTotalNative",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "wrapNative",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "wrapNativeFromVaultBalance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

@@ -15,7 +15,10 @@
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
-		"@repo/core": "workspace:*"
+		"@repo/core": "workspace:*",
+    "ethers": "^6.13.2",
+    "web3": "^4.13.0",
+    "viem": "^2.21.15"
 	},
 	"publishConfig": {
 		"access": "public"
