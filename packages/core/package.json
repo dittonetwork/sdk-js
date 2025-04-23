@@ -1,0 +1,19 @@
+{
+	"name": "core",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "vitest"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@cosmjs/crypto": "^0.33.1",
+		"@cosmjs/encoding": "^0.33.1",
+		"@cosmjs/stargate": "^0.33.1",
+		"@cosmjs/tendermint-rpc": "^0.33.1",
+		"viem": "^2.28.0"
+	}
+}

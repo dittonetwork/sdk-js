@@ -3,7 +3,8 @@
 	"scripts": {
 		"build": "turbo build",
 		"dev": "turbo dev",
-		"test": "turbo test",
+		"test": "turbo run test --parallel",
+		"test:watch": "turbo run test --parallel -- --watch",
 		"clean": "turbo clean && rm -rf node_modules",
 		"changeset": "changeset",
 		"version-packages": "changeset version",
