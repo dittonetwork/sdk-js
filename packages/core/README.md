@@ -1,513 +1,490 @@
 # @ditto-network/core
 
-A JavaScript SDK for building workflows on the Ditto Network, enabling a Smart Account experience at any level of your project. This SDK provides the necessary tools and adapters for interacting with the blockchain and constructing workflows. You can use the provided adapters or implement your own.
-
-## Table of Contents
-
-- [Installation](#installation)
-- [Getting Started](#getting-started)
-- [Examples](#examples)
-  - [Node.js](#nodejs)
-  - [React](#react)
-- [Actions and Triggers](#actions-and-triggers)
-  - [Actions](#actions)
-    - [Uniswap Swap Action](#uniswap-swap-action)
-    - [MultiSender Action](#multisender-action)
-    - [Custom Contract Call Action](#custom-contract-call-action)
-  - [Triggers](#triggers)
-    - [Instant Trigger](#instant-trigger)
-    - [Price-Based Trigger](#price-based-trigger)
-    - [Time-Based Trigger](#time-based-trigger)
-- [Workflow Creation](#workflow-creation)
-- [Implementing Custom Actions](#implementing-custom-actions)
-- [Documentation](#documentation)
-
+Core library for creating and managing workflows in the Ditto Network. This library provides tools for creating, configuring, and signing workflows that can be executed in a decentralized network.
 
 ## Installation
 
 ```bash
-npm install @ditto-network/core @ditto-network/web3.js web3
+npm install @ditto-network/core viem
 ```
 
-
-## Getting Started
-
-Here’s a quick guide to get you started with the Ditto Network SDK:
-
-
-## Modules
-
-- **Provider**
-- **SmartWalletFactory**
-- **WorkflowsFactory**
-- **Triggers**
-- **Actions**
-
-
-### Provider
-
-The `Provider` module is responsible for setting up the connection to the blockchain and managing interactions.
-
-
-#### Initialization
-
-```typescript
-import { Provider as DittoProvider, BrowserStorage } from '@ditto-network/core';
-import { EthersSigner, EthersContractFactory } from '@ditto-network/ethers';
-import { ethers } from 'ethers';
-
-const ethersProvider = new ethers.BrowserProvider(window.ethereum!);
-const signer = await ethersProvider.getSigner();
-const provider = new DittoProvider({
-  signer: new EthersSigner(signer),
-  storage: new BrowserStorage(),
-  contractFactory: new EthersContractFactory(signer),
-});
-```
-
-
-### Smart Wallet (Vault)
-
-The Vault is a modular smart contract wallet designed to securely hold and manage assets, execute deferred tasks, and interact with DeFi protocols.
-
-
-#### Methods
-
-##### getLastVaultId
-
-Retrieves the next available Vault ID for the specified blockchain network. This method is useful for generating a new Vault without conflicts.
-
-```typescript
-const chainId = 1; // Ethereum mainnet
-const lastVaultId = await swFactory.getLastVaultId(chainId);
-console.log(`Last Vault ID: ${lastVaultId}`);
-```
-
-- `chainId`: The ID of the blockchain network.
-
-
-##### getVaultAddress
-
-Predicts the address of the Vault based on the specified chain ID and Vault ID. This method is useful for knowing the Vault address before actually deploying it.
-
-```typescript
-const chainId = 1; // Ethereum mainnet
-const vaultId = 2; // Example Vault ID
-const vaultAddress = await swFactory.getVaultAddress(chainId, vaultId);
-console.log(`Predicted Vault Address: ${vaultAddress}`);
-```
-
-- `chainId`: The ID of the blockchain network.
-- `vaultId`: The ID of the Vault.
-
-
-##### createVault
-
-Creates a new smart wallet (Vault) on the specified blockchain network. This method deploys the Vault contract and returns the deployed Vault instance.
-
-```typescript
-import { SmartWalletFactory } from '@ditto-network/core';
-
-const swFactory = new SmartWalletFactory(provider);
-const chainId = 137; // Polygon
-const lastVaultId = await swFactory.getLastVaultId(chainId);
-const vault = await swFactory.createVault(chainId, nextVaultId + 1);
-const vaultAddress = vault.getAddress();
-console.log(`New Vault Address: ${vaultAddress}`);
-```
-
-- `chainId`: The ID of the blockchain network.
-- `vaultId`: The ID for the new Vault.
-
-
-##### getDefaultOrCreate
-
-Retrieves the default Vault for the specified chain ID and account address. If no default Vault exists, it creates a new one.
-
-```typescript
-const chainId = 1; // Ethereum mainnet
-const accountAddress = '0xYourAccountAddress';
-const vault = await swFactory.getDefaultOrCreate(chainId, accountAddress);
-const vaultAddress = vault.getAddress();
-console.log(`Default or New Vault Address: ${vaultAddress}`);
-```
-
-- `chainId`: The ID of the blockchain network.
-- `accountAddress`: The account address for which the default Vault is retrieved or created.
-
-
-## Actions and Triggers
-
-### Actions
-
-Actions are the building blocks of a workflow. They are the steps that are executed by triggers. Each action has a configuration that defines how it should be executed. Here are available actions:
-
-
-#### Uniswap Swap Action
-
-The UniSwap swap action is an action that swaps tokens on UniSwap. It can be combined with price-based triggers to build a limit order workflow.
-
-**Configuration for UniSwap swap action:**
-```typescript
-type ActionConfig = {
-  fromToken: { address: string, decimals: number };
-  toToken: { address: string, decimals: number };
-  fromAmount: string;
-  slippagePercent?: number;
-  providerStrategy:
-    | { type: 'nodejs'; rpcUrl: string; chainId: number }
-    | { type: 'browser'; provider: ethers.providers.ExternalProvider };
-};
-```
-
-- **fromToken**: Token object that represents the token from which the swap is made.
-- **toToken**: Token object that represents the token to which the swap is made.
-- **fromAmount**: Amount of `fromToken` that should be swapped, represented in weis multiplied by 10^fromToken.decimals.
-- **slippagePercent**: Optional parameter that determines the slippage percent, default is 0.5%.
-- **ProviderStrategy**: Configuration for the provider used to execute the swap. It can be one of the following:
-  - **NodeJS provider**: `{ type: 'nodejs'; rpcUrl: string; chainId: number }`
-    ```typescript
-    const providerStrategy = {
-      type: 'nodejs',
-      rpcUrl: 'https://mainnet.infura.io/v3/your-infura-id',
-      chainId: 1, // Ethereum mainnet chain ID
-    };
-    ```
-  - **Browser provider**: `{ type: 'browser'; provider: ethers.providers.ExternalProvider }`
-    ```typescript
-    const providerStrategy = {
-      type: 'browser',
-      provider: window.ethereum,
-    };
-    ```
-
-**Example**
-```typescript
-new UniswapSwapActionCallDataBuilder(
-  {
-    fromToken: { address: '0x...', decimals: 18 },
-    toToken: { address: '0x...', decimals: 6 },
-    fromAmount: '1000000000000000000', // 1 token in wei
-    slippagePercent: 0.05,
-    providerStrategy: {
-      type: 'nodejs',
-      chainId: 1,
-      rpcUrl: 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID',
-    },
-  },
-);
-```
-In this example, 1 token of `fromToken` is swapped to `toToken` with 0.05% slippage using the NodeJS provider strategy.
-
-
-#### MultiSender Action
-
-The MultiSender Action allows you to send tokens to multiple recipients in a single transaction.
-
-**Configuration for MultiSender Action:**
-```typescript
-type MultiSenderActionConfig = {
-  items: { to: string, amount: string, asset: { address: string, decimals: number } }[];
-};
-```
-
-- **items**: Array of objects, each representing a recipient with the address, amount, and asset.
-
-**Example**
-```typescript
-const multiSenderActionConfig = {
-  items: [
-    { to: '0xRecipientAddress1', amount: '1000000000000000000', asset: { address: '0x...', decimals: 18 } }, // 1 token in wei
-    { to: '0xRecipientAddress2', amount: '2000000', asset: { address: '0x...', decimals: 6 } }, // 2 tokens in smallest unit
-  ],
-};
-const multiSenderAction = new MultiSenderAction(multiSenderActionConfig, commonConfig);
-```
-
-
-#### Custom Contract Call Action
-
-The `CustomContractCall` action allows you to interact with any smart contract by specifying the contract address, ABI, function name, and arguments. This action is useful for executing custom logic or interacting with contracts not directly supported by the SDK.
-
-**Configuration for Custom Contract Call Action:**
-```typescript
-type ActionConfig = {
-  address: Address;
-  functionName: string;
-  abi: any;
-  args: any[];
-  value?: bigint; // native amount to send with the call
-};
-```
-
-- **address**: The address of the target contract.
-- **functionName**: The name of the function to be called on the contract.
-- **abi**: The ABI of the target contract.
-- **args**: An array of arguments to be passed to the function.
-- **value**: (Optional) The native amount to send with the call, default is `0`.
-
-
-**Example usage**
-
-Here is an example of a workflow that uses the `CustomContractCall` action to disperse Ether to multiple recipients:
-
-```typescript
-import disperseAbi from './path/to/disperseAbi.json';
-import { parseUnits } from 'ethers';
-
-const recepients = [
-  ['0x...', '0.1'], // 0.1 MATIC
-  ['0x...', '0.2'], // 0.2 MATIC
-];
-
-new CustomContractCall(
-  {
-    address: '0xD152f549545093347A162Dce210e7293f1452150',
-    abi: disperseAbi,
-    functionName: 'disperseEther',
-    args: [
-      recepients.map(([to]) => to),
-      recepients.map(([, amount]) => parseUnits(amount)),
-    ],
-    value: recepients.reduce(
-      (acc, [, amount]) => acc + parseUnits(amount),
-      BigInt(0)
-    ),
-  },
-  commonConfig
-);
-```
-
-
-### Triggers
-
-Triggers define the conditions under which actions are executed. Here are the available triggers:
-
-
-#### Instant Trigger
-
-The Instant Trigger executes an action immediately without any conditions.
-
-**Example**
-```typescript
-const instantTrigger = new InstantTrigger();
-```
-
-#### Price-Based Trigger
-
-A price-based trigger executes an action when the price of a specified asset meets certain conditions.
-
-**Configuration for Price-Based Trigger:**
-```typescript
-type PriceTriggerConfig = {
-  uniswapPoolFeeTier: FeeAmount;
-  triggerAtPrice: string; // weis * 10**fromToken.decimals
-  priceMustBeHigherThan?: boolean;
-  fromToken: { address: string, decimals: number };
-  toToken: { address: string, decimals: number };
-  providerStrategy:
-    | { type: 'nodejs'; rpcUrl: string; chainId: number }
-    | { type: 'browser'; provider: ethers.providers.ExternalProvider };
-};
-```
-
-- **uniswapPoolFeeTier**: The fee tier of the Uniswap pool.
-- **triggerAtPrice**: The price target that triggers the action.
-- **priceMustBeHigherThan**: Optional boolean to specify if the price must be higher than the target price.
-- **fromToken**: Token object representing the asset whose price is being monitored.
-- **toToken**: Token object representing the target asset.
-- **ProviderStrategy**: Configuration for the provider used to monitor the price.
-
-**Example**
-```typescript
-const priceTrigger = new PriceTrigger({
-  uniswapPoolFeeTier: FeeAmount.LOW,
-  triggerAtPrice: '2000000000000000000', // 2 tokens in wei
-  priceMustBeHigherThan: true,
-  fromToken: { address: '0x...', decimals: 18 },
-  toToken: { address: '0x...', decimals: 6 },
-  providerStrategy: {
-    type: 'nodejs',
-    rpcUrl: 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID',
-    chainId: 1,
-  },
-});
-```
-In this example, the trigger is set to execute an action when the price of the specified token is greater than 2 tokens.
-
-
-#### Time-Based Trigger
-
-A time-based trigger executes an action at specified intervals.
-
-**Configuration for Time-Based Trigger:**
-```typescript
-type TimeTriggerConfig = {
-  startAtTimestamp: number; // Unix timestamp when the trigger should start
-  repeatTimes?: number; // Number of times the trigger should repeat
-  cycle: { frequency: number; scale: TimeScale };
-  providerStrategy:
-    | { type: 'nodejs'; rpcUrl: string; chainId: number }
-    | { type: 'browser'; provider: ethers.providers.ExternalProvider };
-};
-```
-
-- **startAtTimestamp**: Unix timestamp when the trigger should start.
-- **repeatTimes**: Optional number of times the trigger should repeat.
-- **cycle**: Object defining the frequency and scale (e.g., minutes, hours, days) of the trigger.
-- **ProviderStrategy**: Configuration for the provider used to manage the time-based execution.
-
-**Example**
-```typescript
-const timeTrigger = new TimeTrigger({
-  startAtTimestamp: Math.floor(Date.now() / 1000) + 3600, // Start in 1 hour
-  repeatTimes: 10, // Repeat 10 times
-  cycle: { frequency: 1, scale: TimeScale.Hours },
-  providerStrategy: {
-    type: 'nodejs',
-    rpcUrl: 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID',
-    chainId: 1,
-  },
-});
-```
-In this example, the trigger is set to execute an action every hour, starting in one hour, and will repeat 10 times.
-
-
-## Workflow Creation
-
-Creating workflows involves defining triggers and actions, and deploying them on the blockchain.
-
-**Example**
-```typescript
-const workflowFactory = new WorkflowsFactory(provider);
-
-  const wf = await workflowFactory.create({
-    name: 'MultiSender Action Example',
-    triggers: [new InstantTrigger()], // or [] for no triggers === instant workflow execution
-    actions: [
-      new MultiSenderAction(
-        {
-          items: recepients.map(([to, amount]) => ({
-            to,
-            amount: parseUnits(amount, tokens.usdt.decimals),
-            asset: tokens.usdt,
-          })),
-        },
-        commonConfig
-      ),
-    ],
-    chainId,
-  });
-
-  const tx = await wf.buildAndDeploy(swAddress, account as Address);
-```
-
-In this example, tokens are sent to multiple recipients with the specified amounts.
-
-
-## Implementing Custom Actions
-
-Creating a custom action allows you to extend the functionality of your workflow beyond predefined actions like MultiSenderAction. You can define custom actions to interact with smart contracts or execute specific logic required for your application.
-
-### Steps to Implement a Custom Action
-
-1. **Define the Configuration**: Specify the parameters required for your action.
-2. **Implement the Action Class**: Create a class that implements the `CallDataBuilder` interface.
-3. **Build Call Data**: Encode the function calls to interact with the blockchain.
-
-
-### Example SendTokens Action
-
-The following example demonstrates how to create a custom action that sends tokens to a recipient.
-
-```typescript
-import { CallDataBuilder } from '@ditto-network/core';
-
-// 1. Define the configuration for the SendTokens action
-// This type specifies the parameters required to send tokens
-type SendTokensConfig = {
-  to: string; // The recipient's address
-  token: Erc20Token; // The ERC20 token to be sent
-  amount: string; // The amount of tokens to send, specified as a string
-};
-
-// 2. Implement the CallDataBuilder interface for the SendTokens action
-// This class will build the call data necessary to perform the token transfer
-export class SendTokens implements CallDataBuilder {
-  // Constructor to initialize the SendTokens class with configuration and common builder options
-  constructor(
-    protected readonly config: SendTokensConfig,
-    protected readonly commonCallDataBuilderConfig: CommonBuilderOptions
-  ) {}
-
-  // The build method is required by the CallDataBuilder interface
-  // It constructs the call data for the token transfer
-  public async build(): Promise<CallDataBuilderReturnData> {
-    // Initialize a Set to hold the call data
-    const callData = new Set<CallData>();
-
-    // Get the contract interface for the Vault contract from the provider
-    const vaultInterface = this.commonCallDataBuilderConfig.provider
-      .getContractFactory()
-      .getContractInterface(JSON.stringify(VaultABI));
-
-    // Extract the chain ID from the common builder options
-    const { chainId } = this.commonCallDataBuilderConfig;
-
-    // Add the call data for withdrawing ERC20 tokens
-    callData.add({
-      to: this.commonCallDataBuilderConfig.vaultAddress, // The address of the Vault contract
-      callData: vaultInterface.encodeFunctionData('withdrawERC20', [
-        this.config.token.address, // The address of the ERC20 token
-        this.config.to, // The recipient's address
-        this.config.amount, // The amount of tokens to send
-      ]),
-    });
-
-    // Return the call data and value (value is set to the token amount converted to BigInt)
-    return { callData, value: BigInt(this.config.amount) };
-  }
-}
-
-// 3. Use the Custom Action in a Workflow
-const wf = await workflowFactory.create({
-  name: 'Custom Action Example',
-  triggers: [new InstantTrigger()],
-  actions: [ 
-    new SendTokens({
-      to: '0x', // recipient address
-      token: { address: '0x', decimals: 18 }, // token address and decimals
-      amount: '1000000000000000000', // 1 token in wei
-    }, commonConfig)
-  ],
-  chainId,
-});
-
-const tx = await wf.buildAndDeploy(swAddress, account as Address);
-```
-
-Implementing custom actions allows you to tailor workflows to your specific requirements, making it possible to automate a wide range of blockchain interactions. By following the steps to define the configuration, implement the action class, and build call data, you can extend the capabilities of your workflows beyond predefined actions.
-
-
-## Examples
-
-### Node.js
-
-For Node.js examples, see:
-
-- [Web3.js example](https://github.com/dittonetwork/sdk-js/blob/master/examples/nodejs-example/web3js.ts)
-- [Ethers.js example](https://github.com/dittonetwork/sdk-js/blob/master/examples/nodejs-example/ethers.ts)
-
-### React
-
-For React examples, see the sandbox project in [examples/sandbox](https://github.com/dittonetwork/sdk-js/tree/master/examples/sandbox) or [examples/react-example](https://github.com/dittonetwork/sdk-js/tree/master/examples/react-example).
-
-To run the React examples:
+or
 
 ```bash
-npm run serve
+yarn add @ditto-network/core viem
 ```
 
-## Documentation
+> **Note**: This library requires `viem` as a peer dependency for blockchain interactions and signing workflows. Make sure to install it along with the core package.
 
-For detailed documentation and API reference, visit our [documentation site](https://docs.dittonetwork.io).
+## Overview
+
+The `@ditto-network/core` package provides tools for working with the Ditto Network blockchain infrastructure, allowing you to create automated workflows that can be executed based on schedules or blockchain events.
+
+Main components:
+
+- **Workflow Builder** - creation and configuration of workflows
+- **Job Builder** - creation and configuration of jobs within a workflow
+- **Step Builder** - creation and configuration of steps within jobs
+- **Workflow Signer** - tools for signing workflows
+- **Kepler Client** - client for interacting with the Kepler blockchain, which is a core component of the Ditto Network infrastructure responsible for transaction verification, workflow state management, and providing a secure environment for execution of workflows
+
+## Core Concepts
+
+### Workflow
+
+A workflow is a container for a set of jobs that defines when and how these jobs should be executed. A workflow can be triggered on a schedule or in response to blockchain events.
+
+### Job
+
+A job is a set of steps that should be executed together. Jobs can depend on other jobs, creating a directed acyclic graph (DAG) for execution.
+
+### Step
+
+A step is an atomic operation within a job. There are two types of steps:
+
+- **Contract Call** - a smart contract call
+- **Action** - execution of a predefined action
+
+### Kepler Blockchain
+
+Kepler is a specialized blockchain that forms a core part of the Ditto Network infrastructure. It serves several critical functions:
+
+- **Workflow Management** - Stores and manages workflow definitions and their execution states
+- **Transaction Verification** - Verifies the validity of transactions and actions requested by workflows
+- **Secure Environment** - Provides a secure and decentralized environment for workflow execution
+- **Account Management** - Manages account nonces for proper transaction ordering
+
+The Ditto Network uses Kepler to ensure workflows are executed reliably and securely in a decentralized manner.
+
+## Usage
+
+### Creating a workflow
+
+```typescript
+import {
+  createWorkflowBuilder,
+  createJobBuilder,
+  createWorkflowSignerBuilder,
+  createKeplerClient,
+} from "@ditto-network/core";
+import { createWalletClient, custom } from "viem";
+import { mainnet } from "viem/chains";
+
+// Create a wallet client for signing operations
+const client = createWalletClient({
+  chain: mainnet,
+  transport: custom(window.ethereum),
+});
+// Create a Kepler client
+const keplerClient = createKeplerClient("http://localhost:26657");
+
+// Create a signer for signing the workflow
+const signer = await createWorkflowSignerBuilder(walletClient)
+  .setDomain({
+    name: "Ditto Network",
+    version: "1",
+    chainId: 1,
+  })
+  .build();
+
+// Create a workflow
+const workflow = await createWorkflowBuilder()
+  .withName("Limit Order Workflow")
+  .onScheduleTrigger({ cron: "0 * * * *" }) // Execute every hour
+  .addJob((job) =>
+    job
+      .withBaseParams({ id: "send-money", chainId: 1 })
+      .addStep((step) =>
+        step.withName("Send money").withContractCall({
+          address: "0xE...",
+          calldata: "0x5...",
+        })
+      )
+      .withGasLimitChecker({
+        max_fee: 1000,
+        max_priority_fee: 100000,
+      })
+  )
+  .addJob((job) =>
+    job
+      .withBaseParams({ id: "check-and-swap", chainId: 1 })
+      .addStep((step) =>
+        step.withName("Approve and swap").withAction({
+          uses: "ditto/appore-and-swap@v1",
+          with: {
+            token_in: "0x4...",
+            token_out: "0xP...",
+            amount_in: "1000000000000000000",
+            slippage: "0.01",
+            spender: "0xE...",
+          },
+        })
+      )
+      .dependsOn("send-money")
+      .setAssetPriceChecker({
+        sell_asset: "0x4...",
+        buy_asset: "0xG...",
+        limit_price: "2000",
+        operator: "lte",
+      })
+      .setGasLimitChecker({
+        max_fee: 100,
+        max_priority_fee: 10000,
+      })
+  )
+  .withSigner(signer)
+  .withKeplerClient(keplerClient)
+  .buildAndSign();
+
+console.log(workflow);
+```
+
+### Creating a workflow with dependencies between jobs
+
+```typescript
+import {
+  createWorkflowBuilder,
+  createKeplerClient,
+  createWorkflowSignerBuilder,
+} from "@ditto-network/core";
+import { createWalletClient, custom } from "viem";
+import { mainnet } from "viem/chains";
+
+// Create a wallet client for signing operations
+const client = createWalletClient({
+  chain: mainnet,
+  transport: custom(window.ethereum),
+});
+
+// Create Kepler client
+const keplerClient = createKeplerClient("http://localhost:26657");
+
+// Create signer
+const signer = await createWorkflowSignerBuilder(walletClient)
+  .setDomain({
+    name: "Ditto Network",
+    version: "1",
+    chainId: 1,
+  })
+  .build();
+
+const workflow = await createWorkflowBuilder()
+  .withName("Workflow with Dependencies")
+  .onScheduleTrigger({ cron: "0 0 * * *" }) // Daily at midnight
+  .addJob((job) =>
+    job.withBaseParams({ id: "job-1", chainId: 1 }).addStep((step) =>
+      step.withName("Fetch Data").withContractCall({
+        address: "0x1234567890123456789012345678901234567890",
+        calldata: "0xabcdef",
+      })
+    )
+  )
+  .addJob((job) =>
+    job
+      .withBaseParams({ id: "job-2", chainId: 1 })
+      .dependsOn("job-1") // Depends on job-1 completion
+      .addStep((step) =>
+        step.withName("Process Data").withContractCall({
+          address: "0x0987654321098765432109876543210987654321",
+          calldata: "0xfedcba",
+        })
+      )
+  )
+  .withSigner(signer)
+  .withKeplerClient(keplerClient)
+  .buildAndSign();
+```
+
+### Creating a step with an action
+
+```typescript
+job.addStep((step) =>
+  step.withName("Execute Action").withAction({
+    uses: "ditto/context@v1",
+    with: { param1: "value1", param2: "value2" },
+  })
+);
+```
+
+### Adding checkers to a job
+
+Checkers allow you to add conditions under which a job can be executed:
+
+```typescript
+job
+  .withBaseParams({ id: "job-with-checkers", chainId: 1 })
+  .withGasLimitChecker({
+    max_fee: 100000000000,
+    max_priority_fee: 2000000000,
+  })
+  .withCountChecker(5) // Maximum 5 executions
+  .withAssetPriceChecker({
+    sell_asset: "0xTokenA",
+    buy_asset: "0xTokenB",
+    limit_price: "1000000000000000000",
+    operator: ">=",
+  })
+  .withOnChainCallChecker({
+    abi: "function isEnabled() returns (bool)",
+    method: "isEnabled",
+    chain_id: 1,
+    args: [],
+  });
+```
+
+### Creating a workflow with a blockchain event trigger
+
+```typescript
+import { createWalletClient, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import {
+  createWorkflowBuilder,
+  createKeplerClient,
+  createWorkflowSignerBuilder,
+} from "@ditto-network/core";
+
+// Setup wallet and clients
+const account = privateKeyToAccount("0xYourPrivateKey");
+const walletClient = createWalletClient({
+  account,
+  transport: http("https://mainnet.example.com"),
+});
+const keplerClient = createKeplerClient("http://localhost:26657");
+const signer = await createWorkflowSignerBuilder(walletClient)
+  .setDomain({
+    name: "Ditto Network",
+    version: "1",
+    chainId: 1,
+  })
+  .build();
+
+// Create workflow with blockchain event trigger
+const workflow = await createWorkflowBuilder()
+  .withName('Event-Triggered Workflow')
+  .onChainEventTrigger({
+    abi: '[{"type":"event","name":"Transfer","inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"value","type":"uint256"}]}]',
+    addresses: ['0x1234567890123456789012345678901234567890'],
+    event_name: 'Transfer'
+  })
+  .addJob((job) => /* ... */)
+  .withSigner(signer)
+  .withKeplerClient(keplerClient)
+  .buildAndSign();
+```
+
+## API Reference
+
+### createWorkflowBuilder
+
+Creates a builder for workflows with a fluent API.
+
+```typescript
+const builder = createWorkflowBuilder();
+```
+
+**Methods:**
+
+- **withName(name: string)** - Sets the workflow name
+- **onScheduleTrigger(trigger: ScheduleTrigger)** - Adds a schedule-based trigger
+- **onChainEventTrigger(trigger: OnchainEventTrigger)** - Adds a blockchain event trigger
+- **addJob(enrich: (jobBuilder: JobBuilder) => JobBuilder)** - Adds a job
+- **withSigner(signer: WorkflowSigner)** - Sets the signer for signature
+- **withKeplerClient(client: KeplerClient)** - Sets the Kepler client
+- **withCount(count: number)** - Sets the maximum number of executions
+- **withExpiration(timestamp: number)** - Sets the expiration time
+- **buildAndSign()** - Creates and signs the workflow
+
+### createJobBuilder
+
+Creates a builder for jobs with a method chain.
+
+```typescript
+const jobBuilder = createJobBuilder();
+```
+
+**Methods:**
+
+- **withBaseParams(params: { id: string, chainId: number })**
+
+  - `id` - Unique identifier for the job
+  - `chainId` - ID of the blockchain network where the job will be executed
+  - Sets the basic parameters for the job
+
+- **addStep(enrich: (stepBuilder: StepBuilder) => StepBuilder)**
+
+  - `stepBuilder` - Builder for creating a step
+  - Adds a new step to the job using the provided enricher function
+  - Returns the updated job builder
+
+- **dependsOn(jobIds: string | string[])**
+
+  - `jobIds` - IDs of jobs that the current job depends on
+  - Can be a single string for one dependency or an array for multiple
+  - Defines the execution order of jobs
+
+- **withAccountAbstraction(address: string)**
+
+  - `address` - Smart contract address for account abstraction
+  - Enables the use of account abstraction for job execution
+
+- **withOnChainCallChecker(checker: OnChainCallChecker)**
+
+  - `checker` - Object with parameters for on-chain call verification:
+    - `abi` - ABI for contract call
+    - `method` - Method name to call
+    - `chain_id` - Network ID
+    - `args` - Arguments for the call
+
+- **withGasLimitChecker(limit: GasLimitChecker)**
+
+  - `limit` - Object with gas limits:
+    - `max_fee` - Maximum gas fee
+    - `max_priority_fee` - Maximum priority fee
+
+- **withCountChecker(count: number)**
+
+  - `count` - Maximum number of job executions
+  - Limits how many times the job can be executed
+
+- **withAssetPriceChecker(checker: AssetPriceChecker)**
+  - `checker` - Parameters for asset price verification:
+    - `sell_asset` - Address of token to sell
+    - `buy_asset` - Address of token to buy
+    - `limit_price` - Threshold price
+    - `operator` - Comparison operator (GT, LT, GTE, LTE, EQ)
+
+### createStepBuilder
+
+Creates a builder for steps with a method chain.
+
+```typescript
+const stepBuilder = createStepBuilder();
+```
+
+**Methods:**
+
+- **withName(name: string)**
+
+  - `name` - Human-readable name for the step
+  - Used for identification and logging purposes
+  - Should be descriptive and unique within the job
+
+- **withContractCall(params: { address: string, calldata: string })**
+
+  - `address` - Ethereum smart contract address to call
+  - `calldata` - ABI-encoded function call data
+  - Configures the step to make a contract call on the blockchain
+  - The calldata must match the contract's interface
+
+- **withAction(params: { uses: string, with: Record<string, string> })**
+  - `uses` - Action identifier in format "owner/action@version"
+  - `with` - Key-value pairs of action parameters:
+    - Keys are parameter names defined by the action
+    - Values are strings that will be passed to the action
+  - Configures the step to execute a predefined action
+  - Actions are reusable components that perform specific tasks
+
+### createWorkflowSignerBuilder
+
+Creates a builder for a workflow signer.
+
+```typescript
+const signerBuilder = createWorkflowSignerBuilder(walletClient);
+```
+
+**Methods:**
+
+- **setDomain(domain: TypedDataDomain)** - Sets the domain for EIP-712 signature:
+  - `name` - Domain name (e.g. "Ditto Network")
+  - `version` - Domain version (e.g. "1")
+  - `chainId` - Chain ID (e.g. 1 for Ethereum mainnet)
+  - `verifyingContract` (optional) - Contract address for verification
+  - `salt` (optional) - Unique value to prevent signature reuse
+- **build()** - Creates the signer object
+
+### createKeplerClient
+
+Creates a client for interacting with the Kepler blockchain.
+
+```typescript
+const client = createKeplerClient(rpcEndpoint);
+```
+
+The Kepler client provides a connection to the Kepler blockchain, which is the backbone of the Ditto Network infrastructure. Through this client, workflows can interact with the Kepler chain to verify accounts, retrieve nonces, and manage blockchain state.
+
+**Methods:**
+
+- **connect()** - Connects to the Kepler RPC
+- **getAccountNonce(address: string)** - Gets the account nonce
+- **disconnect()** - Disconnects from the Kepler RPC
+
+## Data Types
+
+### Workflow
+
+Represents a complete workflow.
+
+```typescript
+type Workflow = {
+  name: string;
+  id: string;
+  on: WorkflowTriggers;
+  count?: number;
+  expired_at?: number;
+  signature: string;
+  jobs: Job[];
+  nonce: number;
+};
+```
+
+### Job
+
+Represents a job within a workflow.
+
+```typescript
+type Job = {
+  id: string;
+  chain_id: number;
+  account_abstraction?: string;
+  needs?: string[];
+  checkers: Checkers;
+  steps: Step[];
+};
+```
+
+### Step
+
+Represents a step within a job.
+
+```typescript
+type Step = ContractCallStep | ActionStep;
+
+type ContractCallStep = {
+  name: string;
+  address: string;
+  calldata: string;
+};
+
+type ActionStep = {
+  name: string;
+  uses: string;
+  with: Record<string, string>;
+};
+```
+
+### Checkers
+
+Represents various checks that can be applied to a job.
+
+```typescript
+type Checkers = {
+  onchain_calls?: OnChainCallChecker[];
+  gas_limit?: GasLimitChecker;
+  count?: number;
+  asset_price_checker?: AssetPriceChecker;
+};
+```
+
+## License
+
+ISC

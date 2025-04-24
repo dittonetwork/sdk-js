@@ -1,2 +1,0 @@
-#!/usr/bin/env sh
-npx nx affected -t typecheck --base=master --head=HEAD --verbose

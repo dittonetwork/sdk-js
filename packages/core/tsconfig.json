@@ -1,20 +1,10 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../packages/internal/tsconfig/base.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "resolveJsonModule": true,
-    "noFallthroughCasesInSwitch": true
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "target": "ES2020"
   },
-  "files": [],
-  "include": [],
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    }
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/**/__tests__"]
 }
