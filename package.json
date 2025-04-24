@@ -17,6 +17,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.2",
 		"@changesets/cli": "^2.27.1",
+		"semantic-release-monorepo": "^8.0.2",
 		"tsup": "^8.0.2",
 		"turbo": "^2.1.2",
 		"typescript": "^5.3.3",
