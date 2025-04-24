@@ -1,22 +1,29 @@
-import type { ActionStep, ContractCallStep, Step } from './types';
+import type { ActionStep, ContractCallStep, Step } from "./types";
 
 type StepState = {
-	name?: Step['name'];
-	stepType: 'contract' | 'action' | null;
-	address?: ContractCallStep['address'];
-	calldata?: ContractCallStep['calldata'];
-	uses?: ActionStep['uses'];
-	with?: ActionStep['with'];
+  name?: Step["name"];
+  stepType: "contract" | "action" | null;
+  address?: ContractCallStep["address"];
+  calldata?: ContractCallStep["calldata"];
+  uses?: ActionStep["uses"];
+  with?: ActionStep["with"];
 };
 
 type ContractCallParams = {
-	address: ContractCallStep['address'];
-	calldata: ContractCallStep['calldata'];
+  address: ContractCallStep["address"];
+  calldata: ContractCallStep["calldata"];
 };
 
 type ActionParams = {
-	uses: ActionStep['uses'];
-	with: ActionStep['with'];
+  uses: ActionStep["uses"];
+  with: ActionStep["with"];
+};
+
+type StepBuilder = {
+  withName(name: Step["name"]): StepBuilder;
+  withContractCall(params: ContractCallParams): StepBuilder;
+  withAction(params: ActionParams): StepBuilder;
+  build(): Step;
 };
 
 /**
@@ -42,154 +49,152 @@ type ActionParams = {
  */
 
 function createStepBuilder() {
-	const state: StepState = {
-		stepType: null,
-	};
+  const state: StepState = {
+    stepType: null,
+  };
 
-	/**
-	 * Sets the name for the step being built.
-	 *
-	 * @param {string} name - The name to assign to the step
-	 * @returns {object} The builder instance for method chaining
-	 * @throws {Error} If name is empty or contains only whitespace
-	 *
-	 * @example
-	 * createStepBuilder()
-	 *   .withName('myStep') // Sets the step name
-	 */
-	const withName = (name: Step['name']) => {
-		if (!name || name.trim() === '') {
-			throw new Error('Step name is required');
-		}
-		state.name = name;
-		return builder;
-	};
+  /**
+   * Sets the name for the step being built.
+   *
+   * @param {string} name - The name to assign to the step
+   * @returns {object} The builder instance for method chaining
+   * @throws {Error} If name is empty or contains only whitespace
+   *
+   * @example
+   * createStepBuilder()
+   *   .withName('myStep') // Sets the step name
+   */
+  const withName = (name: Step["name"]): StepBuilder => {
+    if (!name || name.trim() === "") {
+      throw new Error("Step name is required");
+    }
+    state.name = name;
+    return builder;
+  };
 
-	/**
-	 * Configures the step as a contract call with address and calldata.
-	 *
-	 * @param {ContractCallParams} params - The parameters for the contract call
-	 * @returns {object} The builder instance for method chaining
-	 */
-	const withContractCall = (params: ContractCallParams) => {
-		if (!state.name) {
-			throw new Error(
-				'Step name must be set before setting contract call parameters',
-			);
-		}
-		if (state.stepType === 'action') {
-			throw new Error(
-				'Cannot set contract call parameters: action parameters are already set',
-			);
-		}
+  /**
+   * Configures the step as a contract call with address and calldata.
+   *
+   * @param {ContractCallParams} params - The parameters for the contract call
+   * @returns {object} The builder instance for method chaining
+   */
+  const withContractCall = (params: ContractCallParams): StepBuilder => {
+    if (!state.name) {
+      throw new Error(
+        "Step name must be set before setting contract call parameters"
+      );
+    }
+    if (state.stepType === "action") {
+      throw new Error(
+        "Cannot set contract call parameters: action parameters are already set"
+      );
+    }
 
-		state.stepType = 'contract';
-		Object.assign(state, params);
-		return builder;
-	};
+    state.stepType = "contract";
+    Object.assign(state, params);
+    return builder;
+  };
 
-	/**
-	 * Configures the step as an action with 'uses' and 'with' parameters.
-	 *
-	 * @param {ActionParams} params - The parameters for the action
-	 * @returns {object} The builder instance for method chaining
-	 */
-	const withAction = (params: ActionParams) => {
-		if (!state.name) {
-			throw new Error('Step name must be set before setting action parameters');
-		}
-		if (state.stepType === 'contract') {
-			throw new Error(
-				'Cannot set action parameters: contract call parameters are already set',
-			);
-		}
+  /**
+   * Configures the step as an action with 'uses' and 'with' parameters.
+   *
+   * @param {ActionParams} params - The parameters for the action
+   * @returns {object} The builder instance for method chaining
+   */
+  const withAction = (params: ActionParams): StepBuilder => {
+    if (!state.name) {
+      throw new Error("Step name must be set before setting action parameters");
+    }
+    if (state.stepType === "contract") {
+      throw new Error(
+        "Cannot set action parameters: contract call parameters are already set"
+      );
+    }
 
-		state.stepType = 'action';
-		Object.assign(state, params);
-		return builder;
-	};
+    state.stepType = "action";
+    Object.assign(state, params);
+    return builder;
+  };
 
-	/**
-	 * Builds a contract call step based on the current state.
-	 *
-	 * @returns {ContractCallStep} A complete and valid contract call step object
-	 * @throws {Error} If required parameters are missing or if step name is not set
-	 *
-	 */
-	const buildContractCall = (): ContractCallStep => {
-		const { name, address, calldata } = state;
+  /**
+   * Builds a contract call step based on the current state.
+   *
+   * @returns {ContractCallStep} A complete and valid contract call step object
+   * @throws {Error} If required parameters are missing or if step name is not set
+   *
+   */
+  const buildContractCall = (): ContractCallStep => {
+    const { name, address, calldata } = state;
 
-		if (!name) {
-			throw new Error('Step name is required');
-		}
-		if (!address || !calldata) {
-			throw new Error('Missing required contract call properties');
-		}
+    if (!name) {
+      throw new Error("Step name is required");
+    }
+    if (!address || !calldata) {
+      throw new Error("Missing required contract call properties");
+    }
 
-		return { name, address, calldata };
-	};
+    return { name, address, calldata };
+  };
 
-	/**
-	 * Builds an action step based on the current state.
-	 *
-	 * @returns {ActionStep} A complete and valid action step object
-	 * @throws {Error} If required parameters are missing or if step name is not set
-	 *
-	 */
-	const buildAction = (): ActionStep => {
-		const { name, uses, with: withParams } = state;
+  /**
+   * Builds an action step based on the current state.
+   *
+   * @returns {ActionStep} A complete and valid action step object
+   * @throws {Error} If required parameters are missing or if step name is not set
+   *
+   */
+  const buildAction = (): ActionStep => {
+    const { name, uses, with: withParams } = state;
 
-		if (!name) {
-			throw new Error('Step name is required');
-		}
-		if (!uses || !withParams) {
-			throw new Error('Missing required action properties');
-		}
+    if (!name) {
+      throw new Error("Step name is required");
+    }
+    if (!uses || !withParams) {
+      throw new Error("Missing required action properties");
+    }
 
-		return { name, uses, with: withParams };
-	};
+    return { name, uses, with: withParams };
+  };
 
-	/**
-	 * Builds a step based on the current state.
-	 *
-	 * @returns {Step} A complete and valid step object, either ContractCallStep or ActionStep
-	 * @throws {Error} If required parameters are missing or if step type is not set
-	 *
-	 */
-	const build = (): Step => {
-		if (!state.name) {
-			throw new Error('Step name is required');
-		}
-		switch (state.stepType) {
-			case 'contract': {
-				return buildContractCall();
-			}
-			case 'action': {
-				return buildAction();
-			}
-			default: {
-				throw new Error(
-					'Step type is not set: use either withContractCall() or withAction()',
-				);
-			}
-		}
-	};
+  /**
+   * Builds a step based on the current state.
+   *
+   * @returns {Step} A complete and valid step object, either ContractCallStep or ActionStep
+   * @throws {Error} If required parameters are missing or if step type is not set
+   *
+   */
+  const build = (): Step => {
+    if (!state.name) {
+      throw new Error("Step name is required");
+    }
+    switch (state.stepType) {
+      case "contract": {
+        return buildContractCall();
+      }
+      case "action": {
+        return buildAction();
+      }
+      default: {
+        throw new Error(
+          "Step type is not set: use either withContractCall() or withAction()"
+        );
+      }
+    }
+  };
 
-	const builder = {
-		withName,
-		withContractCall,
-		withAction,
-		build,
-	};
+  const builder = {
+    withName,
+    withContractCall,
+    withAction,
+    build,
+  };
 
-	return builder;
+  return builder;
 }
 
-type StepBuilder = ReturnType<typeof createStepBuilder>;
-
 export {
-	createStepBuilder,
-	type StepBuilder,
-	type ContractCallParams,
-	type ActionParams,
+  createStepBuilder,
+  type StepBuilder,
+  type ContractCallParams,
+  type ActionParams,
 };
