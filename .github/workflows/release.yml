@@ -40,7 +40,9 @@ jobs:
         run: pnpm lint:fix
 
       - name: TypeScript Type Check
-        run: pnpm type-check
+        run: |
+          echo "Running type-check in verbose mode to see errors:"
+          pnpm tsc --noEmit --project tsconfig.json --verbose
 
       - name: Lint
         run: pnpm lint
