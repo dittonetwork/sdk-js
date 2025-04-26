@@ -35,10 +35,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
-      - name: Install Semantic Release Packages
-        run: |
-          pnpm add -D semantic-release semantic-release-monorepo @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
-
       - name: Fix Code Style
         run: pnpm lint:fix
 
@@ -62,6 +58,7 @@ jobs:
       - name: Semantic Release Core Package
         run: |
           cd packages/core
+          npm install --no-save semantic-release semantic-release-monorepo @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
           npx semantic-release -e semantic-release-monorepo
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
