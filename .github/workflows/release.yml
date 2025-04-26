@@ -67,17 +67,30 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > ~/.npmrc
           npm config set access public
 
-      - name: Semantic Release Core Package
+      - name: Semantic Release Core Package (Publish Only)
         run: |
           cd packages/core
-          npm install --no-save semantic-release semantic-release-monorepo @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
-          # Set environment variables to bypass checks
+          # Create temporary config to disable git
+          echo '{
+            "branches": ["master"],
+            "plugins": [
+              "@semantic-release/commit-analyzer",
+              "@semantic-release/release-notes-generator",
+              "@semantic-release/npm"
+            ],
+            "dryRun": false,
+            "ci": false
+          }' > .releaserc-temp.json
+
+          # Install dependencies locally
+          npm install --no-save semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
+
+          # Run semantic-release with npm-only config
           GITHUB_REF=refs/heads/master \
           CI=false \
           NODE_ENV=production \
           GIT_LOCAL_BRANCH=master \
-          npx semantic-release -e semantic-release-monorepo --no-ci --debug
+          npx semantic-release --no-ci --debug --extends ./.releaserc-temp.json
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
