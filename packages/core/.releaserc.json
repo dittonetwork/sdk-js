@@ -5,5 +5,7 @@
     "@semantic-release/release-notes-generator",
     "@semantic-release/npm"
   ],
-  "extends": "semantic-release-monorepo"
+  "extends": "semantic-release-monorepo",
+  "repositoryUrl": "https://github.com/dittonetwork/sdk-js.git",
+  "tagFormat": "${name}@${version}"
 }
