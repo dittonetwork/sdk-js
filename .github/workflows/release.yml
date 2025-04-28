@@ -76,7 +76,15 @@ jobs:
           # Ensure we're fully synced with remote before running semantic-release
           git fetch origin
           git checkout master
+
+          # Save local changes before rebasing
+          git stash -u
+
+          # Pull latest changes
           git pull --rebase origin master
+
+          # Restore local changes
+          git stash pop || true
 
           # Install dependencies locally
           npm install --no-save semantic-release semantic-release-monorepo @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
