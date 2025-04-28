@@ -50,9 +50,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
-      - name: Fix Code Style
-        run: pnpm lint:fix
-
       - name: TypeScript Type Check
         run: pnpm tsc --noEmit --project ./packages/core/tsconfig.json
 
@@ -77,11 +74,11 @@ jobs:
           echo "Current git status:"
           git status
 
-          # Важно: корректная настройка аутентификации Git
+          # Important: Proper Git authentication setup
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
 
-          # Настраиваем правильный URL репозитория с токеном
+          # Configure the correct repository URL with token
           echo "Setting up Git remote with token authentication"
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/dittonetwork/sdk-js.git
           git remote -v
@@ -94,7 +91,7 @@ jobs:
           echo "Installing semantic-release and plugins"
           npm install --no-save semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm @semantic-release/git
 
-          # Устанавливаем конфигурацию semantic-release напрямую с дополнительными параметрами
+          # Set up semantic-release configuration with additional parameters
           echo "Creating semantic-release configuration file..."
           echo '{
             "branches": ["master"],
@@ -114,7 +111,7 @@ jobs:
             "tagFormat": "${version}"
           }' > .releaserc.json
 
-          # Вывод содержимого package.json для проверки
+          # Output package.json contents for verification
           echo "Current package.json:"
           cat package.json
 
