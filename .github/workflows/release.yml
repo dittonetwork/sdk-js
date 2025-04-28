@@ -73,24 +73,49 @@ jobs:
       - name: Semantic Release Core Package
         run: |
           cd packages/core
+          # Debug output to understand repo state
+          echo "Current git status:"
+          git status
+          
           # Ensure we're fully synced with remote before running semantic-release
-          git fetch origin
+          git fetch --prune --unshallow || git fetch --prune
           git checkout master
-
+          
           # Save local changes before rebasing
           git stash -u
-
+          
+          # Force reset to match remote exactly
+          git reset --hard origin/master
+          
           # Pull latest changes
-          git pull --rebase origin master
-
+          git pull origin master
+          
           # Restore local changes
           git stash pop || true
-
+          
+          # Show status after syncing
+          echo "Git status after sync:"
+          git status
+          git log -n 3 --oneline
+          
           # Install dependencies locally
           npm install --no-save semantic-release semantic-release-monorepo @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
-
-          # Run semantic-release with standard configuration
-          npx semantic-release -e semantic-release-monorepo --no-ci
+          
+          # Create/update .releaserc.json to force publishing
+          cat > .releaserc.json << EOF
+{
+  "branches": ["master"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/npm"
+  ],
+  "ci": false
+}
+EOF
+          
+          # Run semantic-release with more debugging and forced parameters
+          DEBUG=semantic-release:* npx semantic-release --no-ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
