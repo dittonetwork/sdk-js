@@ -106,21 +106,6 @@ jobs:
           # Set up semantic-release configuration with additional parameters
           echo "Creating semantic-release configuration file..."
           cat > .releaserc.json << EOF
-{
-  "branches": ["master"],
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/npm",
-    ["@semantic-release/git", {
-      "assets": ["package.json"],
-      "message": "chore(release): \${nextRelease.version} [skip ci]\n\n\${nextRelease.notes}"
-    }]
-  ],
-  "ci": false,
-  "dryRun": false
-}
-EOF
 
           # Output package.json contents for verification
           echo "Current package.json:"
