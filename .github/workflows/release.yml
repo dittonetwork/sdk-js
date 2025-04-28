@@ -22,12 +22,15 @@ jobs:
           fetch-depth: 0
           # Make sure we get all tags
           fetch-tags: true
+          # Use PAT instead of GITHUB_TOKEN
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Configure Git
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
-          git remote set-branches --add origin master
+          # Use authentication with the PAT to avoid permission issues
+          git remote set-url origin https://x-access-token:${{ secrets.RELEASE_TOKEN }}@github.com/dittonetwork/sdk-js.git
           git fetch
           # Ensure we're on the correct branch with up-to-date information
           git checkout master
@@ -67,30 +70,15 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > ~/.npmrc
           npm config set access public
 
-      - name: Semantic Release Core Package (Publish Only)
+      - name: Semantic Release Core Package
         run: |
           cd packages/core
-          # Create temporary config to disable git
-          echo '{
-            "branches": ["master"],
-            "plugins": [
-              "@semantic-release/commit-analyzer",
-              "@semantic-release/release-notes-generator",
-              "@semantic-release/npm"
-            ],
-            "dryRun": false,
-            "ci": false
-          }' > .releaserc-temp.json
-
           # Install dependencies locally
-          npm install --no-save semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
+          npm install --no-save semantic-release semantic-release-monorepo @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
 
-          # Run semantic-release with npm-only config
-          GITHUB_REF=refs/heads/master \
-          CI=false \
-          NODE_ENV=production \
-          GIT_LOCAL_BRANCH=master \
-          npx semantic-release --no-ci --debug --extends ./.releaserc-temp.json
+          # Run semantic-release with standard configuration
+          npx semantic-release -e semantic-release-monorepo
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
