@@ -77,34 +77,15 @@ jobs:
           echo "Current git status:"
           git status
 
-          # Ensure we're fully synced with remote before running semantic-release
-          git fetch --prune --unshallow || git fetch --prune
-          git checkout master
-
-          # Save local changes before rebasing
-          git stash -u
-
-          # Force reset to match remote exactly
-          git reset --hard origin/master
-
-          # Pull latest changes
-          git pull origin master
-
-          # Restore local changes
-          git stash pop || true
-
-          # Show status after syncing
-          echo "Git status after sync:"
-          git status
-          git log -n 3 --oneline
+          # Commit any changes from previous steps (lint, build, etc)
+          git add -A
+          git commit -m "chore: automated changes before release [skip ci]" || echo "No changes to commit"
 
           # Install dependencies locally
-          npm install --no-save semantic-release semantic-release-monorepo @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
+          npm install --no-save semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
 
-          # Create/update .releaserc.json to force publishing
-          cat > .releaserc.json << EOF
-
-          # Run semantic-release with more debugging and forced parameters
+          # Run semantic-release with debug and force flag
+          echo "Running semantic-release with debugging enabled"
           DEBUG=semantic-release:* npx semantic-release --no-ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
