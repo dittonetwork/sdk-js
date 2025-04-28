@@ -77,16 +77,53 @@ jobs:
           echo "Current git status:"
           git status
 
+          # Важно: корректная настройка аутентификации Git
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+          # Настраиваем правильный URL репозитория с токеном
+          echo "Setting up Git remote with token authentication"
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/dittonetwork/sdk-js.git
+          git remote -v
+
           # Commit any changes from previous steps (lint, build, etc)
           git add -A
           git commit -m "chore: automated changes before release [skip ci]" || echo "No changes to commit"
 
           # Install dependencies locally
-          npm install --no-save semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm
+          echo "Installing semantic-release and plugins"
+          npm install --no-save semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm @semantic-release/git
+
+          # Устанавливаем конфигурацию semantic-release напрямую с дополнительными параметрами
+          echo "Creating semantic-release configuration file..."
+          echo '{
+            "branches": ["master"],
+            "plugins": [
+              "@semantic-release/commit-analyzer",
+              "@semantic-release/release-notes-generator",
+              ["@semantic-release/npm", {
+                "npmPublish": true
+              }],
+              ["@semantic-release/git", {
+                "assets": ["package.json"],
+                "message": "chore(release): ${nextRelease.version} [skip ci]\\n\\n${nextRelease.notes}"
+              }]
+            ],
+            "ci": false,
+            "dryRun": false,
+            "tagFormat": "${version}"
+          }' > .releaserc.json
+
+          # Вывод содержимого package.json для проверки
+          echo "Current package.json:"
+          cat package.json
 
           # Run semantic-release with debug and force flag
           echo "Running semantic-release with debugging enabled"
-          DEBUG=semantic-release:* npx semantic-release --no-ci
+          export NODE_DEBUG=semantic-release,semantic-release:*
+          export GH_TOKEN=${GITHUB_TOKEN}
+          export GITHUB_TOKEN=${GITHUB_TOKEN}
+          npx semantic-release --no-ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
