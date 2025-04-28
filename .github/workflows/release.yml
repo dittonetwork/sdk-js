@@ -103,9 +103,9 @@ jobs:
           echo "Installing semantic-release and plugins"
           npm install --no-save semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm @semantic-release/git
 
-          # Set up semantic-release configuration with additional parameters
-          echo "Creating semantic-release configuration file..."
-          cat > .releaserc.json << EOF
+          # Check existing configuration
+          echo "Existing .releaserc.json content:"
+          cat .releaserc.json || echo "No existing .releaserc.json found"
 
           # Output package.json contents for verification
           echo "Current package.json:"
