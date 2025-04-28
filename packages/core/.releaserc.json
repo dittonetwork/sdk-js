@@ -1,11 +1,11 @@
 {
-  "branches": ["master"],
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/npm"
-  ],
-  "extends": "semantic-release-monorepo",
-  "repositoryUrl": "https://github.com/dittonetwork/sdk-js.git",
-  "tagFormat": "${name}@${version}"
+	"branches": ["master"],
+	"plugins": [
+		"@semantic-release/commit-analyzer",
+		"@semantic-release/release-notes-generator",
+		"@semantic-release/npm"
+	],
+	"extends": "semantic-release-monorepo",
+	"repositoryUrl": "https://github.com/dittonetwork/sdk-js.git",
+	"tagFormat": "${name}@${version}"
 }

@@ -1,40 +1,36 @@
 {
-  "name": "@ditto-network/core",
-  "release": {
-    "branches": [
-      "master"
-    ],
-    "extends": "semantic-release-monorepo"
-  },
-  "version": "0.1.0",
-  "description": "Core functionality for Ditto Network JS SDK",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-    "test": "vitest",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "publishConfig": {
-    "access": "public"
-  },
-  "dependencies": {
-    "@cosmjs/crypto": "^0.33.1",
-    "@cosmjs/encoding": "^0.33.1",
-    "@cosmjs/stargate": "^0.33.1",
-    "@cosmjs/tendermint-rpc": "^0.33.1",
-    "viem": "^2.28.0"
-  },
-  "devDependencies": {
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
-  }
+	"name": "@ditto-network/core",
+	"release": {
+		"branches": ["master"],
+		"extends": "semantic-release-monorepo"
+	},
+	"version": "0.1.0",
+	"description": "Core functionality for Ditto Network JS SDK",
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
+	"types": "dist/index.d.ts",
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsup src/index.ts --format cjs,esm --dts",
+		"dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+		"test": "vitest",
+		"clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {
+		"@cosmjs/crypto": "^0.33.1",
+		"@cosmjs/encoding": "^0.33.1",
+		"@cosmjs/stargate": "^0.33.1",
+		"@cosmjs/tendermint-rpc": "^0.33.1",
+		"viem": "^2.28.0"
+	},
+	"devDependencies": {
+		"tsup": "^8.4.0",
+		"typescript": "^5.8.3"
+	}
 }
