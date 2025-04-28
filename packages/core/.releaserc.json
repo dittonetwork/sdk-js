@@ -20,5 +20,6 @@
 	],
 	"ci": false,
 	"dryRun": false,
-	"tagFormat": "${version}"
+	"tagFormat": "${version}",
+	"allowOutdatedBranch": true
 }
