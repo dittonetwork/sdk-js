@@ -123,13 +123,12 @@ jobs:
           echo "Current package.json:"
           cat package.json
 
-          # Run semantic-release with debug and force flag
+          # Run semantic-release with debug
           echo "Running semantic-release with debugging enabled"
           export NODE_DEBUG=semantic-release,semantic-release:*
           export GH_TOKEN=${GITHUB_TOKEN}
           export GITHUB_TOKEN=${GITHUB_TOKEN}
-          # Add --no-verify-conditions to skip branch verification
-          npx semantic-release --no-verify-conditions
+          npx semantic-release
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
