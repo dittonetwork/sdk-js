@@ -73,12 +73,15 @@ jobs:
           git log -3 --oneline origin/master
           git fetch origin master --quiet
           echo "::endgroup::"
+          git fetch origin master --tags          # подтянуть свежее
+          git rev-list --left-right --count master...origin/master  # должно вывести 0 0
+          git checkout -B master origin/master    # атомарно перезаписать локальную ветку
           npx semantic-release -e semantic-release-monorepo
           echo "::group::REMOTE LOG AFTER"
           git log -3 --oneline origin/master
           git fetch origin master --quiet
           echo "::endgroup::"
-          env:
+        env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
