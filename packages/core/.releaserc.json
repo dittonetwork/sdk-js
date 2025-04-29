@@ -21,5 +21,7 @@
 	"ci": false,
 	"dryRun": false,
 	"tagFormat": "${version}",
-	"allowOutdatedBranch": true
+	"debug": true,
+	"force": true,
+	"pkgRoot": "packages/core"
 }
