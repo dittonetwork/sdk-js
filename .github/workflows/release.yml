@@ -109,10 +109,6 @@ jobs:
           # Make sure the branch is definitely in sync
           git merge-base --is-ancestor HEAD origin/master || echo "Branch is still not in sync after reset!"
 
-          # Commit any changes from previous steps (lint, build, etc)
-          git add -A
-          git commit -m "chore: automated changes before release [skip ci]" || echo "No changes to commit"
-
           # Install dependencies locally
           echo "Installing semantic-release and plugins"
           npm install --no-save semantic-release semantic-release-monorepo @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm @semantic-release/git
