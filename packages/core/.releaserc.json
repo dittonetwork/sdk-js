@@ -16,5 +16,6 @@
 	"tagFormat": "${version}",
 	"debug": true,
 	"force": true,
-	"pkgRoot": "packages/core"
+	"pkgRoot": "packages/core",
+	"git": false
 }
