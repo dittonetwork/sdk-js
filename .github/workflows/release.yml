@@ -69,12 +69,15 @@ jobs:
 
       - name: Semantic Release Core Package
         run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name  "GitHub Actions"
-          git remote set-url origin https://x-access-token:${{ secrets.RELEASE_TOKEN }}@github.com/dittonetwork/sdk-js.git
-          git fetch origin master --tags
-          git checkout -B master origin/master
-          git rev-list --left-right --graph --oneline HEAD...origin/master || true
+          echo "--- debug refs ---"
+          echo "refs/heads/master : $(git rev-parse refs/heads/master || echo 'none')"
+          echo "HEAD              : $(git rev-parse HEAD)"
+          echo "git dir           : $(git rev-parse --git-dir)"
+          git branch -vv
+          git remote -v
+          git rev-list --left-right --count master...origin/master || true
+          echo "------------------"
+          echo "origin/master     : $(git rev-parse origin/master)"
           npx semantic-release -e semantic-release-monorepo
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
