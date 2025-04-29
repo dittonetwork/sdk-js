@@ -69,9 +69,12 @@ jobs:
 
       - name: Semantic Release Core Package
         run: |
-          echo "EVENT_SHA = $GITHUB_SHA"
-          echo "HEAD       = $(git rev-parse HEAD)"
-          echo "ORIGIN     = $(git ls-remote origin refs/heads/master | cut -f1)"
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name  "GitHub Actions"
+          git remote set-url origin https://x-access-token:${{ secrets.RELEASE_TOKEN }}@github.com/dittonetwork/sdk-js.git
+          git fetch origin master --tags
+          git checkout -B master origin/master
+          git rev-list --left-right --graph --oneline HEAD...origin/master || true
           npx semantic-release -e semantic-release-monorepo
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
