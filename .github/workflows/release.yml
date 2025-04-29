@@ -69,7 +69,11 @@ jobs:
 
       - name: Semantic Release Core Package
         working-directory: packages/core
-        run: npx semantic-release -e semantic-release-monorepo
+        run: |
+          echo "EVENT_SHA = $GITHUB_SHA"
+          echo "HEAD       = $(git rev-parse HEAD)"
+          echo "ORIGIN     = $(git ls-remote origin refs/heads/master | cut -f1)"
+          npx semantic-release -e semantic-release-monorepo
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
