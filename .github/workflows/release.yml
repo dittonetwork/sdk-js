@@ -69,17 +69,16 @@ jobs:
 
       - name: Semantic Release Core Package
         run: |
-          echo "--- debug refs ---"
-          echo "refs/heads/master : $(git rev-parse refs/heads/master || echo 'none')"
-          echo "HEAD              : $(git rev-parse HEAD)"
-          echo "git dir           : $(git rev-parse --git-dir)"
-          git branch -vv
-          git remote -v
-          git rev-list --left-right --count master...origin/master || true
-          echo "------------------"
-          echo "origin/master     : $(git rev-parse origin/master)"
+          echo "::group::REMOTE LOG BEFORE"
+          git log -3 --oneline origin/master
+          git fetch origin master --quiet
+          echo "::endgroup::"
           npx semantic-release -e semantic-release-monorepo
-        env:
+          echo "::group::REMOTE LOG AFTER"
+          git log -3 --oneline origin/master
+          git fetch origin master --quiet
+          echo "::endgroup::"
+          env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
