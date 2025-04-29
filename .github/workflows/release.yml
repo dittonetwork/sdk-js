@@ -39,11 +39,6 @@ jobs:
           git checkout -B master origin/master
           git rev-list --left-right --graph --oneline HEAD...origin/master || true
 
-      - name: Setup pnpm 8
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-
       - name: Setup Node.js 20.x
         uses: actions/setup-node@v4
         with:
@@ -59,9 +54,6 @@ jobs:
           path: packages
           github_token: ${{ secrets.RELEASE_TOKEN }}
 
-      - name: Install Dependencies
-        run: pnpm i
-
       - name: Setup npm auth
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > ~/.npmrc
@@ -76,7 +68,7 @@ jobs:
           git fetch origin master --tags          # подтянуть свежее
           git rev-list --left-right --count master...origin/master  # должно вывести 0 0
           git checkout -B master origin/master    # атомарно перезаписать локальную ветку
-          npx semantic-release -e semantic-release-monorepo
+          npx --yes semantic-release -e semantic-release-monorepo
           echo "::group::REMOTE LOG AFTER"
           git log -3 --oneline origin/master
           git fetch origin master --quiet
