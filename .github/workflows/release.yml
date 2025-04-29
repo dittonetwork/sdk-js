@@ -68,7 +68,6 @@ jobs:
           npm config set access public
 
       - name: Semantic Release Core Package
-        working-directory: packages/core
         run: |
           echo "EVENT_SHA = $GITHUB_SHA"
           echo "HEAD       = $(git rev-parse HEAD)"
