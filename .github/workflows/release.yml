@@ -121,6 +121,9 @@ jobs:
           echo "Current package.json:"
           cat package.json
 
+          git fetch origin master --tags
+          git checkout -B master origin/master
+
           # Run semantic-release with debug
           echo "Running semantic-release with debugging enabled"
           export NODE_DEBUG=semantic-release,semantic-release:*
