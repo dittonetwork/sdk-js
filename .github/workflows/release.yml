@@ -6,7 +6,7 @@ on:
       - master
 
 concurrency:
-  group: ${{ github.ref }}
+  group: release-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 # Basic permissions for npm publishing
@@ -27,16 +27,14 @@ jobs:
           # Use PAT instead of GITHUB_TOKEN
           token: ${{ secrets.RELEASE_TOKEN }}
 
-      - name: Configure Git
+      - name: Fast-forward branch
         run: |
           git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-          # Use authentication with the PAT to avoid permission issues
+          git config --global user.name  "GitHub Actions"
           git remote set-url origin https://x-access-token:${{ secrets.RELEASE_TOKEN }}@github.com/dittonetwork/sdk-js.git
-          git fetch
-          # Ensure we're on the correct branch with up-to-date information
+          git fetch origin master --tags
           git checkout -B master origin/master
-          git pull --rebase origin master
+          git rev-list --left-right --graph --oneline HEAD...origin/master || true
 
       - name: Setup pnpm 8
         uses: pnpm/action-setup@v3
@@ -70,67 +68,8 @@ jobs:
           npm config set access public
 
       - name: Semantic Release Core Package
-        run: |
-          cd packages/core
-          # Debug output to understand repo state
-          echo "Current git status:"
-          git status
-
-          # Important: Proper Git authentication setup
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-
-          # Configure the correct repository URL with token
-          echo "Setting up Git remote with token authentication"
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/dittonetwork/sdk-js.git
-          git remote -v
-
-          # Force synchronize with remote before release
-          echo "Forcing sync with remote branch..."
-          # First, fetch everything from remote
-          git fetch --all --force
-          # Reset to remote state completely
-          git reset --hard origin/master
-          # Clean any untracked files
-          git clean -fd
-          # Verify we're on master
-          git checkout master
-          # Pull with force
-          git pull --force origin master
-
-          # Verify branch state after reset
-          echo "Branch state after reset:"
-          git status
-          echo "Last commit:"
-          git log -1 --oneline
-          echo "Remote commit:"
-          git log -1 origin/master --oneline
-
-          # Make sure the branch is definitely in sync
-          git merge-base --is-ancestor HEAD origin/master || echo "Branch is still not in sync after reset!"
-
-          # Install dependencies locally
-          echo "Installing semantic-release and plugins"
-          npm install --no-save semantic-release semantic-release-monorepo @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm @semantic-release/git
-
-          # Check existing configuration
-          echo "Existing .releaserc.json content:"
-          cat .releaserc.json || echo "No existing .releaserc.json found"
-
-          # Output package.json contents for verification
-          echo "Current package.json:"
-          cat package.json
-
-          git fetch origin master --tags
-          git checkout -B master origin/master
-
-          # Run semantic-release with debug
-          echo "Running semantic-release with debugging enabled"
-          export NODE_DEBUG=semantic-release,semantic-release:*
-          export GH_TOKEN=${GITHUB_TOKEN}
-          export GITHUB_TOKEN=${GITHUB_TOKEN}
-          # Use semantic-release-monorepo with configuration from .releaserc.json
-          npx semantic-release -e semantic-release-monorepo
+        working-directory: packages/core
+        run: npx semantic-release -e semantic-release-monorepo
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
