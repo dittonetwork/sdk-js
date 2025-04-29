@@ -5,7 +5,9 @@ on:
     branches:
       - master
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 # Basic permissions for npm publishing
 permissions:
@@ -33,7 +35,7 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.RELEASE_TOKEN }}@github.com/dittonetwork/sdk-js.git
           git fetch
           # Ensure we're on the correct branch with up-to-date information
-          git checkout master
+          git checkout -B master origin/master
           git pull --rebase origin master
 
       - name: Setup pnpm 8
